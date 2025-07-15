@@ -5,7 +5,7 @@
 
     let api = null
     let tasks = $state([])
-    let loading = $state(true)
+    let syncing = $state(true)
     let error = $state('')
     let initialLoad = $state(true)
 
@@ -24,7 +24,7 @@
         if (!token) {
             api = null
             tasks = []
-            loading = false
+            syncing = false
             error = 'no todoist api token'
             return
         }
@@ -33,12 +33,12 @@
             api.clearLocalData()
             tasks = []
         }
-        await loadTasks()
+        await loadTasks(true)
     }
 
-    export async function loadTasks() {
+    export async function loadTasks(showSyncing = false) {
         try {
-            loading = true
+            if (showSyncing) syncing = true
             error = ''
             await api.sync()
             tasks = api.getTasks()
@@ -46,17 +46,47 @@
             error = `failed to sync tasks`
             console.error(err)
         } finally {
-            loading = false
+            if (showSyncing) syncing = false
         }
     }
 
     async function completeTask(taskId) {
         try {
-            tasks = tasks.filter((task) => task.id !== taskId)
+            tasks = TodoistAPI.sortTasks(
+                tasks.map((task) =>
+                    task.id === taskId
+                        ? {
+                              ...task,
+                              checked: true,
+                              completed_at: new Date().toISOString(),
+                          }
+                        : task
+                )
+            )
+
             await api.completeTask(taskId)
+            await loadTasks()
         } catch (err) {
-            error = `failed to complete task`
             console.error(err)
+            await loadTasks()
+        }
+    }
+
+    async function uncompleteTask(taskId) {
+        try {
+            tasks = TodoistAPI.sortTasks(
+                tasks.map((task) =>
+                    task.id === taskId
+                        ? { ...task, checked: false, completed_at: null }
+                        : task
+                )
+            )
+
+            await api.uncompleteTask(taskId)
+            await loadTasks()
+        } catch (err) {
+            console.error(err)
+            await loadTasks()
         }
     }
 
@@ -129,8 +159,8 @@
 
 <div class="todoist">
     <div class="widget-header">
-        {#if loading}
-            loading...
+        {#if syncing}
+            syncing...
         {:else if error}
             <span class="error">{error}</span>
         {:else}
@@ -143,7 +173,11 @@
                 {tasks.length === 1 ? 'task' : 'tasks'}
             </a>
         {/if}
-        <button onclick={loadTasks} disabled={loading} class="refresh">
+        <button
+            onclick={() => loadTasks(true)}
+            disabled={syncing}
+            class="refresh"
+        >
             refresh
         </button>
     </div>
@@ -152,17 +186,26 @@
         <br />
         <div class="tasks-list">
             {#each tasks as task}
-                <div class="task">
-                    <button
-                        onclick={() => completeTask(task.id)}
-                        class="checkbox"
-                    >
-                        [ ]
-                    </button>
+                <div class="task" class:completed={task.checked}>
+                    {#if task.checked}
+                        <button
+                            onclick={() => uncompleteTask(task.id)}
+                            class="checkbox completed"
+                        >
+                            [x]
+                        </button>
+                    {:else}
+                        <button
+                            onclick={() => completeTask(task.id)}
+                            class="checkbox"
+                        >
+                            [ ]
+                        </button>
+                    {/if}
                     <span class="task-title">{task.content}</span>
                     {#if task.due}
                         <span class="task-due">
-                            {formatDueDate(task.offset_due_date, task.has_time)}
+                            {formatDueDate(task.due_date, task.has_time)}
                         </span>
                     {/if}
                 </div>
@@ -174,5 +217,9 @@
 <style>
     .task-due {
         color: var(--txt-3);
+    }
+
+    .task.completed .task-title {
+        text-decoration: line-through;
     }
 </style>
