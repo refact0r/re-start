@@ -36,8 +36,6 @@
 <style>
     .links {
         display: flex;
-        gap: 3rem;
-        flex-wrap: wrap;
     }
     .link {
         text-decoration: none;
@@ -47,5 +45,8 @@
     }
     span {
         color: var(--txt-3);
+    }
+    .column {
+        width: 100%;
     }
 </style>
