@@ -1,15 +1,16 @@
 # re-start
 
-a useful browser startpage, built with svelte.
+a simple, useful browser startpage, built with svelte.
 
 features:
 
 - customizable links
-- basic todoist tasks integration
+- todoist tasks integration
 - weather
 - random stats (load time, ping, fps, viewport size)
 
-<img width="2504" height="1347" alt="image" src="https://github.com/user-attachments/assets/e469d2af-0d43-46a9-8f7f-d914771f0119" />
+<img width="1459" height="899" alt="Screenshot 2025-07-17 at 7 50 08 PM" src="https://github.com/user-attachments/assets/f346fbe1-9a7e-4add-aeca-089249f977dd" />
+
 
 ## how to use
 
