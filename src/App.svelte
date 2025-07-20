@@ -11,7 +11,8 @@
 
     let loadTime = $state(0)
     let latency = $state(null)
-    let viewportSize = $state('')
+    let viewportWidth = $state(0)
+    let viewportHeight = $state(0)
     let fps = $state(0)
 
     let currentHrs = $state('')
@@ -130,7 +131,8 @@
     }
 
     function updateViewportSize() {
-        viewportSize = `${window.innerWidth} x ${window.innerHeight}`
+        viewportWidth = window.innerWidth
+        viewportHeight = window.innerHeight
     }
 
     onMount(() => {
@@ -164,18 +166,20 @@
         <div class="top">
             <div class="datetime">
                 <div class="clock">
-                    {currentHrs}:{currentMin}:{currentSec}
+                    {currentHrs}<span class="colon">:</span>{currentMin}<span
+                        class="colon">:</span
+                    >{currentSec}
                     {#if settings.timeFormat === '12hr'}
-                        <span class="clock-ampm">{currentAmPm}</span>
+                        <span class="ampm">{currentAmPm}</span>
                     {/if}
                 </div>
                 <div class="date">{currentDate}</div>
             </div>
             <div class="stats">
-                <div>load: {loadTime} ms</div>
-                <div>ping: {latency || '?'} ms</div>
+                <div>load {loadTime} ms</div>
+                <div>ping {latency || '?'} ms</div>
+                <div>{viewportWidth} x {viewportHeight}</div>
                 <div>{fps} fps</div>
-                <div>{viewportSize}</div>
             </div>
         </div>
         <div class="widgets">
@@ -224,20 +228,28 @@
     }
     .clock {
         margin: 0;
-        font-size: 3rem;
+        font-size: 3.25rem;
         font-weight: 300;
         color: var(--txt-1);
-        line-height: normal;
+        line-height: 3.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .colon,
+    .ampm {
+        color: var(--txt-2);
     }
     .date {
         margin: 0;
         font-size: 1.5rem;
         color: var(--txt-3);
-        line-height: normal;
+        line-height: 2rem;
     }
     .widgets {
         display: flex;
         gap: 1.5rem;
+    }
+    .todoist {
+        flex: 1;
     }
     .datetime,
     .weather,
@@ -245,19 +257,18 @@
     .links,
     .stats {
         padding: 1.5rem;
-        /* background: var(--bg-2); */
         border: 2px solid var(--bg-3);
         position: relative;
 
         &::after {
             display: block;
-            color: var(--bg-4);
+            color: var(--txt-4);
             position: absolute;
             top: -14px;
             left: 8px;
             background-color: var(--bg-1);
             padding: 0 4px;
-            z-index: 1000;
+            z-index: 10;
         }
     }
     .datetime::after {

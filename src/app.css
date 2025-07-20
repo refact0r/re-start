@@ -1,13 +1,12 @@
 :root {
     --bg-1: oklch(19% 0 0);
-    --bg-2: oklch(21% 0 0);
-    --bg-3: oklch(24% 0 0);
+    --bg-2: oklch(23% 0 0);
+    --bg-3: oklch(27% 0 0);
     --bg-4: oklch(31% 0 0);
     --txt-4: oklch(40% 0 0);
     --txt-3: oklch(50% 0 0);
     --txt-2: oklch(75% 0 0);
     --txt-1: oklch(90% 0 0);
-    --txt-0: oklch(95% 0 0);
     --txt-err: oklch(70% 0.11 0);
 }
 

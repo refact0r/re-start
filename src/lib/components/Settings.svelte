@@ -156,7 +156,7 @@
                                 type="text"
                                 bind:value={link.title}
                                 placeholder="title"
-                                class="link-input"
+                                class="link-input name"
                             />
                             <input
                                 type="url"
@@ -195,7 +195,6 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.3);
         z-index: 999;
     }
     .settings {
@@ -205,14 +204,14 @@
         width: 40rem;
         height: 100%;
         background: var(--bg-1);
-        border-left: 1px solid var(--bg-2);
+        border-left: 2px solid var(--bg-3);
         z-index: 1000;
         display: flex;
         flex-direction: column;
     }
     .header {
-        padding: 0.5rem 1.5rem;
-        border-bottom: 1px solid var(--bg-2);
+        padding: 0.75rem 1rem 0.75rem 1.5rem;
+        border-bottom: 2px solid var(--bg-3);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -222,15 +221,17 @@
         }
     }
     .close-btn {
-        font-size: 1.5rem;
-        padding: 0.5rem;
-        line-height: 1;
+        padding: 0 0.5rem;
+        font-size: 1.75rem;
+        line-height: 2.25rem;
         font-weight: 300;
     }
     .content {
         flex: 1;
         padding: 1.5rem;
         overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--bg-3) var(--bg-1);
     }
     .group {
         margin-bottom: 1.5rem;
@@ -247,7 +248,7 @@
         width: 100%;
         padding: 0.5rem;
         background: var(--bg-2);
-        border: 1px solid var(--bg-3);
+        border: 2px solid var(--bg-3);
     }
     .links-header {
         display: flex;
@@ -258,13 +259,14 @@
     }
     .link {
         display: flex;
-        gap: 0.5rem;
         margin-bottom: 0.5rem;
     }
-    .link .link-input:nth-child(1) {
+    .link-input.name {
         width: 12rem;
+        margin-right: 0.5rem;
     }
     .remove-btn {
+        padding-left: 0.5rem;
         font-size: 1.5rem;
         font-weight: 300;
     }

@@ -122,14 +122,13 @@
 
 <style>
     .weather {
-        flex-shrink: 0;
-        flex-grow: 0;
+        height: 18rem;
     }
     .temp {
         font-size: 2rem;
         font-weight: 300;
         color: var(--txt-1);
-        line-height: normal;
+        line-height: 2.625rem;
     }
     .description {
         font-size: 1.25rem;
