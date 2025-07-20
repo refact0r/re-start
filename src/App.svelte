@@ -176,10 +176,13 @@
                 <div class="date">{currentDate}</div>
             </div>
             <div class="stats">
-                <div>load {loadTime} ms</div>
-                <div>ping {latency || '?'} ms</div>
-                <div>{viewportWidth} x {viewportHeight}</div>
-                <div>{fps} fps</div>
+                <div>load <span class="value">{loadTime} ms</span></div>
+                <div>ping <span class="value">{latency || '?'} ms</span></div>
+                <div>fps <span class="value">{fps}</span></div>
+                <div>
+                    <span class="value">{viewportWidth}</span> x
+                    <span class="value">{viewportHeight}</span>
+                </div>
             </div>
         </div>
         <div class="widgets">
@@ -298,5 +301,8 @@
     }
     .settings-btn:hover {
         opacity: 1;
+    }
+    .value {
+        color: var(--txt-1);
     }
 </style>
