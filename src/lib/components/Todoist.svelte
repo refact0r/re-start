@@ -146,6 +146,9 @@
 
     onMount(() => {
         initializeAPI(settings.todoistApiToken)
+        if (api) {
+            tasks = api.getTasks()
+        }
     })
 </script>
 
