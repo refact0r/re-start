@@ -87,7 +87,7 @@
     })
 </script>
 
-<div class="weather panel">
+<div class="panel">
     <button class="widget-label" onclick={refreshWeather} disabled={loading}>
         {loading ? 'loading...' : 'weather'}
     </button>

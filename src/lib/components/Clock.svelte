@@ -59,7 +59,7 @@
     })
 </script>
 
-<div class="datetime panel">
+<div class="panel">
     <div class="panel-label">datetime</div>
     <div class="clock">
         {currentHrs}<span class="colon">:</span>{currentMin}<span class="colon"
@@ -73,7 +73,7 @@
 </div>
 
 <style>
-    .datetime {
+    .panel {
         flex: 1;
     }
     .clock {

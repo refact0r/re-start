@@ -91,7 +91,7 @@
     })
 </script>
 
-<div class="stats panel">
+<div class="panel">
     <div class="panel-label">stats</div>
     <div>load <span class="value">{loadTime} ms</span></div>
     <div>ping <span class="value">{latency || '?'} ms</span></div>

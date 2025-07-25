@@ -163,7 +163,7 @@
     })
 </script>
 
-<div class="todoist panel">
+<div class="panel">
     <button
         class="widget-label"
         onclick={() => loadTasks(true)}
@@ -223,6 +223,9 @@
 </div>
 
 <style>
+    .panel {
+        flex: 1;
+    }
     .widget-header {
         display: flex;
         justify-content: space-between;
@@ -232,19 +235,15 @@
         overflow: auto;
         scrollbar-width: none;
     }
-
     .task-due {
         color: var(--txt-3);
     }
-
     .task-project {
         color: var(--txt-3);
     }
-
     .task.completed .task-title {
         text-decoration: line-through;
     }
-
     .overdue-date {
         color: var(--txt-err);
     }

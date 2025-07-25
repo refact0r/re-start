@@ -14,7 +14,7 @@
     })
 </script>
 
-<div class="links panel">
+<div class="panel">
     <div class="panel-label">links</div>
     {#each columns as column}
         <div class="column">
@@ -35,7 +35,7 @@
 </div>
 
 <style>
-    .links {
+    .panel {
         display: flex;
     }
     .link {

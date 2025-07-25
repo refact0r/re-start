@@ -91,3 +91,7 @@ input {
     color: inherit;
     outline: none;
 }
+
+.error {
+    color: var(--txt-err);
+}
