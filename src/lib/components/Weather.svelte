@@ -1,5 +1,5 @@
 <script>
-    import { onMount, untrack } from 'svelte'
+    import { onMount, onDestroy, untrack } from 'svelte'
     import WeatherAPI from '../weather-api.js'
     import { settings } from '../settings-store.svelte.js'
 
@@ -9,13 +9,13 @@
     let error = $state(null)
     let initialLoad = $state(true)
 
-    async function refresh() {
-        loading = true
-        await loadWeather()
-        loading = false
-    }
-
     const weatherAPI = new WeatherAPI()
+
+    function handleVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            loadWeather()
+        }
+    }
 
     $effect(() => {
         const lat = settings.latitude
@@ -37,6 +37,7 @@
             error = 'no latitude or longitude'
             return
         }
+        loading = true
 
         const cached = weatherAPI.getCachedWeather(settings.timeFormat)
         if (cached.data) {
@@ -45,12 +46,12 @@
 
             if (!cached.isStale) {
                 error = null
+                loading = false
                 return
             }
         }
 
         try {
-            loading = true
             error = null
 
             const data = await weatherAPI.getWeather(
@@ -78,11 +79,16 @@
 
     onMount(() => {
         loadWeather()
+        document.addEventListener('visibilitychange', handleVisibilityChange)
+    })
+
+    onDestroy(() => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
     })
 </script>
 
 <div class="weather panel">
-    <button class="widget-label" onclick={refresh} disabled={loading}>
+    <button class="widget-label" onclick={refreshWeather} disabled={loading}>
         {loading ? 'loading...' : 'weather'}
     </button>
 

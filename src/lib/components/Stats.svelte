@@ -43,6 +43,7 @@
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible') {
             startFPS()
+            measurePing()
         } else {
             stopFPS()
         }

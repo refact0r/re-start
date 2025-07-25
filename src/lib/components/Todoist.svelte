@@ -1,5 +1,5 @@
 <script>
-    import { onMount, untrack } from 'svelte'
+    import { onMount, onDestroy, untrack } from 'svelte'
     import TodoistAPI from '../todoist-api.js'
     import { settings } from '../settings-store.svelte.js'
 
@@ -9,6 +9,12 @@
     let error = $state('')
     let initialLoad = $state(true)
     let taskCount = $derived(tasks.filter((task) => !task.checked).length)
+
+    function handleVisibilityChange() {
+        if (document.visibilityState === 'visible' && api) {
+            loadTasks()
+        }
+    }
 
     $effect(() => {
         const token = settings.todoistApiToken
@@ -149,6 +155,11 @@
         if (api) {
             tasks = api.getTasks()
         }
+        document.addEventListener('visibilitychange', handleVisibilityChange)
+    })
+
+    onDestroy(() => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
     })
 </script>
 
@@ -215,11 +226,6 @@
     .widget-header {
         display: flex;
         justify-content: space-between;
-
-        /* a {
-            font-size: 1.25rem;
-            line-height: 1.5rem;
-        } */
     }
     .tasks {
         max-height: 15rem;

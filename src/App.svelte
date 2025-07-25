@@ -1,40 +1,17 @@
 <script>
-    import { onMount, onDestroy } from 'svelte'
     import Todoist from './lib/components/Todoist.svelte'
     import Weather from './lib/components/Weather.svelte'
     import Links from './lib/components/Links.svelte'
     import Clock from './lib/components/Clock.svelte'
     import Stats from './lib/components/Stats.svelte'
     import Settings from './lib/components/Settings.svelte'
-    import { settings } from './lib/settings-store.svelte.js'
     import '@fontsource-variable/geist-mono'
 
     let showSettings = $state(false)
-    let weatherComponent
-    let todoistComponent
 
     function closeSettings() {
         showSettings = false
     }
-
-    function handleVisibilityChange() {
-        if (document.visibilityState === 'visible') {
-            if (weatherComponent) {
-                weatherComponent.loadWeather()
-            }
-            if (todoistComponent) {
-                todoistComponent.loadTasks()
-            }
-        }
-    }
-
-    onMount(() => {
-        document.addEventListener('visibilitychange', handleVisibilityChange)
-    })
-
-    onDestroy(() => {
-        document.removeEventListener('visibilitychange', handleVisibilityChange)
-    })
 </script>
 
 <main>
@@ -44,8 +21,8 @@
             <Stats />
         </div>
         <div class="widgets">
-            <Weather bind:this={weatherComponent} />
-            <Todoist bind:this={todoistComponent} />
+            <Weather />
+            <Todoist />
         </div>
         <Links />
     </div>
