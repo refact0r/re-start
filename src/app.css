@@ -52,6 +52,31 @@ button {
         color: var(--txt-2);
     }
 }
+.panel {
+    padding: 1.5rem;
+    border: 2px solid var(--bg-3);
+    position: relative;
+}
+
+.panel-label,
+.widget-label {
+    position: absolute;
+    top: -14px;
+    left: 8px;
+    background-color: var(--bg-1);
+    color: var(--txt-4);
+    padding: 0 4px;
+    z-index: 10;
+}
+
+.widget-label:hover:not(:disabled) {
+    color: var(--txt-3);
+}
+
+.widget-label:disabled {
+    cursor: default;
+    color: var(--txt-4);
+}
 
 a {
     color: inherit;

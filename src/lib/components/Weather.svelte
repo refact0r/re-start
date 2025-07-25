@@ -5,9 +5,15 @@
 
     let current = $state(null)
     let forecast = $state([])
-    let loading = $state(true)
+    let loading = $state(false)
     let error = $state(null)
     let initialLoad = $state(true)
+
+    async function refresh() {
+        loading = true
+        await loadWeather()
+        loading = false
+    }
 
     const weatherAPI = new WeatherAPI()
 
@@ -29,13 +35,23 @@
     export async function loadWeather() {
         if (settings.latitude === null || settings.longitude === null) {
             error = 'no latitude or longitude'
-            loading = false
             return
+        }
+
+        const cached = weatherAPI.getCachedWeather(settings.timeFormat)
+        if (cached.data) {
+            current = cached.data.current
+            forecast = cached.data.forecast
+
+            if (!cached.isStale) {
+                error = null
+                return
+            }
         }
 
         try {
             loading = true
-            error = ''
+            error = null
 
             const data = await weatherAPI.getWeather(
                 settings.latitude,
@@ -44,6 +60,7 @@
                 settings.speedUnit,
                 settings.timeFormat
             )
+
             current = data.current
             forecast = data.forecast
         } catch (err) {
@@ -64,10 +81,12 @@
     })
 </script>
 
-<div class="weather">
-    {#if loading}
-        <div>loading...</div>
-    {:else if error}
+<div class="weather panel">
+    <button class="widget-label" onclick={refresh} disabled={loading}>
+        {loading ? 'loading...' : 'weather'}
+    </button>
+
+    {#if error}
         <div class="error">{error}</div>
     {:else if current}
         <div class="temp">{current.temperature_2m}°</div>
@@ -121,9 +140,6 @@
 </div>
 
 <style>
-    .weather {
-        height: 18rem;
-    }
     .temp {
         font-size: 2rem;
         font-weight: 300;

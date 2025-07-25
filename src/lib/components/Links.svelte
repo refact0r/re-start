@@ -14,7 +14,8 @@
     })
 </script>
 
-<div class="links">
+<div class="links panel">
+    <div class="panel-label">links</div>
     {#each columns as column}
         <div class="column">
             {#each column as link}

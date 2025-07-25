@@ -152,13 +152,19 @@
     })
 </script>
 
-<div class="todoist">
-    <div class="widget-header">
-        {#if syncing}
-            syncing...
-        {:else if error}
-            <span class="error">{error}</span>
-        {:else}
+<div class="todoist panel">
+    <button
+        class="widget-label"
+        onclick={() => loadTasks(true)}
+        disabled={syncing}
+    >
+        {syncing ? 'syncing...' : 'todoist'}
+    </button>
+
+    {#if error}
+        <div class="error">{error}</div>
+    {:else}
+        <div class="widget-header">
             <a
                 href="https://todoist.com/app"
                 target="_blank"
@@ -166,17 +172,8 @@
             >
                 {taskCount} task{taskCount === 1 ? '' : 's'}
             </a>
-        {/if}
-        <button
-            onclick={() => loadTasks(true)}
-            disabled={syncing}
-            class="refresh"
-        >
-            refresh
-        </button>
-    </div>
+        </div>
 
-    {#if tasks.length > 0}
         <br />
         <div class="tasks">
             <div class="tasks-list">
@@ -215,6 +212,15 @@
 </div>
 
 <style>
+    .widget-header {
+        display: flex;
+        justify-content: space-between;
+
+        /* a {
+            font-size: 1.25rem;
+            line-height: 1.5rem;
+        } */
+    }
     .tasks {
         max-height: 15rem;
         overflow: auto;

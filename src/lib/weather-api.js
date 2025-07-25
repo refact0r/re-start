@@ -11,7 +11,7 @@ class WeatherAPI {
     }
 
     /**
-     * Get processed weather data including current conditions and hourly forecasts
+     * Get weather data from API and cache it
      */
     async getWeather(
         latitude,
@@ -20,16 +20,13 @@ class WeatherAPI {
         speedUnit,
         timeFormat = '12hr'
     ) {
-        let rawData = this._getCachedWeather()
-        if (!rawData) {
-            rawData = await this._fetchWeatherData(
-                latitude,
-                longitude,
-                tempUnit,
-                speedUnit
-            )
-            this._cacheWeather(rawData)
-        }
+        const rawData = await this._fetchWeatherData(
+            latitude,
+            longitude,
+            tempUnit,
+            speedUnit
+        )
+        this._cacheWeather(rawData)
 
         return {
             current: this._processCurrentWeather(rawData.current),
@@ -38,6 +35,51 @@ class WeatherAPI {
                 rawData.current.time,
                 timeFormat
             ),
+        }
+    }
+
+    /**
+     * Get cached weather data with staleness info
+     */
+    getCachedWeather(timeFormat = '12hr') {
+        const cached = this._getCachedData()
+
+        if (!cached.data) {
+            return { data: null, isStale: false }
+        }
+
+        const processedData = {
+            current: this._processCurrentWeather(cached.data.current),
+            forecast: this._processHourlyForecast(
+                cached.data.hourly,
+                cached.data.current.time,
+                timeFormat
+            ),
+        }
+
+        return {
+            data: processedData,
+            isStale: cached.isStale,
+        }
+    }
+
+    /**
+     * Get cached data with expiration status
+     */
+    _getCachedData() {
+        try {
+            const cached = localStorage.getItem(this.cacheKey)
+            if (!cached) return { data: null, isStale: false }
+
+            const { data, timestamp } = JSON.parse(cached)
+            const now = Date.now()
+            const isStale = now - timestamp >= this.cacheExpiry
+
+            return { data, isStale }
+        } catch (error) {
+            console.error('failed to get cached weather data:', error)
+            localStorage.removeItem(this.cacheKey)
+            return { data: null, isStale: false }
         }
     }
 
@@ -166,30 +208,6 @@ class WeatherAPI {
                 minute: '2-digit',
                 hour12: false,
             })
-        }
-    }
-
-    /**
-     * Get cached weather data if it exists and is not expired
-     */
-    _getCachedWeather() {
-        try {
-            const cached = localStorage.getItem(this.cacheKey)
-            if (!cached) return null
-
-            const { data, timestamp } = JSON.parse(cached)
-            const now = Date.now()
-
-            if (now - timestamp < this.cacheExpiry) {
-                return data
-            }
-
-            localStorage.removeItem(this.cacheKey)
-            return null
-        } catch (error) {
-            console.error('failed to get cached weather data:', error)
-            localStorage.removeItem(this.cacheKey)
-            return null
         }
     }
 
