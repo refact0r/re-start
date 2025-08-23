@@ -1,14 +1,14 @@
 # re-start
 
-a tui-like browser startpage, built with svelte.
+a tui-style browser startpage, built with svelte.
 
 features:
 
-- todoist tasks integration
+- todoist tasks integrationz
 - weather (from open-meteo)
-- customizable links
-- random stats (load time, ping, fps, viewport size)
-- relatively lightweight (<90kb including fonts)
+- customizable quick links
+- stats (load time, ping, fps, viewport size)
+- lightweight & performant (&lt;90kb including fonts, loads in &lt;50ms)
 
 <img width="2331" height="1319" alt="image" src="https://github.com/user-attachments/assets/e3164af7-fc42-4caf-81ee-a049e05b84c7" />
 
