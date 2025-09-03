@@ -22,15 +22,24 @@ features:
 4. click "Install Add-on From File" and select the .xpi file you downloaded.
 5. make sure to click "Add" and "Keep Changes".
 
-### chrome
+### chrome/edge
 
 1. clone/download this repo.
 2. run `npm i` (you must have node.js).
 3. run `npm run build`. you should see it create a `dist` folder.
-4. go to the chrome extensions manager (`chrome://extensions`).
-5. turn on developer mode in the top right.
-6. click "Load unpacked" in the top left.
-7. select the `dist` folder.
+4. open the `manifest.json` file in `dist`.
+5. delete these 3 lines from `manifest.json`:
+
+```json
+    "chrome_settings_overrides": {
+        "homepage": "index.html"
+    },
+```
+
+6. go to the chrome extensions manager (`chrome://extensions`).
+7. turn on developer mode in the top right.
+8. click "Load unpacked" in the top left.
+9. select the `dist` folder.
 
 ### development / building from source
 
