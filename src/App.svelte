@@ -1,17 +1,23 @@
 <script>
+    import '@fontsource-variable/geist-mono'
+    import { onMount } from 'svelte'
+    import Clock from './lib/components/Clock.svelte'
+    import Links from './lib/components/Links.svelte'
+    import Settings from './lib/components/Settings.svelte'
+    import Stats from './lib/components/Stats.svelte'
     import Todoist from './lib/components/Todoist.svelte'
     import Weather from './lib/components/Weather.svelte'
-    import Links from './lib/components/Links.svelte'
-    import Clock from './lib/components/Clock.svelte'
-    import Stats from './lib/components/Stats.svelte'
-    import Settings from './lib/components/Settings.svelte'
-    import '@fontsource-variable/geist-mono'
+    import { initializeTheme } from './lib/theme-store.svelte.js'
 
     let showSettings = $state(false)
 
     function closeSettings() {
         showSettings = false
     }
+
+    onMount(() => {
+        initializeTheme()
+    })
 </script>
 
 <main>
@@ -45,6 +51,8 @@
         min-height: 100vh;
         justify-content: center;
         align-items: center;
+        padding: 2rem 1rem;
+        box-sizing: border-box;
     }
     .container {
         display: flex;

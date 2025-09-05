@@ -14,9 +14,6 @@
     box-sizing: border-box;
 }
 
-html {
-}
-
 body {
     margin: 0;
     padding: 0;
@@ -27,9 +24,6 @@ body {
     font-weight: 400;
     font-size: 100%;
     line-height: 1.5;
-}
-
-#app {
 }
 
 h1,

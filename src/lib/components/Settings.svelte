@@ -1,6 +1,8 @@
 <script>
-    import { fly, fade } from 'svelte/transition'
-    import { settings, saveSettings } from '../settings-store.svelte.js'
+    import { fade, fly } from 'svelte/transition'
+    import { saveSettings, settings } from '../settings-store.svelte.js'
+    import { applyTheme, themeSettings } from '../theme-store.svelte.js'
+    import { themeNames, themes } from '../themes.js'
 
     let { showSettings = false, closeSettings } = $props()
 
@@ -55,6 +57,7 @@
                             bind:group={settings.timeFormat}
                             value="12hr"
                         />
+                        <span class="radio-indicator" class:checked={settings.timeFormat === '12hr'}></span>
                         12 hour
                     </label>
                     <label class="radio-label">
@@ -63,8 +66,27 @@
                             bind:group={settings.timeFormat}
                             value="24hr"
                         />
+                        <span class="radio-indicator" class:checked={settings.timeFormat === '24hr'}></span>
                         24 hour
                     </label>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">theme</div>
+                <div class="theme-grid">
+                    {#each themeNames as themeName}
+                        <label class="theme-option">
+                            <input
+                                type="radio"
+                                bind:group={themeSettings.currentTheme}
+                                value={themeName}
+                                onchange={() => applyTheme(themeName)}
+                            />
+                            <span class="radio-indicator" class:checked={themeSettings.currentTheme === themeName}></span>
+                            <span class="theme-preview" style="background-color: {themes[themeName].colors['bg-4']}"></span>
+                            <span class="theme-name">{themes[themeName].displayName}</span>
+                        </label>
+                    {/each}
                 </div>
             </div>
             <div class="group">
@@ -102,6 +124,7 @@
                             bind:group={settings.tempUnit}
                             value="fahrenheit"
                         />
+                        <span class="radio-indicator" class:checked={settings.tempUnit === 'fahrenheit'}></span>
                         fahrenheit
                     </label>
                     <label class="radio-label">
@@ -110,6 +133,7 @@
                             bind:group={settings.tempUnit}
                             value="celsius"
                         />
+                        <span class="radio-indicator" class:checked={settings.tempUnit === 'celsius'}></span>
                         celsius
                     </label>
                 </div>
@@ -123,6 +147,7 @@
                             bind:group={settings.speedUnit}
                             value="mph"
                         />
+                        <span class="radio-indicator" class:checked={settings.speedUnit === 'mph'}></span>
                         mph
                     </label>
                     <label class="radio-label">
@@ -131,6 +156,7 @@
                             bind:group={settings.speedUnit}
                             value="kmh"
                         />
+                        <span class="radio-indicator" class:checked={settings.speedUnit === 'kmh'}></span>
                         kmh
                     </label>
                 </div>
@@ -272,5 +298,57 @@
     }
     .version {
         color: var(--txt-3);
+    }
+    .theme-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+    .theme-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: border-color 0.2s ease;
+    }
+    .theme-option:hover {
+        border-color: var(--bg-3);
+    }
+    .theme-option:has(.radio-indicator.checked) {
+        border-color: var(--txt-3);
+    }
+    .theme-option input[type='radio'] {
+        display: none;
+    }
+    .theme-preview {
+        width: 12px;
+        height: 12px;
+        border: 1px solid var(--bg-3);
+        flex-shrink: 0;
+    }
+    .theme-name {
+        font-size: 0.9rem;
+        flex: 1;
+    }
+    .radio-group {
+        display: flex;
+        gap: 1rem;
+    }
+    .radio-label {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        cursor: pointer;
+    }
+    .radio-label input[type='radio'] {
+        display: none;
+    }
+    .radio-indicator::before {
+        content: '( )';
+    }
+    .radio-indicator.checked::before {
+        content: '(x)';
     }
 </style>
