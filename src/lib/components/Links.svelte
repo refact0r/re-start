@@ -21,7 +21,7 @@
             {#each column as link}
                 <a
                     href={link.url}
-                    target="_blank"
+                    target={settings.linkTarget}
                     rel="noopener noreferrer"
                     class="link"
                 >

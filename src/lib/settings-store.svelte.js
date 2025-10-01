@@ -6,6 +6,7 @@ let defaultSettings = {
     tempUnit: 'fahrenheit',
     speedUnit: 'mph',
     linksPerColumn: 4,
+    linkTarget: '_self',
     links: [
         { title: 'gmail', url: 'https://mail.google.com' },
         { title: 'calendar', url: 'https://calendar.google.com' },

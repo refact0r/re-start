@@ -145,6 +145,27 @@
                 />
             </div>
             <div class="group">
+                <div class="setting-label">link behavior</div>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input
+                            type="radio"
+                            bind:group={settings.linkTarget}
+                            value="_self"
+                        />
+                        same tab
+                    </label>
+                    <label class="radio-label">
+                        <input
+                            type="radio"
+                            bind:group={settings.linkTarget}
+                            value="_blank"
+                        />
+                        new tab
+                    </label>
+                </div>
+            </div>
+            <div class="group">
                 <div class="links-header">
                     <div class="setting-label">links</div>
                     <button class="add-btn" onclick={addLink}>add link</button>
