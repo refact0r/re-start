@@ -8,6 +8,7 @@ features:
 - weather (from open-meteo)
 - customizable quick links
 - stats (load time, ping, fps, viewport size)
+- multiple color themes
 - lightweight & performant (&lt;90kb including fonts, loads in &lt;50ms)
 
 <img width="2331" height="1319" alt="image" src="https://github.com/user-attachments/assets/e3164af7-fc42-4caf-81ee-a049e05b84c7" />
