@@ -1,11 +1,20 @@
 <script>
-    import { fly, fade } from 'svelte/transition'
-    import { settings, saveSettings } from '../settings-store.svelte.js'
+    import { fade, fly } from 'svelte/transition'
+    import { saveSettings, settings } from '../settings-store.svelte.js'
+    import { getTheme, setTheme } from '../theme-store.svelte.js'
+    import { themeNames, themes } from '../themes.js'
+    import RadioButton from './RadioButton.svelte'
 
     let { showSettings = false, closeSettings } = $props()
 
     // @ts-ignore
     const version = __APP_VERSION__
+
+    // Reactive theme binding
+    let currentTheme = $state(getTheme())
+    $effect(() => {
+        setTheme(currentTheme)
+    })
 
     function addLink() {
         settings.links = [...settings.links, { title: '', url: '' }]
@@ -49,22 +58,46 @@
             <div class="group">
                 <div class="setting-label">time format</div>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.timeFormat}
-                            value="12hr"
-                        />
+                    <RadioButton bind:group={settings.timeFormat} value="12hr">
                         12 hour
-                    </label>
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.timeFormat}
-                            value="24hr"
-                        />
+                    </RadioButton>
+                    <RadioButton bind:group={settings.timeFormat} value="24hr">
                         24 hour
-                    </label>
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">theme</div>
+                <div class="theme-grid">
+                    {#each themeNames as themeName}
+                        <div class="theme-option">
+                            <RadioButton
+                                bind:group={currentTheme}
+                                value={themeName}
+                            >
+                                <div class="theme-preview">
+                                    <div
+                                        style="background-color: {themes[
+                                            themeName
+                                        ].colors['--bg-1']}"
+                                    ></div>
+                                    <div
+                                        style="background-color: {themes[
+                                            themeName
+                                        ].colors['--txt-4']}"
+                                    ></div>
+                                    <div
+                                        style="background-color: {themes[
+                                            themeName
+                                        ].colors['--txt-2']}"
+                                    ></div>
+                                </div>
+                                <span class="theme-name"
+                                    >{themes[themeName].displayName}</span
+                                >
+                            </RadioButton>
+                        </div>
+                    {/each}
                 </div>
             </div>
             <div class="group">
@@ -96,43 +129,26 @@
             <div class="group">
                 <div class="setting-label">temperature format</div>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.tempUnit}
-                            value="fahrenheit"
-                        />
+                    <RadioButton
+                        bind:group={settings.tempUnit}
+                        value="fahrenheit"
+                    >
                         fahrenheit
-                    </label>
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.tempUnit}
-                            value="celsius"
-                        />
+                    </RadioButton>
+                    <RadioButton bind:group={settings.tempUnit} value="celsius">
                         celsius
-                    </label>
+                    </RadioButton>
                 </div>
             </div>
             <div class="group">
                 <div class="setting-label">speed format</div>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.speedUnit}
-                            value="mph"
-                        />
+                    <RadioButton bind:group={settings.speedUnit} value="mph">
                         mph
-                    </label>
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.speedUnit}
-                            value="kmh"
-                        />
+                    </RadioButton>
+                    <RadioButton bind:group={settings.speedUnit} value="kmh">
                         kmh
-                    </label>
+                    </RadioButton>
                 </div>
             </div>
             <div class="group">
@@ -293,5 +309,28 @@
     }
     .version {
         color: var(--txt-3);
+    }
+    .theme-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+    .theme-preview {
+        display: inline-flex;
+        vertical-align: middle;
+        margin-top: -0.125rem;
+        border: 2px solid var(--bg-3);
+    }
+    .theme-preview div {
+        width: 1rem;
+        height: 1rem;
+    }
+    .theme-name {
+        font-size: 0.9rem;
+        flex: 1;
+    }
+    .radio-group {
+        display: flex;
+        gap: 3ch;
     }
 </style>
