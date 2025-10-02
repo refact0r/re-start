@@ -1,13 +1,20 @@
 <script>
     import { fade, fly } from 'svelte/transition'
     import { saveSettings, settings } from '../settings-store.svelte.js'
-    import { applyTheme, themeSettings } from '../theme-store.svelte.js'
+    import { getTheme, setTheme } from '../theme-store.svelte.js'
     import { themeNames, themes } from '../themes.js'
+    import RadioButton from './RadioButton.svelte'
 
     let { showSettings = false, closeSettings } = $props()
 
     // @ts-ignore
     const version = __APP_VERSION__
+
+    // Reactive theme binding
+    let currentTheme = $state(getTheme())
+    $effect(() => {
+        setTheme(currentTheme)
+    })
 
     function addLink() {
         settings.links = [...settings.links, { title: '', url: '' }]
@@ -51,41 +58,45 @@
             <div class="group">
                 <div class="setting-label">time format</div>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.timeFormat}
-                            value="12hr"
-                        />
-                        <span class="radio-indicator" class:checked={settings.timeFormat === '12hr'}></span>
+                    <RadioButton bind:group={settings.timeFormat} value="12hr">
                         12 hour
-                    </label>
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.timeFormat}
-                            value="24hr"
-                        />
-                        <span class="radio-indicator" class:checked={settings.timeFormat === '24hr'}></span>
+                    </RadioButton>
+                    <RadioButton bind:group={settings.timeFormat} value="24hr">
                         24 hour
-                    </label>
+                    </RadioButton>
                 </div>
             </div>
             <div class="group">
                 <div class="setting-label">theme</div>
                 <div class="theme-grid">
                     {#each themeNames as themeName}
-                        <label class="theme-option">
-                            <input
-                                type="radio"
-                                bind:group={themeSettings.currentTheme}
+                        <div class="theme-option">
+                            <RadioButton
+                                bind:group={currentTheme}
                                 value={themeName}
-                                onchange={() => applyTheme(themeName)}
-                            />
-                            <span class="radio-indicator" class:checked={themeSettings.currentTheme === themeName}></span>
-                            <span class="theme-preview" style="background-color: {themes[themeName].colors['bg-4']}"></span>
-                            <span class="theme-name">{themes[themeName].displayName}</span>
-                        </label>
+                            >
+                                <div class="theme-preview">
+                                    <div
+                                        style="background-color: {themes[
+                                            themeName
+                                        ].colors['--bg-1']}"
+                                    ></div>
+                                    <div
+                                        style="background-color: {themes[
+                                            themeName
+                                        ].colors['--txt-4']}"
+                                    ></div>
+                                    <div
+                                        style="background-color: {themes[
+                                            themeName
+                                        ].colors['--txt-2']}"
+                                    ></div>
+                                </div>
+                                <span class="theme-name"
+                                    >{themes[themeName].displayName}</span
+                                >
+                            </RadioButton>
+                        </div>
                     {/each}
                 </div>
             </div>
@@ -118,47 +129,26 @@
             <div class="group">
                 <div class="setting-label">temperature format</div>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.tempUnit}
-                            value="fahrenheit"
-                        />
-                        <span class="radio-indicator" class:checked={settings.tempUnit === 'fahrenheit'}></span>
+                    <RadioButton
+                        bind:group={settings.tempUnit}
+                        value="fahrenheit"
+                    >
                         fahrenheit
-                    </label>
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.tempUnit}
-                            value="celsius"
-                        />
-                        <span class="radio-indicator" class:checked={settings.tempUnit === 'celsius'}></span>
+                    </RadioButton>
+                    <RadioButton bind:group={settings.tempUnit} value="celsius">
                         celsius
-                    </label>
+                    </RadioButton>
                 </div>
             </div>
             <div class="group">
                 <div class="setting-label">speed format</div>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.speedUnit}
-                            value="mph"
-                        />
-                        <span class="radio-indicator" class:checked={settings.speedUnit === 'mph'}></span>
+                    <RadioButton bind:group={settings.speedUnit} value="mph">
                         mph
-                    </label>
-                    <label class="radio-label">
-                        <input
-                            type="radio"
-                            bind:group={settings.speedUnit}
-                            value="kmh"
-                        />
-                        <span class="radio-indicator" class:checked={settings.speedUnit === 'kmh'}></span>
+                    </RadioButton>
+                    <RadioButton bind:group={settings.speedUnit} value="kmh">
                         kmh
-                    </label>
+                    </RadioButton>
                 </div>
             </div>
             <div class="group">
@@ -304,29 +294,15 @@
         grid-template-columns: 1fr 1fr;
         gap: 0.5rem;
     }
-    .theme-option {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem;
-        border: 2px solid transparent;
-        cursor: pointer;
-        transition: border-color 0.2s ease;
-    }
-    .theme-option:hover {
-        border-color: var(--bg-3);
-    }
-    .theme-option:has(.radio-indicator.checked) {
-        border-color: var(--txt-3);
-    }
-    .theme-option input[type='radio'] {
-        display: none;
-    }
     .theme-preview {
-        width: 12px;
-        height: 12px;
-        border: 1px solid var(--bg-3);
-        flex-shrink: 0;
+        display: inline-flex;
+        vertical-align: middle;
+        margin-top: -0.125rem;
+        border: 2px solid var(--bg-3);
+    }
+    .theme-preview div {
+        width: 1rem;
+        height: 1rem;
     }
     .theme-name {
         font-size: 0.9rem;
@@ -334,21 +310,6 @@
     }
     .radio-group {
         display: flex;
-        gap: 1rem;
-    }
-    .radio-label {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        cursor: pointer;
-    }
-    .radio-label input[type='radio'] {
-        display: none;
-    }
-    .radio-indicator::before {
-        content: '( )';
-    }
-    .radio-indicator.checked::before {
-        content: '(x)';
+        gap: 3ch;
     }
 </style>

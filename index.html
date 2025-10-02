@@ -5,6 +5,35 @@
         <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>~</title>
+        <script>
+            ;(function () {
+                const themes = __THEMES_DATA__
+                const defaultTheme = '__DEFAULT_THEME__'
+
+                try {
+                    const stored = localStorage.getItem('themeSettings')
+                    let themeName = defaultTheme
+                    if (stored) {
+                        const parsed = JSON.parse(stored)
+                        if (
+                            parsed.currentTheme &&
+                            themes[parsed.currentTheme]
+                        ) {
+                            themeName = parsed.currentTheme
+                        }
+                    }
+
+                    const theme = themes[themeName]
+                    if (theme && theme.colors) {
+                        const colors = theme.colors
+                        const root = document.documentElement
+                        for (const key in colors) {
+                            root.style.setProperty(key, colors[key])
+                        }
+                    }
+                } catch (e) {}
+            })()
+        </script>
     </head>
     <body>
         <div id="app"></div>
