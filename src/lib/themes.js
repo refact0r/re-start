@@ -64,6 +64,19 @@ export const themes = {
             '--txt-err': '#eb6f92',
         },
     },
+    gruvbox: {
+        displayName: 'gruvbox',
+        colors: {
+            '--bg-1': '#282828',
+            '--bg-2': '#3c3836',
+            '--bg-3': '#504945',
+            '--txt-1': '#ebdbb2',
+            '--txt-2': '#d5c4a1',
+            '--txt-3': '#928374',
+            '--txt-4': '#fabd2f',
+            '--txt-err': '#fb4934',
+        },
+    },
 }
 
 export const themeNames = Object.keys(themes)
