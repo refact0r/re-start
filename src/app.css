@@ -19,7 +19,7 @@ body {
     background: var(--bg-1);
     color: var(--txt-2);
 
-    font-family: 'Geist Mono Variable', monospace;
+    font-family: 'Jetbrains Mono Variable', monospace;
     font-weight: 400;
     font-size: 100%;
     line-height: 1.5;

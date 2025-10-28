@@ -1,12 +1,17 @@
 let defaultSettings = {
     timeFormat: '12hr',
     todoistApiToken: '',
-    latitude: null,
-    longitude: null,
-    tempUnit: 'fahrenheit',
-    speedUnit: 'mph',
+    latitude: 0,
+    longitude: 0,
+    tempUnit: 'celsius',
+    speedUnit: 'kmh',
     linksPerColumn: 4,
     linkTarget: '_self',
+    engineTarget: 'duckduckgo',
+    engines: [
+        { title: 'google', url: 'https://google.com/search?q=' },
+        { title: 'duckduckgo', url: 'https://duckduckgo.com/?q=' },
+    ],
     links: [
         { title: 'gmail', url: 'https://mail.google.com' },
         { title: 'calendar', url: 'https://calendar.google.com' },

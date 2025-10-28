@@ -1,11 +1,12 @@
 <script>
-    import '@fontsource-variable/geist-mono'
+    import '@fontsource-variable/jetbrains-mono'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
     import Settings from './lib/components/Settings.svelte'
     import Stats from './lib/components/Stats.svelte'
     import Todoist from './lib/components/Todoist.svelte'
     import Weather from './lib/components/Weather.svelte'
+    import Search from './lib/components/Search.svelte'
 
     let showSettings = $state(false)
 
@@ -19,6 +20,9 @@
         <div class="top">
             <Clock />
             <Stats />
+        </div>
+        <div class="top">
+            <Search />
         </div>
         <div class="widgets">
             <Weather />

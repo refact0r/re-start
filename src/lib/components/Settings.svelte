@@ -7,6 +7,8 @@
 
     let { showSettings = false, closeSettings } = $props()
 
+    let addEngines = $state(false)
+
     // @ts-ignore
     const version = __APP_VERSION__
 
@@ -18,6 +20,14 @@
 
     function addLink() {
         settings.links = [...settings.links, { title: '', url: '' }]
+    }
+
+    function addEngine() {
+        settings.engines = [...settings.engines, { title: '', url: '' }]
+    }
+
+    function removeEngine(index) {
+        settings.engines = settings.engines.filter((_, i) => i !== index)
     }
 
     function removeLink(index) {
@@ -173,6 +183,67 @@
                         new tab
                     </RadioButton>
                 </div>
+            </div>
+            <div class="group">
+                <div class="links-header">
+                    <div class="links-header">search engine</div>
+                    {#if addEngines}
+                        <button class="add-btn" onclick={addEngine}
+                            >add engine</button
+                        >
+                        <button
+                            class="add-btn"
+                            onclick={() => {
+                                addEngines = false
+                            }}>done</button
+                        >
+                    {:else}
+                        <button
+                            class="add-btn"
+                            onclick={() => {
+                                addEngines = true
+                                addEngine
+                            }}>edit engines</button
+                        >
+                    {/if}
+                </div>
+                {#if !addEngines}
+                    <div class="radio-group">
+                        {#each settings.engines as engine, index}
+                            <RadioButton
+                                bind:group={settings.engineTarget}
+                                value={engine.title}
+                            >
+                                {engine.title}
+                            </RadioButton>
+                        {/each}
+                    </div>
+                {:else}
+                    <div class="links-list">
+                        {#each settings.engines as engine, index}
+                            <div class="link">
+                                <input
+                                    type="text"
+                                    bind:value={engine.title}
+                                    placeholder="title"
+                                    class="link-input name"
+                                />
+                                <input
+                                    type="url"
+                                    bind:value={engine.url}
+                                    placeholder="https://example.com"
+                                    class="link-input"
+                                />
+                                <button
+                                    class="remove-btn"
+                                    onclick={() => removeEngine(index)}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        {/each}
+                    </div>
+                {/if}
             </div>
             <div class="group">
                 <div class="links-header">
