@@ -1,0 +1,12 @@
+{
+    "version": { "license": "MIT" },
+    "categories": { "firefox": ["tabs"] },
+    "contributions_url": "https://ko-fi.com/refact0r",
+    "requires_payment": false,
+    "homepage": {
+        "en-US": "https://github.com/refact0r/re-start"
+    },
+    "support_email": {
+        "en-US": "refact0r.contact@gmail.com"
+    }
+}
