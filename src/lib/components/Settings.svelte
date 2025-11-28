@@ -1,6 +1,10 @@
 <script>
     import { fade, fly } from 'svelte/transition'
-    import { saveSettings, settings } from '../settings-store.svelte.js'
+    import {
+        saveSettings,
+        settings,
+        resetSettings,
+    } from '../settings-store.svelte.js'
     import { themeNames, themes } from '../themes.js'
     import RadioButton from './RadioButton.svelte'
 
@@ -25,6 +29,15 @@
     function handleKeydown(event) {
         if (event.key === 'Escape') {
             handleClose()
+        }
+    }
+
+    function handleReset() {
+        if (
+            confirm('are you sure you want to reset all settings to default?')
+        ) {
+            resetSettings()
+            saveSettings(settings)
         }
     }
 </script>
@@ -88,7 +101,17 @@
                     id="font"
                     type="text"
                     bind:value={settings.font}
-                    placeholder="e.g., Geist Mono Variable, Monaco, Courier New"
+                    placeholder="Geist Mono Variable"
+                />
+            </div>
+
+            <div class="group">
+                <label for="tab-title">tab title</label>
+                <input
+                    id="tab-title"
+                    type="text"
+                    bind:value={settings.tabTitle}
+                    placeholder="~"
                 />
             </div>
 
@@ -209,13 +232,16 @@
                 </div>
             </div>
             <div class="version">
-                re-start
-                {#if version}v{version}
-                {/if} • made with ❤️ by
+                <a href="https://github.com/refact0r/re-start" target="_blank">
+                    re-start
+                    {#if version}v{version}
+                    {/if}</a
+                >
+                • made with ❤️ by
                 <a href="https://refact0r.dev" target="_blank">refact0r</a>
                 •
-                <a href="https://github.com/refact0r/re-start" target="_blank"
-                    >github</a
+                <button class="reset-link" onclick={handleReset}
+                    >reset settings</button
                 >
             </div>
         </div>
@@ -306,6 +332,14 @@
     }
     .version {
         color: var(--txt-3);
+
+        a {
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: var(--txt-2);
+        }
     }
     .theme-grid {
         display: grid;
@@ -329,5 +363,18 @@
     .radio-group {
         display: flex;
         gap: 3ch;
+    }
+    .reset-link {
+        background: none;
+        border: none;
+        color: var(--txt-3);
+        cursor: pointer;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+        text-decoration: underline;
+    }
+    .reset-link:hover {
+        color: var(--txt-2);
     }
 </style>

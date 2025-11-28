@@ -37,6 +37,10 @@
     })
 
     $effect(() => {
+        document.title = settings.tabTitle || '~'
+    })
+
+    $effect(() => {
         saveSettings(settings)
     })
 </script>

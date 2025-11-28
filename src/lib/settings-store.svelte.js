@@ -2,6 +2,7 @@ let defaultSettings = {
     timeFormat: '12hr',
     font: 'Geist Mono Variable',
     currentTheme: 'default',
+    tabTitle: '~',
     todoistApiToken: '',
     latitude: null,
     longitude: null,
@@ -48,6 +49,19 @@ export function saveSettings(settings) {
         localStorage.setItem('settings', JSON.stringify(settings))
     } catch (error) {
         console.error('failed to save settings to localStorage:', error)
+    }
+}
+
+export function resetSettings() {
+    try {
+        localStorage.removeItem('settings')
+        // Reset the settings object to default
+        const newSettings = loadSettings()
+        Object.assign(settings, newSettings)
+        return true
+    } catch (error) {
+        console.error('failed to reset settings:', error)
+        return false
     }
 }
 
