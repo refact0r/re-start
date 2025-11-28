@@ -17,11 +17,9 @@ features:
 
 ### firefox
 
-1. download the latest .xpi file from the `releases` folder.
-2. go to the firefox extensions manager (`about:addons`)
-3. click the gear icon in the top right.
-4. click "Install Add-on From File" and select the .xpi file you downloaded.
-5. make sure to click "Add" and "Keep Changes".
+1. go to <https://addons.mozilla.org/en-US/firefox/addon/d004c62a8aed4f3b8ddd/>.
+2. click "Add to Firefox".
+3. make sure to click "Add" and "Keep Changes" when prompted.
 
 ### chrome/edge
 
