@@ -291,7 +291,8 @@
     }
     form {
         opacity: 0;
-        display: inline-block;
+        display: flex;
+        gap: 1ch;
         transition: opacity 0.2s ease;
         flex: 1;
     }
@@ -300,7 +301,9 @@
         opacity: 1;
     }
     .add-task-input {
+        flex: 1;
         background: transparent;
+        padding: 0;
         border: none;
         color: var(--txt-2);
         height: 1.5rem;
