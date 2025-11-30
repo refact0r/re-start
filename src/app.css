@@ -101,3 +101,7 @@ input {
 .bright {
     color: var(--txt-1);
 }
+
+.dark {
+    color: var(--txt-3);
+}

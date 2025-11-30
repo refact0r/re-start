@@ -9,6 +9,8 @@
     let error = $state('')
     let initialLoad = $state(true)
     let taskCount = $derived(tasks.filter((task) => !task.checked).length)
+    let newTaskContent = $state('')
+    let addingTask = $state(false)
 
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible' && api) {
@@ -54,6 +56,23 @@
             console.error(err)
         } finally {
             if (showSyncing) syncing = false
+        }
+    }
+
+    async function addTask(event) {
+        event.preventDefault()
+        if (!newTaskContent.trim() || !api || addingTask) return
+
+        try {
+            addingTask = true
+            await api.addTask(newTaskContent.trim())
+            newTaskContent = ''
+            await loadTasks()
+        } catch (err) {
+            console.error('Failed to add task:', err)
+            error = 'failed to add task'
+        } finally {
+            addingTask = false
         }
     }
 
@@ -181,8 +200,20 @@
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    {taskCount} task{taskCount === 1 ? '' : 's'}
+                    <span class="bright">{taskCount}</span> task{taskCount === 1
+                        ? ''
+                        : 's'}
                 </a>
+                <form onsubmit={addTask}>
+                    <span class="dark">+</span>
+                    <input
+                        type="text"
+                        class="add-task-input"
+                        placeholder="new task"
+                        bind:value={newTaskContent}
+                        disabled={addingTask}
+                    />
+                </form>
             </div>
 
             <br />
@@ -233,7 +264,7 @@
     }
     .widget-header {
         display: flex;
-        justify-content: space-between;
+        gap: 1ch;
     }
     .tasks {
         max-height: 15rem;
@@ -257,5 +288,27 @@
     }
     .overdue-date {
         color: var(--txt-err);
+    }
+    form {
+        opacity: 0;
+        display: inline-block;
+        transition: opacity 0.2s ease;
+        flex: 1;
+    }
+    form:hover,
+    form:focus-within {
+        opacity: 1;
+    }
+    .add-task-input {
+        background: transparent;
+        border: none;
+        color: var(--txt-2);
+        height: 1.5rem;
+    }
+    .add-task-input::placeholder {
+        color: var(--txt-3);
+    }
+    .add-task-input:disabled {
+        opacity: 0.5;
     }
 </style>

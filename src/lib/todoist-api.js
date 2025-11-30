@@ -245,6 +245,25 @@ class TodoistAPI {
     }
 
     /**
+     * Add a new task
+     */
+    async addTask(content) {
+        const tempId = crypto.randomUUID()
+        const commands = [
+            {
+                type: 'item_add',
+                temp_id: tempId,
+                uuid: crypto.randomUUID(),
+                args: {
+                    content: content,
+                },
+            },
+        ]
+
+        return this.executeCommands(commands)
+    }
+
+    /**
      * Execute sync commands
      */
     async executeCommands(commands) {
