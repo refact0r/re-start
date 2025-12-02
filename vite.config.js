@@ -31,10 +31,21 @@ function injectThemeScript() {
     }
 }
 
+// Plugin to exclude manifest.json from public copy (we'll generate it separately)
+function excludeManifest() {
+    return {
+        name: 'exclude-manifest',
+        generateBundle(options, bundle) {
+            // Remove manifest.json from bundle if Vite copied it
+            delete bundle['manifest.json']
+        },
+    }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
     base: './',
-    plugins: [svelte(), injectThemeScript()],
+    plugins: [svelte(), injectThemeScript(), excludeManifest()],
     define: {
         __APP_VERSION__: JSON.stringify(manifest.version),
     },
