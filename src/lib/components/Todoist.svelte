@@ -37,7 +37,9 @@
     })
 
     $effect(() => {
-        const parsed = parseSmartDate(newTaskContent)
+        const parsed = parseSmartDate(newTaskContent, {
+            dateFormat: settings.dateFormat,
+        })
         parsedDate = parsed
         if (parsed) {
             console.log('Parsed date:', parsed)
@@ -79,7 +81,9 @@
         const raw = newTaskContent.trim()
         if (!raw || !api || addingTask) return
 
-        const parsed = parsedDate || parseSmartDate(raw)
+        const parsed =
+            parsedDate ||
+            parseSmartDate(raw, { dateFormat: settings.dateFormat })
         let content = raw
         let due = null
         if (parsed?.match) {

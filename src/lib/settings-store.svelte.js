@@ -6,6 +6,7 @@ let defaultSettings = {
     latitude: null,
     longitude: null,
     timeFormat: '12hr',
+    dateFormat: 'mdy',
     tempUnit: 'fahrenheit',
     speedUnit: 'mph',
     linksPerColumn: 4,

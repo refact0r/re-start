@@ -26,13 +26,14 @@
         currentMin = now.getMinutes().toString().padStart(2, '0')
         currentSec = now.getSeconds().toString().padStart(2, '0')
 
-        currentDate = now
-            .toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            })
+        const locale = settings.dateFormat === 'dmy' ? 'en-GB' : 'en-US'
+        currentDate = new Intl.DateTimeFormat(locale, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        })
+            .format(now)
             .toLowerCase()
     }
 

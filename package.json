@@ -10,7 +10,7 @@
         "build:chrome": "vite build --outDir dist/chrome && node scripts/build-manifest.js chrome dist/chrome",
         "watch": "vite build --outDir dist/firefox --watch",
         "preview": "vite preview",
-        "test": "vitest"
+        "test": "vitest run"
     },
     "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "^6.2.1",

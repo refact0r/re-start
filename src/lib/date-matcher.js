@@ -58,6 +58,21 @@ const RELATIVE_DAYS = {
     today: 0,
 }
 
+const MONTH_NAME_PATTERN = Object.keys(MONTHS).join('|')
+const WEEKDAY_PATTERN = Object.keys(WEEKDAYS).join('|')
+const DAY_TOKEN_PATTERN = '(\\d{1,2}(?:st|nd|rd|th)?|first)'
+const YEAR_TOKEN_PATTERN = '(\\d{2,4})'
+const TRAILING_BOUNDARY = '(?=[\\s,.;!?)-]|$)'
+const MONTH_FIRST_PATTERN = `\\b(${MONTH_NAME_PATTERN})\\b(?:\\s+${DAY_TOKEN_PATTERN})?(?:\\s*,?\\s*${YEAR_TOKEN_PATTERN})?${TRAILING_BOUNDARY}`
+const DAY_FIRST_PATTERN = `\\b${DAY_TOKEN_PATTERN}\\s+(${MONTH_NAME_PATTERN})\\b(?:\\s*,?\\s*${YEAR_TOKEN_PATTERN})?${TRAILING_BOUNDARY}`
+const WEEKDAY_REGEX = new RegExp(`(next)?\\s*\\b(${WEEKDAY_PATTERN})\\b`, 'gi')
+
+function isOptionsBag(value) {
+    return (
+        value !== null && typeof value === 'object' && !(value instanceof Date)
+    )
+}
+
 function startOfDay(date) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
@@ -140,16 +155,6 @@ function applyTime(date, hour, minute, ampmProvided) {
     return result
 }
 
-function buildDueResult(candidate) {
-    if (!candidate || !candidate.match || !candidate.date) return null
-    const { match, date, hasTime } = candidate
-    return {
-        match,
-        date,
-        hasTime: Boolean(hasTime),
-    }
-}
-
 function findRelativeDates(text, lower, now, consider) {
     Object.entries(RELATIVE_DAYS).forEach(([word, delta]) => {
         const regex = new RegExp(`\\b${word}\\b`, 'g')
@@ -179,10 +184,8 @@ function resolveWeekday(base, isNext) {
 }
 
 function findWeekdays(text, lower, now, consider) {
-    const regex =
-        /(next)?\s*\b(sun(day)?|mon(day)?|tue(s|sday)?|wed(nesday)?|thu(r|rs|rsday)?|fri(day)?|sat(urday)?|weekend|weekday)\b/gi
     let m
-    while ((m = regex.exec(lower))) {
+    while ((m = WEEKDAY_REGEX.exec(lower))) {
         const modifier = m[1]?.trim()
         const word = m[2]
         const start = m.index
@@ -211,38 +214,61 @@ function findWeekdays(text, lower, now, consider) {
 }
 
 function findMonthDates(text, lower, now, consider) {
-    const monthNames = Object.keys(MONTHS).join('|')
-    const trailing = '(?=[\\s,.;!?)-]|$)'
-    const regex = new RegExp(
-        `\\b(${monthNames})\\b(?:\\s+(\\d{1,2}(?:st|nd|rd|th)?|first))?(?:\\s*,?\\s*(\\d{2,4}))?${trailing}`,
-        'gi'
-    )
     let m
-    while ((m = regex.exec(lower))) {
+    const monthFirstRegex = new RegExp(MONTH_FIRST_PATTERN, 'gi')
+    while ((m = monthFirstRegex.exec(lower))) {
         const [, monthWord, dayToken, yearToken] = m
-        const month = MONTHS[monthWord]
-        if (!month && month !== 0) continue
-        const day = dayToken ? resolveDayToken(dayToken) : 1
-        if (!day) continue
-        const year = yearToken ? parseInt(yearToken, 10) : undefined
-        const date = buildDate(month, day, year, now)
+        pushMonthMatch(m, monthWord, dayToken, yearToken, now, consider, 1)
+    }
 
-        consider({
-            match: { start: m.index, end: m.index + m[0].length },
-            date,
-            hasTime: false,
-            dateProvided: true,
-        })
+    const dayFirstRegex = new RegExp(DAY_FIRST_PATTERN, 'gi')
+    while ((m = dayFirstRegex.exec(lower))) {
+        const [, dayToken, monthWord, yearToken] = m
+        pushMonthMatch(m, monthWord, dayToken, yearToken, now, consider)
     }
 }
 
-function findNumericDates(lower, now, consider) {
+function pushMonthMatch(
+    match,
+    monthWord,
+    dayToken,
+    yearToken,
+    now,
+    consider,
+    defaultDay = null
+) {
+    const month = MONTHS[monthWord]
+    if (!month && month !== 0) return
+    const day = dayToken ? resolveDayToken(dayToken) : defaultDay
+    if (!day) return
+    const year = yearToken ? parseInt(yearToken, 10) : undefined
+    const date = buildDate(month, day, year, now)
+
+    consider({
+        match: { start: match.index, end: match.index + match[0].length },
+        date,
+        hasTime: false,
+        dateProvided: true,
+    })
+}
+
+function findNumericDates(lower, now, consider, dateFormat = 'mdy') {
     const regex =
         /\b(\d{1,2})[/-](\d{1,2})(?:[/-](\d{2,4}))?(?=[\s,.;!?)\-]|$)/g
     let m
     while ((m = regex.exec(lower))) {
-        const month = parseInt(m[1], 10) - 1
-        const day = parseInt(m[2], 10)
+        const part1 = parseInt(m[1], 10)
+        const part2 = parseInt(m[2], 10)
+        if (Number.isNaN(part1) || Number.isNaN(part2)) continue
+        let month
+        let day
+        if (dateFormat === 'dmy') {
+            day = part1
+            month = part2 - 1
+        } else {
+            month = part1 - 1
+            day = part2
+        }
         if (month < 0 || month > 11 || day < 1 || day > 31) continue
         const year = m[3] ? parseInt(m[3], 10) : undefined
         const date = buildDate(month, day, year, now)
@@ -406,8 +432,29 @@ function selectBest(candidates) {
     }, null)
 }
 
-export function parseSmartDate(input, now = new Date()) {
+export function parseSmartDate(input, maybeNow, maybeOptions) {
     if (!input || !input.trim()) return null
+    let now = new Date()
+    let options = {}
+
+    if (maybeNow instanceof Date) {
+        const candidate = new Date(maybeNow)
+        if (!Number.isNaN(candidate.getTime())) now = candidate
+    } else if (
+        typeof maybeNow === 'number' ||
+        (typeof maybeNow === 'string' && maybeNow)
+    ) {
+        const candidate = new Date(maybeNow)
+        if (!Number.isNaN(candidate.getTime())) now = candidate
+    } else if (isOptionsBag(maybeNow)) {
+        options = maybeNow
+    }
+
+    if (isOptionsBag(maybeOptions)) {
+        options = maybeOptions
+    }
+
+    const dateFormat = options.dateFormat === 'dmy' ? 'dmy' : 'mdy'
     const lower = input.toLowerCase()
     const candidates = []
     const consider = (candidate) => {
@@ -423,7 +470,7 @@ export function parseSmartDate(input, now = new Date()) {
     findRelativeDates(input, lower, safeNow, consider)
     findWeekdays(input, lower, safeNow, consider)
     findMonthDates(input, lower, safeNow, consider)
-    findNumericDates(lower, safeNow, consider)
+    findNumericDates(lower, safeNow, consider, dateFormat)
     findOrdinalsOnly(lower, safeNow, consider)
 
     const timeDetections = collectTimeMatches(lower)
@@ -450,7 +497,12 @@ export function parseSmartDate(input, now = new Date()) {
     })
 
     const best = selectBest(withTime)
-    return buildDueResult(best)
+    if (!best || !best.match || !best.date) return null
+    return {
+        match: best.match,
+        date: best.date,
+        hasTime: Boolean(best.hasTime),
+    }
 }
 
 export function stripDateMatch(text, match) {

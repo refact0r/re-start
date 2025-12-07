@@ -176,6 +176,24 @@ const CASES = [
         },
     },
     {
+        name: 'day first month name with year',
+        input: 'task 1 dec 2026',
+        expected: {
+            match: '1 dec 2026',
+            hasTime: false,
+            due: { year: 2026, month: 12, day: 1 },
+        },
+    },
+    {
+        name: 'day first month name without year',
+        input: 'task 1 dec',
+        expected: {
+            match: '1 dec',
+            hasTime: false,
+            due: { year: 2026, month: 12, day: 1 },
+        },
+    },
+    {
         name: 'numeric date with slash',
         input: 'task 12/15/25',
         expected: {
@@ -200,6 +218,25 @@ const CASES = [
             match: '12-15-25',
             hasTime: false,
             due: { year: 2025, month: 12, day: 15 },
+        },
+    },
+    {
+        name: 'numeric ambiguous defaults to mdy',
+        input: 'task 1-12-2026',
+        expected: {
+            match: '1-12-2026',
+            hasTime: false,
+            due: { year: 2026, month: 1, day: 12 },
+        },
+    },
+    {
+        name: 'numeric date respects dmy format',
+        input: 'task 1-12-2026',
+        options: { dateFormat: 'dmy' },
+        expected: {
+            match: '1-12-2026',
+            hasTime: false,
+            due: { year: 2026, month: 12, day: 1 },
         },
     },
     {
@@ -248,7 +285,9 @@ describe('parseSmartDate', () => {
     CASES.forEach((test) => {
         it(test.name, () => {
             const now = test.now ? new Date(test.now) : new Date(FIXED_NOW)
-            const result = parseSmartDate(test.input, now)
+            const result = test.options
+                ? parseSmartDate(test.input, now, test.options)
+                : parseSmartDate(test.input, now)
 
             if (test.expected === null) {
                 expect(result).toBeNull()

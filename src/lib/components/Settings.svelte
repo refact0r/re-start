@@ -154,6 +154,17 @@
                 </div>
             </div>
             <div class="group">
+                <div class="setting-label">date format</div>
+                <div class="radio-group">
+                    <RadioButton bind:group={settings.dateFormat} value="mdy">
+                        month-day-year
+                    </RadioButton>
+                    <RadioButton bind:group={settings.dateFormat} value="dmy">
+                        day-month-year
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
                 <div class="setting-label">temperature format</div>
                 <div class="radio-group">
                     <RadioButton
