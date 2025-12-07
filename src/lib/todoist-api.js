@@ -247,7 +247,7 @@ class TodoistAPI {
     /**
      * Add a new task
      */
-    async addTask(content) {
+    async addTask(content, due) {
         const tempId = crypto.randomUUID()
         const commands = [
             {
@@ -256,6 +256,13 @@ class TodoistAPI {
                 uuid: crypto.randomUUID(),
                 args: {
                     content: content,
+                    ...(due
+                        ? {
+                              due: {
+                                  date: due,
+                              },
+                          }
+                        : {}),
                 },
             },
         ]

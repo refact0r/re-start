@@ -2,6 +2,12 @@
     import { onMount, onDestroy, untrack } from 'svelte'
     import TodoistAPI from '../todoist-api.js'
     import { settings } from '../settings-store.svelte.js'
+    import AddTask from './AddTask.svelte'
+    import {
+        parseSmartDate,
+        stripDateMatch,
+        formatTodoistDue,
+    } from '../date-matcher.js'
 
     let api = null
     let tasks = $state([])
@@ -11,6 +17,7 @@
     let taskCount = $derived(tasks.filter((task) => !task.checked).length)
     let newTaskContent = $state('')
     let addingTask = $state(false)
+    let parsedDate = $state(null)
 
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible' && api) {
@@ -27,6 +34,14 @@
         }
 
         initializeAPI(token, true)
+    })
+
+    $effect(() => {
+        const parsed = parseSmartDate(newTaskContent)
+        parsedDate = parsed
+        if (parsed) {
+            console.log('Parsed date:', parsed)
+        }
     })
 
     async function initializeAPI(token, clearLocalData = false) {
@@ -61,11 +76,20 @@
 
     async function addTask(event) {
         event.preventDefault()
-        if (!newTaskContent.trim() || !api || addingTask) return
+        const raw = newTaskContent.trim()
+        if (!raw || !api || addingTask) return
 
+        const parsed = parsedDate || parseSmartDate(raw)
+        let content = raw
+        let due = null
+        if (parsed?.match) {
+            const cleaned = stripDateMatch(raw, parsed.match)
+            content = cleaned || raw
+            due = formatTodoistDue(parsed.date, parsed.hasTime)
+        }
         try {
             addingTask = true
-            await api.addTask(newTaskContent.trim())
+            await api.addTask(content, due)
             newTaskContent = ''
             await loadTasks()
         } catch (err) {
@@ -204,16 +228,13 @@
                         ? ''
                         : 's'}
                 </a>
-                <form onsubmit={addTask}>
-                    <span class="dark">+</span>
-                    <input
-                        type="text"
-                        class="add-task-input"
-                        placeholder="new task"
-                        bind:value={newTaskContent}
-                        disabled={addingTask}
-                    />
-                </form>
+                <AddTask
+                    bind:value={newTaskContent}
+                    parsed={parsedDate}
+                    disabled={addingTask}
+                    loading={addingTask}
+                    on:submit={addTask}
+                />
             </div>
 
             <br />
@@ -288,30 +309,5 @@
     }
     .overdue-date {
         color: var(--txt-err);
-    }
-    form {
-        opacity: 0;
-        display: flex;
-        gap: 1ch;
-        transition: opacity 0.2s ease;
-        flex: 1;
-    }
-    form:hover,
-    form:focus-within {
-        opacity: 1;
-    }
-    .add-task-input {
-        flex: 1;
-        background: transparent;
-        padding: 0;
-        border: none;
-        color: var(--txt-2);
-        height: 1.5rem;
-    }
-    .add-task-input::placeholder {
-        color: var(--txt-3);
-    }
-    .add-task-input:disabled {
-        opacity: 0.5;
     }
 </style>
