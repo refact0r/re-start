@@ -58,21 +58,6 @@ const RELATIVE_DAYS = {
     today: 0,
 }
 
-const WORD_NUMBERS = {
-    one: 1,
-    two: 2,
-    three: 3,
-    four: 4,
-    five: 5,
-    six: 6,
-    seven: 7,
-    eight: 8,
-    nine: 9,
-    ten: 10,
-    eleven: 11,
-    twelve: 12,
-}
-
 function startOfDay(date) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
@@ -96,12 +81,6 @@ function addDays(date, days) {
     return d
 }
 
-function firstWeekdayNextMonth(base, targetDow) {
-    const nextMonth = new Date(base.getFullYear(), base.getMonth() + 1, 1)
-    const offset = (targetDow - nextMonth.getDay() + 7) % 7
-    return addDays(nextMonth, offset)
-}
-
 function nextWeekday(base, targetDow, isNextModifier = false) {
     const offsetRaw = (targetDow - base.getDay() + 7) % 7
     const offset = offsetRaw === 0 || isNextModifier ? offsetRaw + 7 : offsetRaw
@@ -114,6 +93,12 @@ function parseDayNumber(raw) {
     const num = parseInt(cleaned, 10)
     if (Number.isNaN(num) || num < 1 || num > 31) return null
     return num
+}
+
+function resolveDayToken(token) {
+    if (!token) return null
+    if (token === 'first') return 1
+    return parseDayNumber(token)
 }
 
 function clampFuture(date, now) {
@@ -181,9 +166,21 @@ function findRelativeDates(text, lower, now, consider) {
     })
 }
 
+function resolveWeekend(base, isNext) {
+    const weekend = nextWeekend(base)
+    return isNext ? addDays(weekend, 7) : weekend
+}
+
+function resolveWeekday(base, isNext) {
+    const dow = base.getDay()
+    if (dow === 0) return addDays(base, 1)
+    if (dow === 6) return addDays(base, 2)
+    return isNext ? addDays(base, 1) : base
+}
+
 function findWeekdays(text, lower, now, consider) {
     const regex =
-        /(next|first)?\s*\b(sun(day)?|mon(day)?|tue(s|sday)?|wed(nesday)?|thu(r|rs|rsday)?|fri(day)?|sat(urday)?|weekend|weekday)\b/gi
+        /(next)?\s*\b(sun(day)?|mon(day)?|tue(s|sday)?|wed(nesday)?|thu(r|rs|rsday)?|fri(day)?|sat(urday)?|weekend|weekday)\b/gi
     let m
     while ((m = regex.exec(lower))) {
         const modifier = m[1]?.trim()
@@ -193,26 +190,15 @@ function findWeekdays(text, lower, now, consider) {
         if (!(word in WEEKDAYS)) continue
 
         const target = WEEKDAYS[word]
+        const base = startOfDay(now)
+        const isNext = modifier === 'next'
         let date
         if (word === 'weekend') {
-            date = nextWeekend(startOfDay(now))
-            if (modifier === 'next') {
-                date = addDays(date, 7)
-            }
+            date = resolveWeekend(base, isNext)
         } else if (word === 'weekday') {
-            const base = startOfDay(now)
-            const dow = base.getDay()
-            const isNext = modifier === 'next'
-            let offset = 0
-            if (dow === 0) offset = 1 // Sunday -> Monday
-            else if (dow === 6) offset = 2 // Saturday -> Monday
-            else if (isNext) offset = 1 // already weekday, move to next weekday
-            date = addDays(base, offset)
-        } else if (modifier === 'first') {
-            date = firstWeekdayNextMonth(now, target)
+            date = resolveWeekday(base, isNext)
         } else {
-            const isNext = modifier === 'next'
-            date = nextWeekday(startOfDay(now), target, isNext)
+            date = nextWeekday(base, target, isNext)
         }
 
         consider({
@@ -228,19 +214,19 @@ function findMonthDates(text, lower, now, consider) {
     const monthNames = Object.keys(MONTHS).join('|')
     const trailing = '(?=[\\s,.;!?)-]|$)'
     const regex = new RegExp(
-        `\\b(${monthNames})\\b\\s*(?:([0-3]?\\d(?:st|nd|rd|th)?|first))?(?:\\s*,?\\s*(\\d{2,4}))?${trailing}`,
+        `\\b(${monthNames})\\b(?:\\s+(\\d{1,2}(?:st|nd|rd|th)?|first))?(?:\\s*,?\\s*(\\d{2,4}))?${trailing}`,
         'gi'
     )
     let m
     while ((m = regex.exec(lower))) {
-        const [, monthWord, dayRaw, yearRaw] = m
+        const [, monthWord, dayToken, yearToken] = m
         const month = MONTHS[monthWord]
-        const day = dayRaw ? parseDayNumber(dayRaw) : 1
         if (!month && month !== 0) continue
+        const day = dayToken ? resolveDayToken(dayToken) : 1
         if (!day) continue
-
-        const year = yearRaw ? parseInt(yearRaw, 10) : undefined
+        const year = yearToken ? parseInt(yearToken, 10) : undefined
         const date = buildDate(month, day, year, now)
+
         consider({
             match: { start: m.index, end: m.index + m[0].length },
             date,
@@ -306,24 +292,6 @@ function findTimeWithAmPm(lower, considerTime) {
     }
 }
 
-function findSpelledTime(lower, considerTime) {
-    const regex = new RegExp(
-        `\\b(${Object.keys(WORD_NUMBERS).join('|')})\\s*(am|pm|a|p)\\b`,
-        'g'
-    )
-    let m
-    while ((m = regex.exec(lower))) {
-        const hour = WORD_NUMBERS[m[1]]
-        considerTime({
-            start: m.index,
-            end: m.index + m[0].length,
-            hour,
-            minute: 0,
-            ampm: m[2],
-        })
-    }
-}
-
 function findTime24h(lower, considerTime) {
     const regex = /\b([01]?\d|2[0-3]):([0-5]\d)\b/g
     let m
@@ -355,6 +323,15 @@ function findBareHours(lower, considerTime) {
     }
 }
 
+function collectTimeMatches(lower) {
+    const matches = []
+    const push = (entry) => matches.push(entry)
+    findTimeWithAmPm(lower, push)
+    findTime24h(lower, push)
+    findBareHours(lower, push)
+    return matches
+}
+
 function combineDateAndTime(candidate, time, now) {
     if (!time) return candidate
 
@@ -383,9 +360,9 @@ function combineDateAndTime(candidate, time, now) {
 }
 
 function isBridgeable(segment) {
-    if (segment == null) return false
-    if (!segment.includes(' ')) return false
-    return segment.length <= 4
+    if (!segment) return false
+    if (segment.length > 4) return false
+    return /\s/.test(segment)
 }
 
 function findAdjacentTime(candidate, times, lower) {
@@ -414,29 +391,18 @@ function findAdjacentTime(candidate, times, lower) {
     return bestBefore
 }
 
-function candidatePriority(candidate) {
-    if (candidate.dateProvided === false) return 0
-    if (candidate.hasTime) return 2
-    return 1
+function scoreCandidate(candidate) {
+    const typeWeight =
+        candidate.dateProvided === false ? 1 : candidate.hasTime ? 3 : 2
+    const span = candidate.match.end - candidate.match.start
+    const position = candidate.match.start
+    return typeWeight * 1_000_000 + span * 1_000 + position
 }
 
 function selectBest(candidates) {
     return candidates.reduce((best, curr) => {
         if (!best) return curr
-        const currPriority = candidatePriority(curr)
-        const bestPriority = candidatePriority(best)
-        if (currPriority !== bestPriority) {
-            return currPriority > bestPriority ? curr : best
-        }
-        const currLen = curr.match.end - curr.match.start
-        const bestLen = best.match.end - best.match.start
-        if (currLen !== bestLen) {
-            return currLen > bestLen ? curr : best
-        }
-        if (curr.match.start !== best.match.start) {
-            return curr.match.start > best.match.start ? curr : best
-        }
-        return curr
+        return scoreCandidate(curr) >= scoreCandidate(best) ? curr : best
     }, null)
 }
 
@@ -460,17 +426,12 @@ export function parseSmartDate(input, now = new Date()) {
     findNumericDates(lower, safeNow, consider)
     findOrdinalsOnly(lower, safeNow, consider)
 
-    const timeDetections = []
-    const collectTime = (t) => timeDetections.push(t)
-    findTimeWithAmPm(lower, collectTime)
-    findSpelledTime(lower, collectTime)
-    findTime24h(lower, collectTime)
-    findBareHours(lower, collectTime)
+    const timeDetections = collectTimeMatches(lower)
+    const today = startOfDay(safeNow)
 
     timeDetections.forEach((t) => {
         if (t.requiresDate) return
-        const today = startOfDay(safeNow)
-        const date = applyTime(today, t.hour, t.minute, t.ampm)
+        const date = applyTime(new Date(today), t.hour, t.minute, t.ampm)
         if (date < safeNow) date.setDate(date.getDate() + 1)
         candidates.push({
             match: { start: t.start, end: t.end },
@@ -494,12 +455,11 @@ export function parseSmartDate(input, now = new Date()) {
 
 export function stripDateMatch(text, match) {
     if (!match) return text.trim()
-    const before = text.slice(0, match.start)
-    const after = text.slice(match.end)
+    const before = text.slice(0, match.start).trimEnd()
+    const after = text.slice(match.end).trimStart()
+    if (!before) return after
+    if (!after) return before
     return `${before} ${after}`
-        .replace(/\s+/g, ' ')
-        .replace(/\s+,/g, ',')
-        .trim()
 }
 
 export function formatTodoistDue(date, hasTime) {
@@ -514,9 +474,3 @@ export function formatTodoistDue(date, hasTime) {
     const s = pad(date.getSeconds())
     return `${y}-${m}-${d}T${h}:${min}:${s}`
 }
-
-// Example phrases covered:
-// - "tomorrow", "tmrw", "tmr"
-// - "next mon", "first mon", "weekend"
-// - "dec 12", "dec 1st 25", "december", "12/1/2025", "12-1-25"
-// - "mon 10", "10pm", "10:02", "ten pm"
