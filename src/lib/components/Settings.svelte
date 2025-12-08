@@ -372,11 +372,10 @@
         color: var(--txt-3);
 
         a {
-            text-decoration: underline;
-        }
-
-        a:hover {
             color: var(--txt-2);
+        }
+        a:hover {
+            color: var(--txt-1);
         }
     }
     .theme-grid {
@@ -405,14 +404,13 @@
     .reset-link {
         background: none;
         border: none;
-        color: var(--txt-3);
+        color: var(--txt-2);
         cursor: pointer;
         padding: 0;
         font-size: inherit;
         font-family: inherit;
-        text-decoration: underline;
     }
     .reset-link:hover {
-        color: var(--txt-2);
+        color: var(--txt-1);
     }
 </style>

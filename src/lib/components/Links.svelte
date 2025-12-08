@@ -40,9 +40,6 @@
     .panel {
         display: flex;
     }
-    .link {
-        text-decoration: none;
-    }
     .link:hover span {
         color: var(--txt-2);
     }

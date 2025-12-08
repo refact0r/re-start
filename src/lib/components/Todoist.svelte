@@ -234,10 +234,11 @@
                 </a>
                 <AddTask
                     bind:value={newTaskContent}
-                    parsed={parsedDate}
+                    bind:parsed={parsedDate}
                     disabled={addingTask}
                     loading={addingTask}
-                    on:submit={addTask}
+                    onsubmit={addTask}
+                    oninput={(val) => (newTaskContent = val)}
                 />
             </div>
 
@@ -313,5 +314,8 @@
     }
     .overdue-date {
         color: var(--txt-err);
+    }
+    a:hover {
+        color: var(--txt-1);
     }
 </style>

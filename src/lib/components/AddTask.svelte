@@ -1,28 +1,30 @@
 <script>
-    import { createEventDispatcher } from 'svelte'
-
-    export let value = ''
-    export let parsed = null
-    export let placeholder = 'new task'
-    export let disabled = false
-    export let loading = false
-
-    const dispatch = createEventDispatcher()
+    let {
+        value = $bindable(''),
+        parsed = $bindable(null),
+        placeholder = 'new task',
+        disabled = false,
+        loading = false,
+        onsubmit,
+        oninput,
+    } = $props()
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        dispatch('submit')
+        onsubmit?.()
     }
 
     const handleInput = (event) => {
-        dispatch('input', event.target.value)
+        oninput?.(event.target.value)
     }
 
-    $: match = parsed?.match
-    $: before = match ? value.slice(0, match.start) : value
-    $: matchedText = match ? value.slice(match.start, match.end) : ''
-    $: after = match ? value.slice(match.end) : ''
-    $: showPlaceholder = !value
+    const match = $derived(parsed?.match)
+    const before = $derived(match ? value.slice(0, match.start) : value)
+    const matchedText = $derived(
+        match ? value.slice(match.start, match.end) : ''
+    )
+    const after = $derived(match ? value.slice(match.end) : '')
+    const showPlaceholder = $derived(!value)
 </script>
 
 <form class="add-task-form" onsubmit={handleSubmit}>
