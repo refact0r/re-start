@@ -14,7 +14,6 @@
     let syncing = $state(true)
     let error = $state('')
     let initialLoad = $state(true)
-    let previousBackend = $state(null)
     let previousToken = $state(null)
     let taskCount = $derived(tasks.filter((task) => !task.checked).length)
     let newTaskContent = $state('')
@@ -33,26 +32,20 @@
 
         if (untrack(() => initialLoad)) {
             initialLoad = false
-            previousBackend = backend
             previousToken = token
             return
         }
 
         // Only clear Todoist data if the token changed (not the backend)
         const tokenChanged = backend === 'todoist' && previousToken !== token
-        previousBackend = backend
         previousToken = token
         initializeAPI(backend, token, tokenChanged)
     })
 
     $effect(() => {
-        const parsed = parseSmartDate(newTaskContent, {
+        parsedDate = parseSmartDate(newTaskContent, {
             dateFormat: settings.dateFormat,
         })
-        parsedDate = parsed
-        if (parsed) {
-            console.log('Parsed date:', parsed)
-        }
     })
 
     async function initializeAPI(backend, token, clearLocalData = false) {
@@ -78,7 +71,7 @@
         }
     }
 
-    export async function loadTasks(showSyncing = false) {
+    async function loadTasks(showSyncing = false) {
         try {
             if (showSyncing) syncing = true
             error = ''
@@ -97,15 +90,12 @@
         const raw = newTaskContent.trim()
         if (!raw || !api || addingTask) return
 
-        const parsed =
-            parsedDate ||
-            parseSmartDate(raw, { dateFormat: settings.dateFormat })
         let content = raw
         let due = null
-        if (parsed?.match) {
-            const cleaned = stripDateMatch(raw, parsed.match)
+        if (parsedDate?.match) {
+            const cleaned = stripDateMatch(raw, parsedDate.match)
             content = cleaned || raw
-            due = formatTaskDue(parsed.date, parsed.hasTime)
+            due = formatTaskDue(parsedDate.date, parsedDate.hasTime)
         }
         try {
             addingTask = true
@@ -215,9 +205,6 @@
 
     onMount(() => {
         initializeAPI(settings.taskBackend, settings.todoistApiToken)
-        if (api) {
-            tasks = api.getTasks()
-        }
         document.addEventListener('visibilitychange', handleVisibilityChange)
     })
 

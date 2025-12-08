@@ -144,7 +144,7 @@
                 </div>
             {/if}
             <div class="group">
-                <label for="latitude">latitude</label>
+                <label for="latitude">weather latitude</label>
                 <input
                     id="latitude"
                     type="number"
@@ -153,7 +153,7 @@
                 />
             </div>
             <div class="group">
-                <label for="longitude">longitude</label>
+                <label for="longitude">weather longitude</label>
                 <input
                     id="longitude"
                     type="number"
@@ -210,15 +210,6 @@
                 </div>
             </div>
             <div class="group">
-                <label for="linksPerColumn">links per column</label>
-                <input
-                    id="linksPerColumn"
-                    type="number"
-                    bind:value={settings.linksPerColumn}
-                    step="1"
-                />
-            </div>
-            <div class="group">
                 <div class="setting-label">link behavior</div>
                 <div class="radio-group">
                     <RadioButton bind:group={settings.linkTarget} value="_self">
@@ -231,6 +222,15 @@
                         new tab
                     </RadioButton>
                 </div>
+            </div>
+            <div class="group">
+                <label for="linksPerColumn">links per column</label>
+                <input
+                    id="linksPerColumn"
+                    type="number"
+                    bind:value={settings.linksPerColumn}
+                    step="1"
+                />
             </div>
             <div class="group">
                 <div class="links-header">
