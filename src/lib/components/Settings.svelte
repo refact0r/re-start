@@ -40,6 +40,52 @@
             saveSettings(settings)
         }
     }
+
+    let locationLoading = $state(false)
+    let locationError = $state(null)
+
+    async function useCurrentLocation() {
+        if (!navigator.geolocation) {
+            locationError = 'geolocation not supported by browser'
+            setTimeout(() => (locationError = null), 3000)
+            return
+        }
+
+        locationLoading = true
+        locationError = null
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                settings.latitude =
+                    Math.round(position.coords.latitude * 100) / 100
+                settings.longitude =
+                    Math.round(position.coords.longitude * 100) / 100
+                locationLoading = false
+            },
+            (error) => {
+                locationLoading = false
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        locationError = 'location permission denied'
+                        break
+                    case error.POSITION_UNAVAILABLE:
+                        locationError = 'location unavailable'
+                        break
+                    case error.TIMEOUT:
+                        locationError = 'location request timed out'
+                        break
+                    default:
+                        locationError = 'failed to get location'
+                }
+                setTimeout(() => (locationError = null), 3000)
+            },
+            {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 300000,
+            }
+        )
+    }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -143,23 +189,38 @@
                     />
                 </div>
             {/if}
-            <div class="group">
-                <label for="latitude">weather latitude</label>
-                <input
-                    id="latitude"
-                    type="number"
-                    bind:value={settings.latitude}
-                    step="0.01"
-                />
+            <div class="supergroup short">
+                <div class="group">
+                    <label for="latitude">weather latitude</label>
+                    <input
+                        id="latitude"
+                        type="number"
+                        bind:value={settings.latitude}
+                        step="0.01"
+                    />
+                </div>
+                <div class="group">
+                    <label for="longitude">weather longitude</label>
+                    <input
+                        id="longitude"
+                        type="number"
+                        bind:value={settings.longitude}
+                        step="0.01"
+                    />
+                </div>
             </div>
             <div class="group">
-                <label for="longitude">weather longitude</label>
-                <input
-                    id="longitude"
-                    type="number"
-                    bind:value={settings.longitude}
-                    step="0.01"
-                />
+                <button
+                    class="button"
+                    onclick={useCurrentLocation}
+                    disabled={locationLoading}
+                >
+                    {locationError
+                        ? locationError
+                        : locationLoading
+                          ? 'getting location...'
+                          : 'use current location'}
+                </button>
             </div>
 
             <div class="group">
@@ -333,7 +394,16 @@
         scrollbar-width: thin;
         scrollbar-color: var(--bg-3) var(--bg-1);
     }
+    .supergroup {
+        display: flex;
+        gap: 1rem;
+
+        &.short .group {
+            margin-bottom: 1rem;
+        }
+    }
     .group {
+        flex: 1;
         margin-bottom: 1.5rem;
     }
     .group > label,
@@ -432,5 +502,21 @@
     }
     .reset-link:hover {
         color: var(--txt-1);
+    }
+    .button {
+        width: 100%;
+        padding: 0.5rem;
+        background: var(--bg-2);
+        border: 2px solid var(--bg-3);
+        color: var(--txt-2);
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .button:hover:not(:disabled) {
+        border-color: var(--txt-4);
+    }
+    .button:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 </style>

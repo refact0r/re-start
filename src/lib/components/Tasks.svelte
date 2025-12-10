@@ -299,12 +299,14 @@
         max-height: 15rem;
         overflow: auto;
         scrollbar-width: none;
+        scroll-snap-type: y proximity;
     }
     .task {
         max-width: 40rem;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        scroll-snap-align: start;
     }
     .task-due {
         color: var(--txt-3);
