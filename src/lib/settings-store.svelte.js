@@ -4,6 +4,7 @@ let defaultSettings = {
     tabTitle: '~',
     taskBackend: 'todoist',
     todoistApiToken: '',
+    locationMode: 'manual',
     latitude: null,
     longitude: null,
     timeFormat: '12hr',

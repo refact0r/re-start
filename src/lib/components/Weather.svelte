@@ -32,14 +32,61 @@
         refreshWeather()
     })
 
+    async function getCurrentLocation() {
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) {
+                reject(new Error('geolocation not supported'))
+                return
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    resolve({
+                        latitude:
+                            Math.round(position.coords.latitude * 100) / 100,
+                        longitude:
+                            Math.round(position.coords.longitude * 100) / 100,
+                    })
+                },
+                (err) => reject(err),
+                {
+                    enableHighAccuracy: false,
+                    timeout: 10000,
+                    maximumAge: 60000,
+                }
+            )
+        })
+    }
+
     export async function loadWeather() {
-        if (settings.latitude === null || settings.longitude === null) {
+        loading = true
+        let lat = settings.latitude
+        let lon = settings.longitude
+
+        if (settings.locationMode === 'auto') {
+            try {
+                const location = await getCurrentLocation()
+                lat = location.latitude
+                lon = location.longitude
+            } catch (err) {
+                console.error('failed to get location:', err)
+                error = 'failed to get location'
+                loading = false
+                return
+            }
+        }
+
+        if (lat === null || lon === null) {
             error = 'no latitude or longitude'
+            loading = false
             return
         }
-        loading = true
 
-        const cached = weatherAPI.getCachedWeather(settings.timeFormat)
+        const cached = weatherAPI.getCachedWeather(
+            settings.timeFormat,
+            lat,
+            lon
+        )
         if (cached.data) {
             current = cached.data.current
             forecast = cached.data.forecast
@@ -55,8 +102,8 @@
             error = null
 
             const data = await weatherAPI.getWeather(
-                settings.latitude,
-                settings.longitude,
+                lat,
+                lon,
                 settings.tempUnit,
                 settings.speedUnit,
                 settings.timeFormat

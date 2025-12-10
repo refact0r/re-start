@@ -189,39 +189,60 @@
                     />
                 </div>
             {/if}
-            <div class="supergroup short">
-                <div class="group">
-                    <label for="latitude">weather latitude</label>
-                    <input
-                        id="latitude"
-                        type="number"
-                        bind:value={settings.latitude}
-                        step="0.01"
-                    />
-                </div>
-                <div class="group">
-                    <label for="longitude">weather longitude</label>
-                    <input
-                        id="longitude"
-                        type="number"
-                        bind:value={settings.longitude}
-                        step="0.01"
-                    />
-                </div>
-            </div>
+
             <div class="group">
-                <button
-                    class="button"
-                    onclick={useCurrentLocation}
-                    disabled={locationLoading}
-                >
-                    {locationError
-                        ? locationError
-                        : locationLoading
-                          ? 'getting location...'
-                          : 'use current location'}
-                </button>
+                <div class="setting-label">weather location</div>
+                <div class="radio-group">
+                    <RadioButton
+                        bind:group={settings.locationMode}
+                        value="manual"
+                    >
+                        manual
+                    </RadioButton>
+                    <RadioButton
+                        bind:group={settings.locationMode}
+                        value="auto"
+                    >
+                        auto
+                    </RadioButton>
+                </div>
             </div>
+
+            {#if settings.locationMode === 'manual'}
+                <div class="supergroup short">
+                    <div class="group">
+                        <label for="latitude">weather latitude</label>
+                        <input
+                            id="latitude"
+                            type="number"
+                            bind:value={settings.latitude}
+                            step="0.01"
+                        />
+                    </div>
+                    <div class="group">
+                        <label for="longitude">weather longitude</label>
+                        <input
+                            id="longitude"
+                            type="number"
+                            bind:value={settings.longitude}
+                            step="0.01"
+                        />
+                    </div>
+                </div>
+                <div class="group">
+                    <button
+                        class="button"
+                        onclick={useCurrentLocation}
+                        disabled={locationLoading}
+                    >
+                        {locationError
+                            ? locationError
+                            : locationLoading
+                              ? 'getting location...'
+                              : 'use current location'}
+                    </button>
+                </div>
+            {/if}
 
             <div class="group">
                 <div class="setting-label">time format</div>

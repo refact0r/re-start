@@ -26,7 +26,7 @@ class WeatherAPI {
             tempUnit,
             speedUnit
         )
-        this._cacheWeather(rawData)
+        this._cacheWeather(rawData, latitude, longitude)
 
         return {
             current: this._processCurrentWeather(rawData.current),
@@ -41,8 +41,8 @@ class WeatherAPI {
     /**
      * Get cached weather data with staleness info
      */
-    getCachedWeather(timeFormat = '12hr') {
-        const cached = this._getCachedData()
+    getCachedWeather(timeFormat = '12hr', latitude = null, longitude = null) {
+        const cached = this._getCachedData(latitude, longitude)
 
         if (!cached.data) {
             return { data: null, isStale: false }
@@ -66,15 +66,36 @@ class WeatherAPI {
     /**
      * Get cached data with expiration status
      */
-    _getCachedData() {
+    _getCachedData(latitude = null, longitude = null) {
         try {
             const cached = localStorage.getItem(this.cacheKey)
             if (!cached) return { data: null, isStale: false }
 
-            const { data, timestamp } = JSON.parse(cached)
-            const now = Date.now()
-            const isStale = now - timestamp >= this.cacheExpiry
+            const {
+                data,
+                timestamp,
+                latitude: cachedLat,
+                longitude: cachedLon,
+            } = JSON.parse(cached)
 
+            // Check if coordinates have changed significantly
+            if (
+                latitude != null &&
+                longitude != null &&
+                cachedLat != null &&
+                cachedLon != null &&
+                this._coordinatesChanged(
+                    cachedLat,
+                    cachedLon,
+                    latitude,
+                    longitude
+                )
+            ) {
+                this.clearCache()
+                return { data: null, isStale: false }
+            }
+
+            const isStale = Date.now() - timestamp >= this.cacheExpiry
             return { data, isStale }
         } catch (error) {
             console.error('failed to get cached weather data:', error)
@@ -91,14 +112,20 @@ class WeatherAPI {
     }
 
     /**
+     * Check if coordinates have changed significantly (more than ~0.5 degrees / ~30 miles)
+     */
+    _coordinatesChanged(oldLat, oldLon, newLat, newLon) {
+        const threshold = 0.1
+        return (
+            Math.abs(oldLat - newLat) > threshold ||
+            Math.abs(oldLon - newLon) > threshold
+        )
+    }
+
+    /**
      * Private method to fetch raw weather data from API
      */
-    async _fetchWeatherData(
-        latitude,
-        longitude,
-        tempUnit = 'fahrenheit',
-        speedUnit = 'mph'
-    ) {
+    async _fetchWeatherData(latitude, longitude, tempUnit, speedUnit) {
         const params = new URLSearchParams({
             latitude: latitude.toString(),
             longitude: longitude.toString(),
@@ -123,12 +150,11 @@ class WeatherAPI {
      * Process current weather data with descriptions
      */
     _processCurrentWeather(currentData) {
-        currentData.temperature_2m = currentData.temperature_2m.toFixed(0)
-        currentData.wind_speed_10m = currentData.wind_speed_10m.toFixed(0)
-        currentData.apparent_temperature =
-            currentData.apparent_temperature.toFixed(0)
         return {
             ...currentData,
+            temperature_2m: currentData.temperature_2m.toFixed(0),
+            wind_speed_10m: currentData.wind_speed_10m.toFixed(0),
+            apparent_temperature: currentData.apparent_temperature.toFixed(0),
             description: this._getWeatherDescription(
                 currentData.weather_code,
                 currentData.is_day === 1
@@ -140,14 +166,14 @@ class WeatherAPI {
      * Process hourly forecast to get every 3rd hour starting 3 hours from current hour
      */
     _processHourlyForecast(hourlyData, currentTime, timeFormat = '12hr') {
-        const currentHour = new Date(currentTime).getHours()
         const forecasts = []
 
-        // Find the current hour in the forecast
+        // Find the current or next hour in the forecast
         let currentIndex = 0
         for (let i = 0; i < hourlyData.time.length; i++) {
-            const forecastHour = new Date(hourlyData.time[i]).getHours()
-            if (forecastHour >= currentHour) {
+            const forecastTime = new Date(hourlyData.time[i])
+            const now = new Date(currentTime)
+            if (forecastTime >= now) {
                 currentIndex = i
                 break
             }
@@ -184,9 +210,10 @@ class WeatherAPI {
     _getWeatherDescription(weatherCode, isDay = true) {
         const timeOfDay = isDay ? 'day' : 'night'
         return (
-            descriptions[weatherCode]?.[timeOfDay]?.description ||
-            `Code ${weatherCode}`
-        ).toLowerCase()
+            descriptions[weatherCode]?.[
+                timeOfDay
+            ]?.description?.toLowerCase() || 'unknown'
+        )
     }
 
     /**
@@ -212,12 +239,14 @@ class WeatherAPI {
     }
 
     /**
-     * Cache weather data with timestamp
+     * Cache weather data with timestamp and coordinates
      */
-    _cacheWeather(data) {
+    _cacheWeather(data, latitude, longitude) {
         const cacheData = {
             data,
             timestamp: Date.now(),
+            latitude,
+            longitude,
         }
         localStorage.setItem(this.cacheKey, JSON.stringify(cacheData))
     }
