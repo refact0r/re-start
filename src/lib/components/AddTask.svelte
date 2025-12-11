@@ -5,6 +5,7 @@
         placeholder = 'new task',
         disabled = false,
         loading = false,
+        show = false,
         onsubmit,
         oninput,
     } = $props()
@@ -27,7 +28,7 @@
     const showPlaceholder = $derived(!value)
 </script>
 
-<form class="add-task-form" onsubmit={handleSubmit}>
+<form class:show onsubmit={handleSubmit}>
     <span class="dark">+</span>
     <div class="input-shell">
         <div class="input-overlay" aria-hidden="true">
@@ -55,7 +56,7 @@
 </form>
 
 <style>
-    .add-task-form {
+    form {
         opacity: 0;
         display: flex;
         gap: 1ch;
@@ -63,8 +64,11 @@
         flex: 1;
         align-items: center;
     }
-    .add-task-form:hover,
-    .add-task-form:focus-within {
+    form:hover,
+    form:focus-within {
+        opacity: 1;
+    }
+    form.show {
         opacity: 1;
     }
     .input-shell {

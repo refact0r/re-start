@@ -240,6 +240,7 @@
                     bind:parsed={parsedDate}
                     disabled={addingTask}
                     loading={addingTask}
+                    show={tasks.length === 0}
                     onsubmit={addTask}
                     oninput={(val) => (newTaskContent = val)}
                 />
