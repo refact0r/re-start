@@ -1,6 +1,6 @@
 {
     "name": "re-start",
-    "version": "1.3.10",
+    "version": "1.4.0",
     "manifest_version": 3,
     "description": "a tui-style startpage/new tab page.",
     "chrome_url_overrides": {
