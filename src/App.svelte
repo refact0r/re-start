@@ -12,6 +12,12 @@
 
     let showSettings = $state(false)
 
+    let needsConfiguration = $derived(
+        (settings.locationMode === 'manual' &&
+            (settings.latitude === null || settings.longitude === null)) ||
+            (settings.taskBackend === 'todoist' && !settings.todoistApiToken)
+    )
+
     function closeSettings() {
         showSettings = false
     }
@@ -70,6 +76,7 @@
 
     <button
         class="settings-btn"
+        class:needs-config={needsConfiguration}
         onclick={() => (showSettings = true)}
         aria-label="Open settings"
     >
@@ -110,5 +117,13 @@
     }
     .settings-btn:hover {
         opacity: 1;
+    }
+    .settings-btn.needs-config {
+        opacity: 1;
+        animation: pulse 2s ease-in-out infinite;
+    }
+    .settings-btn.needs-config:hover {
+        opacity: 1;
+        animation: none;
     }
 </style>

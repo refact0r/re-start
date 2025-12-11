@@ -2,7 +2,7 @@ let defaultSettings = {
     font: 'Geist Mono Variable',
     currentTheme: 'default',
     tabTitle: '~',
-    taskBackend: 'todoist',
+    taskBackend: 'local',
     todoistApiToken: '',
     locationMode: 'manual',
     latitude: null,

@@ -58,7 +58,7 @@ button {
     border: 2px solid var(--bg-3);
     overflow: hidden;
     width: 100%;
-    min-width: 6rem;
+    min-width: 8rem;
 }
 
 .panel-label,
@@ -98,6 +98,16 @@ input {
 
 .bright {
     color: var(--txt-1);
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
 }
 
 .dark {

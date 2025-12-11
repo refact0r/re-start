@@ -20,6 +20,7 @@
     $effect(() => {
         const lat = settings.latitude
         const lon = settings.longitude
+        const locationMode = settings.locationMode
         const tempUnit = settings.tempUnit
         const speedUnit = settings.speedUnit
         const timeFormat = settings.timeFormat
@@ -77,7 +78,7 @@
         }
 
         if (lat === null || lon === null) {
-            error = 'no latitude or longitude'
+            error = 'location not configured'
             loading = false
             return
         }
