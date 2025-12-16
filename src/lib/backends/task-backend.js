@@ -58,6 +58,15 @@ class TaskBackend {
     }
 
     /**
+     * Delete a task
+     * @param {string} taskId - ID of the task to delete
+     * @returns {Promise<void>}
+     */
+    async deleteTask(taskId) {
+        throw new Error('deleteTask() must be implemented by subclass')
+    }
+
+    /**
      * Clear all local data/cache
      * @returns {void}
      */

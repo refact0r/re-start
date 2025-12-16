@@ -103,7 +103,7 @@
     <div class="settings" transition:fly={{ x: 640, duration: 200 }}>
         <div class="header">
             <h2>settings</h2>
-            <button class="close-btn" onclick={handleClose}>×</button>
+            <button class="close-btn" onclick={handleClose}>x</button>
         </div>
 
         <div class="content">
@@ -235,11 +235,11 @@
                         onclick={useCurrentLocation}
                         disabled={locationLoading}
                     >
-                        {locationError
+                        [{locationError
                             ? locationError
                             : locationLoading
                               ? 'getting location...'
-                              : 'use current location'}
+                              : 'use current location'}]
                     </button>
                 </div>
             {/if}
@@ -338,7 +338,7 @@
                                 class="remove-btn"
                                 onclick={() => removeLink(index)}
                             >
-                                ×
+                                x
                             </button>
                         </div>
                     {/each}
@@ -404,7 +404,7 @@
     }
     .close-btn {
         padding: 0 0.5rem;
-        font-size: 1.75rem;
+        font-size: 1.25rem;
         line-height: 2.25rem;
         font-weight: 300;
     }
@@ -476,7 +476,7 @@
     }
     .remove-btn {
         padding-left: 0.5rem;
-        font-size: 1.5rem;
+        font-size: 1rem;
         font-weight: 300;
     }
     .version {
@@ -525,16 +525,15 @@
         color: var(--txt-1);
     }
     .button {
-        width: 100%;
-        padding: 0.5rem;
-        background: var(--bg-2);
-        border: 2px solid var(--bg-3);
-        color: var(--txt-2);
+        /* width: 100%; */
+        /* padding: 0.5rem; */
+        /* background: var(--bg-2); */
+        /* border: 2px solid var(--bg-3); */
+        color: var(--txt-3);
         cursor: pointer;
-        transition: background 0.2s;
     }
     .button:hover:not(:disabled) {
-        border-color: var(--txt-4);
+        /* border-color: var(--txt-4); */
     }
     .button:disabled {
         cursor: not-allowed;

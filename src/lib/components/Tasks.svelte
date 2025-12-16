@@ -19,6 +19,7 @@
     let newTaskContent = $state('')
     let addingTask = $state(false)
     let parsedDate = $state(null)
+    let togglingTasks = $state(new Set())
 
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible' && api) {
@@ -104,14 +105,18 @@
             await loadTasks()
         } catch (err) {
             console.error('Failed to add task:', err)
-            error = 'failed to add task'
         } finally {
             addingTask = false
         }
     }
 
     async function toggleTask(taskId, checked) {
+        // Prevent concurrent toggles of the same task
+        if (togglingTasks.has(taskId)) return
+
         try {
+            togglingTasks.add(taskId)
+
             tasks = tasks.map((task) =>
                 task.id === taskId
                     ? {
@@ -132,6 +137,20 @@
             await loadTasks()
         } catch (err) {
             console.error(err)
+            await loadTasks()
+        } finally {
+            togglingTasks.delete(taskId)
+        }
+    }
+
+    async function deleteTask(taskId) {
+        if (!api) return
+        try {
+            tasks = tasks.filter((task) => task.id !== taskId)
+            await api.deleteTask(taskId)
+            await loadTasks()
+        } catch (err) {
+            console.error('Failed to delete task:', err)
             await loadTasks()
         }
     }
@@ -242,7 +261,6 @@
                     loading={addingTask}
                     show={tasks.length === 0}
                     onsubmit={addTask}
-                    oninput={(val) => (newTaskContent = val)}
                 />
             </div>
 
@@ -268,8 +286,10 @@
                                     >#{task.project_name}</span
                                 >
                             {/if}
-                            <span class="task-title">{task.content}</span>
-                            {#if task.due}
+                            <span class="task-title"
+                                >{task.content || '(no content)'}</span
+                            >
+                            {#if task.due_date}
                                 <span
                                     class="task-due"
                                     class:overdue-date={isTaskOverdue(task)}
@@ -280,6 +300,15 @@
                                     )}
                                 </span>
                             {/if}
+                            <button
+                                type="button"
+                                class="task-delete"
+                                onclick={() => deleteTask(task.id)}
+                                aria-label="delete task"
+                                title="delete"
+                            >
+                                x
+                            </button>
                         </div>
                     {/each}
                 </div>
@@ -303,17 +332,34 @@
         scroll-snap-type: y proximity;
     }
     .task {
+        display: flex;
+        align-items: baseline;
+        gap: 1ch;
         max-width: 40rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap;
         scroll-snap-align: start;
+    }
+    .task-title {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .task-due {
         color: var(--txt-3);
     }
     .task-project {
         color: var(--txt-3);
+    }
+    .task-delete {
+        color: var(--txt-3);
+        opacity: 0;
+        pointer-events: none;
+    }
+    .task:hover .task-delete,
+    .task:focus-within .task-delete {
+        opacity: 1;
+        pointer-events: auto;
     }
     .task.completed .task-title {
         text-decoration: line-through;

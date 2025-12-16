@@ -7,7 +7,7 @@
 <label>
     <input type="radio" bind:group {value} />
     <span class="radio-indicator" class:checked={isChecked}>
-        {isChecked ? 'x' : ' '}
+        {isChecked ? '[x]' : '[ ]'}
     </span>
     <span class="radio-content">
         {@render children?.()}
@@ -25,18 +25,22 @@
     }
 
     .radio-indicator {
-        color: var(--txt-1);
+        color: var(--txt-3);
     }
 
-    .radio-indicator::before {
-        content: '[';
+    .radio-indicator:hover {
+        color: var(--txt-2);
+    }
+
+    /* .radio-indicator::before {
+        content: ')';
         color: var(--txt-3);
     }
 
     .radio-indicator::after {
         content: ']';
         color: var(--txt-3);
-    }
+    } */
 
     label:hover {
         .radio-indicator::before,

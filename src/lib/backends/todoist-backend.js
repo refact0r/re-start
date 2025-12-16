@@ -248,6 +248,23 @@ class TodoistBackend extends TaskBackend {
     }
 
     /**
+     * Delete a task
+     */
+    async deleteTask(taskId) {
+        const commands = [
+            {
+                type: 'item_delete',
+                uuid: crypto.randomUUID(),
+                args: {
+                    id: taskId,
+                },
+            },
+        ]
+
+        return this.executeCommands(commands)
+    }
+
+    /**
      * Add a new task
      */
     async addTask(content, due) {
