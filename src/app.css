@@ -45,6 +45,10 @@ button {
     &:hover {
         color: var(--txt-2);
     }
+    &:disabled {
+        cursor: default;
+        color: var(--txt-3);
+    }
 }
 
 .panel-wrapper {
@@ -106,7 +110,7 @@ input {
         opacity: 1;
     }
     50% {
-        opacity: 0.3;
+        opacity: 0.1;
     }
 }
 

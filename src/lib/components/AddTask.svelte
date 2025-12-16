@@ -60,7 +60,6 @@
         opacity: 0;
         display: flex;
         gap: 1ch;
-        transition: opacity 0.2s ease;
         flex: 1;
         align-items: center;
     }
