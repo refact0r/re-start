@@ -111,16 +111,15 @@
         right: 0;
         padding: 1rem 1.5rem;
         opacity: 0;
-        transition: opacity 0.2s ease;
         z-index: 100;
         color: var(--txt-3);
     }
     .settings-btn:hover {
         opacity: 1;
     }
-    .settings-btn.needs-config {
+    .settings-btn {
         opacity: 1;
-        animation: pulse 2s ease-in-out infinite;
+        animation: pulse 1s ease-in-out infinite;
     }
     .settings-btn.needs-config:hover {
         opacity: 1;

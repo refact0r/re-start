@@ -6,8 +6,12 @@
 
 <label>
     <input type="radio" bind:group {value} />
-    <span class="radio-indicator" class:checked={isChecked}>
-        {isChecked ? '[x]' : '[ ]'}
+    <span class="radio-indicator">
+        {#if isChecked}
+            [<span class="radio-x">x</span>]
+        {:else}
+            [ ]
+        {/if}
     </span>
     <span class="radio-content">
         {@render children?.()}
@@ -32,15 +36,9 @@
         color: var(--txt-2);
     }
 
-    /* .radio-indicator::before {
-        content: ')';
-        color: var(--txt-3);
+    .radio-x {
+        color: var(--txt-2);
     }
-
-    .radio-indicator::after {
-        content: ']';
-        color: var(--txt-3);
-    } */
 
     label:hover {
         .radio-indicator::before,

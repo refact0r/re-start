@@ -268,18 +268,17 @@
             <div class="tasks">
                 <div class="tasks-list">
                     {#each tasks as task}
-                        <div
-                            class="task"
-                            class:completed={task.checked}
-                            class:overdue={isTaskOverdue(task)}
-                        >
+                        <div class="task" class:completed={task.checked}>
                             <button
                                 onclick={() =>
                                     toggleTask(task.id, !task.checked)}
                                 class="checkbox"
-                                class:completed={task.checked}
                             >
-                                {task.checked ? '[x]' : '[ ]'}
+                                {#if task.checked}
+                                    [<span class="checkbox-x">x</span>]
+                                {:else}
+                                    [ ]
+                                {/if}
                             </button>
                             {#if task.project_name && task.project_name !== 'Inbox'}
                                 <span class="task-project"
@@ -292,7 +291,7 @@
                             {#if task.due_date}
                                 <span
                                     class="task-due"
-                                    class:overdue-date={isTaskOverdue(task)}
+                                    class:overdue={isTaskOverdue(task)}
                                 >
                                     {formatDueDate(
                                         task.due_date,
@@ -352,7 +351,6 @@
         color: var(--txt-3);
     }
     .task-delete {
-        color: var(--txt-3);
         opacity: 0;
         pointer-events: none;
     }
@@ -364,10 +362,13 @@
     .task.completed .task-title {
         text-decoration: line-through;
     }
-    .overdue-date {
+    .overdue {
         color: var(--txt-err);
     }
     a:hover {
         color: var(--txt-1);
+    }
+    .checkbox-x {
+        color: var(--txt-2);
     }
 </style>

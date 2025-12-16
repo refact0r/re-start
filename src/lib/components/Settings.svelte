@@ -524,19 +524,4 @@
     .reset-link:hover {
         color: var(--txt-1);
     }
-    .button {
-        /* width: 100%; */
-        /* padding: 0.5rem; */
-        /* background: var(--bg-2); */
-        /* border: 2px solid var(--bg-3); */
-        color: var(--txt-3);
-        cursor: pointer;
-    }
-    .button:hover:not(:disabled) {
-        /* border-color: var(--txt-4); */
-    }
-    .button:disabled {
-        cursor: not-allowed;
-        opacity: 0.6;
-    }
 </style>
