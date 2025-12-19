@@ -41,6 +41,56 @@
         }
     }
 
+    // Drag and drop state
+    let draggedIndex = $state(null)
+    let dragOverIndex = $state(null)
+
+    function handleDragStart(event, index) {
+        draggedIndex = index
+        event.dataTransfer.effectAllowed = 'move'
+        event.dataTransfer.setData('text/html', event.currentTarget)
+    }
+
+    function handleDragOver(event, index) {
+        event.preventDefault()
+        event.dataTransfer.dropEffect = 'move'
+        dragOverIndex = index
+    }
+
+    function handleDragLeave() {
+        dragOverIndex = null
+    }
+
+    function handleDrop(event, dropIndex) {
+        event.preventDefault()
+
+        if (draggedIndex !== null && draggedIndex !== dropIndex) {
+            const newLinks = [...settings.links]
+            const draggedItem = newLinks[draggedIndex]
+
+            // Remove the dragged item
+            newLinks.splice(draggedIndex, 1)
+
+            // Insert at the new position
+            if (draggedIndex < dropIndex) {
+                newLinks.splice(dropIndex, 0, draggedItem)
+            } else {
+                // Dragging backward: place before target
+                newLinks.splice(dropIndex, 0, draggedItem)
+            }
+
+            settings.links = newLinks
+        }
+
+        draggedIndex = null
+        dragOverIndex = null
+    }
+
+    function handleDragEnd() {
+        draggedIndex = null
+        dragOverIndex = null
+    }
+
     let locationLoading = $state(false)
     let locationError = $state(null)
 
@@ -321,18 +371,37 @@
                 </div>
                 <div class="links-list">
                     {#each settings.links as link, index}
-                        <div class="link">
+                        <div
+                            class="link"
+                            class:dragging={draggedIndex === index}
+                            class:drag-over={dragOverIndex === index}
+                            ondragover={(e) => handleDragOver(e, index)}
+                            ondragleave={handleDragLeave}
+                            ondrop={(e) => handleDrop(e, index)}
+                            role="listitem"
+                        >
+                            <span
+                                class="drag-handle"
+                                title="Drag to reorder"
+                                draggable="true"
+                                ondragstart={(e) => handleDragStart(e, index)}
+                                ondragend={handleDragEnd}
+                                role="button"
+                                tabindex="0">=</span
+                            >
                             <input
                                 type="text"
                                 bind:value={link.title}
                                 placeholder="title"
                                 class="link-input name"
+                                draggable="false"
                             />
                             <input
                                 type="url"
                                 bind:value={link.url}
                                 placeholder="https://example.com"
                                 class="link-input"
+                                draggable="false"
                             />
                             <button
                                 class="remove-btn"
@@ -404,7 +473,7 @@
     }
     .close-btn {
         padding: 0 0.5rem;
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         line-height: 2.25rem;
         font-weight: 300;
     }
@@ -468,15 +537,35 @@
     }
     .link {
         display: flex;
-        margin-bottom: 0.5rem;
+        align-items: center;
+        margin-bottom: calc(0.5rem - 2px);
+        border: 2px solid transparent;
     }
-    .link-input.name {
-        width: 12rem;
+    .link.dragging {
+        opacity: 0.5;
+        border: 2px dashed var(--txt-3);
+    }
+    .link.drag-over {
+        border: 2px solid var(--txt-2);
+    }
+    .drag-handle {
+        cursor: grab;
+        padding: 0 0.5rem 0 0.25rem;
+        color: var(--txt-3);
+        user-select: none;
+        font-size: 1.125rem;
+        touch-action: none;
+    }
+    .drag-handle:active {
+        cursor: grabbing;
+    }
+    .link .link-input.name {
+        width: 10rem;
         margin-right: 0.5rem;
     }
     .remove-btn {
-        padding-left: 0.5rem;
-        font-size: 1rem;
+        padding: 0 0.25rem 0 0.5rem;
+        font-size: 1.125rem;
         font-weight: 300;
     }
     .version {
