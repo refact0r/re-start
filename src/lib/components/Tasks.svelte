@@ -266,15 +266,30 @@
             <div class="error">{error}</div>
         {:else}
             <div class="widget-header">
-                <a
-                    href="https://todoist.com/app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <span class="bright">{taskCount}</span> task{taskCount === 1
-                        ? ''
-                        : 's'}
-                </a>
+                {#if settings.taskBackend === 'todoist'}
+                    <a
+                        href="https://todoist.com/app"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <span class="bright">{taskCount}</span>
+                        task{taskCount === 1 ? '' : 's'}
+                    </a>
+                {:else if settings.taskBackend === 'google-tasks'}
+                    <a
+                        href="https://tasks.google.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <span class="bright">{taskCount}</span>
+                        task{taskCount === 1 ? '' : 's'}
+                    </a>
+                {:else}
+                    <span>
+                        <span class="bright">{taskCount}</span>
+                        task{taskCount === 1 ? '' : 's'}
+                    </span>
+                {/if}
                 <AddTask
                     bind:value={newTaskContent}
                     bind:parsed={parsedDate}
