@@ -164,10 +164,13 @@ class GoogleTasksBackendExtension extends TaskBackend {
 
             // Get tasks from all lists in parallel
             if (resourceTypes.includes('tasks')) {
+                // Only fetch completed tasks from the last 24 hours to avoid hitting the 100-task limit
+                const completedMin = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+
                 const taskPromises = this.data.tasklists.map(
                     async (tasklist) => {
                         const data = await this.apiRequest(
-                            `/lists/${tasklist.id}/tasks?showCompleted=true&showHidden=true&showAssigned=true&maxResults=100`
+                            `/lists/${tasklist.id}/tasks?showCompleted=true&showHidden=true&showAssigned=true&maxResults=100&completedMin=${encodeURIComponent(completedMin)}`
                         )
                         // Add tasklist info to each task
                         return (data.items || []).map((task) => ({
