@@ -55,7 +55,9 @@ class GoogleTasksBackend extends TaskBackend {
 
         const authURL = new URL('https://accounts.google.com/o/oauth2/v2/auth')
         authURL.searchParams.set('client_id', this.clientId)
-        authURL.searchParams.set('redirect_uri', `${window.location.origin}/oauth-callback.html`)
+        // Get the base path from current location (handles subdirectory deployments)
+        const basePath = window.location.pathname.replace(/\/[^/]*$/, '')
+        authURL.searchParams.set('redirect_uri', `${window.location.origin}${basePath}/oauth-callback.html`)
         authURL.searchParams.set('response_type', 'token')
         authURL.searchParams.set('scope', this.scopes.join(' '))
         authURL.searchParams.set('state', state)
