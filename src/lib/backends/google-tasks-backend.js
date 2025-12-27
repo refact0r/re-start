@@ -1,85 +1,178 @@
 import TaskBackend from './task-backend.js'
 
 /**
- * Google Tasks API client for Chrome/Firefox Extensions
- * Uses browser.identity API for secure OAuth
+ * Google Tasks API client for Web Applications
+ * Uses OAuth 2.0 implicit flow (no backend/client_secret required)
+ *
+ * NOTE: You need to configure a Web Application OAuth client in Google Cloud Console:
+ * 1. Go to https://console.cloud.google.com/apis/credentials
+ * 2. Create OAuth 2.0 Client ID with type "Web application"
+ * 3. Add your origin to "Authorized JavaScript origins" (e.g., http://localhost:5173)
+ * 4. Update the clientId below
  */
-class GoogleTasksBackendExtension extends TaskBackend {
+class GoogleTasksBackend extends TaskBackend {
     constructor(config = {}) {
         super(config)
-        this.clientId =
-            '489393578728-ij3qkagfga69u9vmcdpknn7aqlpb2olr.apps.googleusercontent.com'
+        // Web application client ID
+        this.clientId = config.clientId || '317653837986-8hsogqkfab632ducq6k0jcpngn1iub6a.apps.googleusercontent.com'
 
-        this.scopes = ['https://www.googleapis.com/auth/tasks']
+        this.scopes = [
+            'https://www.googleapis.com/auth/tasks',
+            'https://www.googleapis.com/auth/calendar.readonly',
+            'https://www.googleapis.com/auth/userinfo.email'
+        ]
         this.baseUrl = 'https://tasks.googleapis.com/tasks/v1'
 
         this.dataKey = 'google_tasks_data'
         this.tasklistIdKey = 'google_tasks_default_list'
         this.tokenKey = 'google_tasks_token'
+        this.tokenExpiryKey = 'google_tasks_token_expiry'
+        this.userEmailKey = 'google_user_email'
+
         this.data = JSON.parse(localStorage.getItem(this.dataKey) ?? '{}')
-        this.defaultTasklistId =
-            localStorage.getItem(this.tasklistIdKey) ?? '@default'
+        this.defaultTasklistId = localStorage.getItem(this.tasklistIdKey) ?? '@default'
         this.accessToken = localStorage.getItem(this.tokenKey)
-        this.isSignedIn = !!this.accessToken
+        this.tokenExpiry = localStorage.getItem(this.tokenExpiryKey)
+        this.userEmail = localStorage.getItem(this.userEmailKey)
+        this.isSignedIn = !!this.accessToken && !this.isTokenExpired()
     }
 
     /**
-     * Get Chrome Identity API (works on Firefox too with polyfill)
+     * Check if current token is expired
      */
-    getIdentityAPI() {
-        // Chrome uses chrome.identity, Firefox uses browser.identity
-        return chrome?.identity ?? browser?.identity ?? null
+    isTokenExpired() {
+        if (!this.tokenExpiry) return true
+        return Date.now() > parseInt(this.tokenExpiry, 10)
     }
 
     /**
-     * Sign in using browser's OAuth flow
-     * This is MORE SECURE - browser handles auth, no credentials in your code!
+     * Sign in using popup-based OAuth implicit flow
+     * Returns access token directly - no backend needed
      */
     async signIn() {
-        const identity = this.getIdentityAPI()
-        if (!identity) {
-            throw new Error(
-                'Browser identity API not available. Are you running as an extension?'
-            )
-        }
+        const state = crypto.randomUUID()
+        sessionStorage.setItem('oauth_state', state)
+
+        const authURL = new URL('https://accounts.google.com/o/oauth2/v2/auth')
+        authURL.searchParams.set('client_id', this.clientId)
+        authURL.searchParams.set('redirect_uri', `${window.location.origin}/oauth-callback.html`)
+        authURL.searchParams.set('response_type', 'token')
+        authURL.searchParams.set('scope', this.scopes.join(' '))
+        authURL.searchParams.set('state', state)
+        authURL.searchParams.set('include_granted_scopes', 'true')
 
         return new Promise((resolve, reject) => {
-            const redirectURL = identity.getRedirectURL()
-            const authURL = new URL('https://accounts.google.com/o/oauth2/auth')
-            authURL.searchParams.set('client_id', this.clientId)
-            authURL.searchParams.set('response_type', 'token')
-            authURL.searchParams.set('redirect_uri', redirectURL)
-            authURL.searchParams.set('scope', this.scopes.join(' '))
+            const width = 500
+            const height = 600
+            const left = window.screenX + (window.outerWidth - width) / 2
+            const top = window.screenY + (window.outerHeight - height) / 2
 
-            identity.launchWebAuthFlow(
-                {
-                    url: authURL.href,
-                    interactive: true,
-                },
-                (responseURL) => {
-                    // Check for errors (works in both Chrome and Firefox)
-                    const runtime = chrome?.runtime ?? browser?.runtime
-                    if (runtime?.lastError) {
-                        reject(new Error(runtime.lastError.message))
+            const popup = window.open(
+                authURL.href,
+                'Google Sign In',
+                `width=${width},height=${height},left=${left},top=${top},popup=1`
+            )
+
+            if (!popup) {
+                reject(new Error('Popup blocked. Please allow popups for this site.'))
+                return
+            }
+
+            // Listen for message from callback page
+            const handleMessage = async (event) => {
+                if (event.origin !== window.location.origin) return
+
+                if (event.data?.type === 'oauth-callback') {
+                    window.removeEventListener('message', handleMessage)
+                    popup.close()
+
+                    if (event.data.error) {
+                        reject(new Error(event.data.error_description || event.data.error))
                         return
                     }
 
-                    // Extract access token from response URL
-                    const url = new URL(responseURL)
-                    const params = new URLSearchParams(url.hash.substring(1))
-                    const accessToken = params.get('access_token')
+                    const { access_token, expires_in, state: returnedState } = event.data
+                    const savedState = sessionStorage.getItem('oauth_state')
 
-                    if (accessToken) {
-                        this.accessToken = accessToken
-                        localStorage.setItem(this.tokenKey, accessToken)
-                        this.isSignedIn = true
-                        resolve(accessToken)
-                    } else {
-                        reject(new Error('No access token in response'))
+                    // Clean up
+                    sessionStorage.removeItem('oauth_state')
+
+                    if (returnedState !== savedState) {
+                        reject(new Error('State mismatch - possible CSRF attack'))
+                        return
                     }
+
+                    if (!access_token) {
+                        reject(new Error('No access token received'))
+                        return
+                    }
+
+                    // Store the token
+                    this.accessToken = access_token
+                    this.isSignedIn = true
+
+                    // Calculate and store expiry time (default 1 hour if not provided)
+                    const expiresInMs = (parseInt(expires_in, 10) || 3600) * 1000
+                    const expiryTime = Date.now() + expiresInMs
+                    this.tokenExpiry = expiryTime.toString()
+
+                    localStorage.setItem(this.tokenKey, this.accessToken)
+                    localStorage.setItem(this.tokenExpiryKey, this.tokenExpiry)
+
+                    // Fetch user email
+                    this.fetchUserEmail().catch(console.error)
+
+                    resolve(this.accessToken)
                 }
-            )
+            }
+
+            window.addEventListener('message', handleMessage)
+
+            // Check if popup was closed without completing auth
+            const checkClosed = setInterval(() => {
+                if (popup.closed) {
+                    clearInterval(checkClosed)
+                    window.removeEventListener('message', handleMessage)
+                    sessionStorage.removeItem('oauth_state')
+                    reject(new Error('Sign in cancelled'))
+                }
+            }, 500)
         })
+    }
+
+    /**
+     * Fetch user email from Google userinfo endpoint
+     */
+    async fetchUserEmail() {
+        if (!this.accessToken) return null
+
+        try {
+            const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+                headers: {
+                    Authorization: `Bearer ${this.accessToken}`,
+                },
+            })
+
+            if (!response.ok) {
+                console.error('Failed to fetch user email:', response.status)
+                return null
+            }
+
+            const data = await response.json()
+            this.userEmail = data.email
+            localStorage.setItem(this.userEmailKey, this.userEmail)
+            return this.userEmail
+        } catch (error) {
+            console.error('Error fetching user email:', error)
+            return null
+        }
+    }
+
+    /**
+     * Get user email
+     */
+    getUserEmail() {
+        return this.userEmail
     }
 
     /**
@@ -88,7 +181,11 @@ class GoogleTasksBackendExtension extends TaskBackend {
     async signOut() {
         this.accessToken = null
         this.isSignedIn = false
+        this.tokenExpiry = null
+        this.userEmail = null
         localStorage.removeItem(this.tokenKey)
+        localStorage.removeItem(this.tokenExpiryKey)
+        localStorage.removeItem(this.userEmailKey)
         this.clearLocalData()
     }
 
@@ -96,6 +193,10 @@ class GoogleTasksBackendExtension extends TaskBackend {
      * Check if signed in
      */
     getIsSignedIn() {
+        // Re-check token expiry
+        if (this.accessToken && this.isTokenExpired()) {
+            this.isSignedIn = false
+        }
         return this.isSignedIn
     }
 
@@ -118,11 +219,11 @@ class GoogleTasksBackendExtension extends TaskBackend {
         })
 
         if (!response.ok) {
-            // Token might be expired, try to refresh by signing in again
             if (response.status === 401) {
                 this.accessToken = null
                 this.isSignedIn = false
                 localStorage.removeItem(this.tokenKey)
+                localStorage.removeItem(this.tokenExpiryKey)
                 throw new Error('Authentication expired. Please sign in again.')
             }
             throw new Error(
@@ -142,51 +243,42 @@ class GoogleTasksBackendExtension extends TaskBackend {
         }
 
         try {
-            // Get task lists
             if (resourceTypes.includes('tasklists')) {
-                const data = await this.apiRequest(
-                    '/users/@me/lists?maxResults=20'
-                )
+                const data = await this.apiRequest('/users/@me/lists?maxResults=20')
                 this.data.tasklists = data.items || []
 
                 const hasValidTasklist = this.data.tasklists.some(
                     (tl) => tl.id === this.defaultTasklistId
                 )
                 if (!this.defaultTasklistId || !hasValidTasklist) {
-                    this.defaultTasklistId =
-                        this.data.tasklists[0]?.id ?? '@default'
-                    localStorage.setItem(
-                        this.tasklistIdKey,
-                        this.defaultTasklistId
-                    )
+                    this.defaultTasklistId = this.data.tasklists[0]?.id ?? '@default'
+                    localStorage.setItem(this.tasklistIdKey, this.defaultTasklistId)
                 }
             }
 
-            // Get tasks from all lists in parallel
             if (resourceTypes.includes('tasks')) {
-                // Only fetch completed tasks from the last 24 hours to avoid hitting the 100-task limit
-                const completedMin = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+                const tasklists = this.data.tasklists || []
 
-                const taskPromises = this.data.tasklists.map(
-                    async (tasklist) => {
+                if (tasklists.length === 0) {
+                    this.data.tasks = []
+                } else {
+                    const taskPromises = tasklists.map(async (tasklist) => {
                         const data = await this.apiRequest(
-                            `/lists/${tasklist.id}/tasks?showCompleted=true&showHidden=true&showAssigned=true&maxResults=100&completedMin=${encodeURIComponent(completedMin)}`
+                            `/lists/${tasklist.id}/tasks?showCompleted=true&showHidden=true&maxResults=100`
                         )
-                        // Add tasklist info to each task
                         return (data.items || []).map((task) => ({
                             ...task,
                             tasklistId: tasklist.id,
                             tasklistName: tasklist.title,
                         }))
-                    }
-                )
+                    })
 
-                const taskArrays = await Promise.all(taskPromises)
-                this.data.tasks = taskArrays.flat()
+                    const taskArrays = await Promise.all(taskPromises)
+                    this.data.tasks = taskArrays.flat()
+                }
             }
 
             localStorage.setItem(this.dataKey, JSON.stringify(this.data))
-            console.log('Google Tasks sync complete:', this.data)
 
             return this.data
         } catch (error) {
@@ -216,8 +308,6 @@ class GoogleTasksBackendExtension extends TaskBackend {
                 let dueDate = null
 
                 if (task.due) {
-                    // Google Tasks API only stores dates, not times
-                    // Extract date portion to avoid timezone conversion issues
                     const dateOnly = task.due.split('T')[0]
                     dueDate = new Date(dateOnly + 'T23:59:59')
                 }
@@ -241,7 +331,7 @@ class GoogleTasksBackendExtension extends TaskBackend {
                 }
             })
 
-        return GoogleTasksBackendExtension.sortTasks(mappedTasks)
+        return GoogleTasksBackend.sortTasks(mappedTasks)
     }
 
     /**
@@ -249,23 +339,19 @@ class GoogleTasksBackendExtension extends TaskBackend {
      */
     static sortTasks(tasks) {
         return tasks.sort((a, b) => {
-            // Sort by completion status first
             if (a.checked !== b.checked) return a.checked ? 1 : -1
 
-            // Sort completed tasks by completion time (most recent first)
             if (a.checked && a.completed_at && b.completed_at) {
                 const diff = new Date(b.completed_at) - new Date(a.completed_at)
                 if (diff !== 0) return diff
             }
 
-            // Sort by due date (tasks with no due date go last)
             if (a.due_date && b.due_date) {
                 const diff = a.due_date - b.due_date
                 if (diff !== 0) return diff
             }
             if (a.due_date !== b.due_date) return a.due_date ? -1 : 1
 
-            // Finally sort by position
             return a.child_order - b.child_order
         })
     }
@@ -274,19 +360,15 @@ class GoogleTasksBackendExtension extends TaskBackend {
      * Get tasklist name by ID
      */
     getTasklistName(tasklistId) {
-        return (
-            this.data.tasklists?.find((tl) => tl.id === tasklistId)?.title ?? ''
-        )
+        return this.data.tasklists?.find((tl) => tl.id === tasklistId)?.title ?? ''
     }
 
     /**
      * Add a new task
-     * Note: Google Tasks API only supports dates, not times
      */
     async addTask(content, due) {
         const taskData = { title: content }
         if (due) {
-            // Google Tasks only supports date (YYYY-MM-DD), strip time if present
             const dateOnly = due.split('T')[0]
             taskData.due = dateOnly + 'T00:00:00.000Z'
         }
@@ -367,4 +449,4 @@ class GoogleTasksBackendExtension extends TaskBackend {
     }
 }
 
-export default GoogleTasksBackendExtension
+export default GoogleTasksBackend

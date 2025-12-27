@@ -17,6 +17,7 @@
     let googleTasksApi = $state(null)
     let signingIn = $state(false)
     let signInError = $state('')
+    let googleUserEmail = $state(localStorage.getItem('google_user_email') || '')
 
     async function handleGoogleSignIn() {
         try {
@@ -29,6 +30,7 @@
 
             await googleTasksApi.signIn()
             settings.googleTasksSignedIn = true
+            googleUserEmail = googleTasksApi.getUserEmail() || ''
             saveSettings(settings)
         } catch (err) {
             console.error('Google sign-in error:', err)
@@ -47,6 +49,7 @@
 
             await googleTasksApi.signOut()
             settings.googleTasksSignedIn = false
+            googleUserEmail = ''
             saveSettings(settings)
             signInError = ''
         } catch (err) {
@@ -198,6 +201,9 @@
         </div>
 
         <div class="content">
+            <!-- APPEARANCE -->
+            <h3 class="section-title first">appearance</h3>
+
             <div class="group">
                 <div class="setting-label">theme</div>
                 <div class="theme-grid">
@@ -232,64 +238,40 @@
                     {/each}
                 </div>
             </div>
-            <div class="group">
-                <label for="font">font</label>
-                <input
-                    id="font"
-                    type="text"
-                    bind:value={settings.font}
-                    placeholder="Geist Mono Variable"
-                />
-            </div>
 
-            <div class="group">
-                <label for="tab-title">tab title</label>
-                <input
-                    id="tab-title"
-                    type="text"
-                    bind:value={settings.tabTitle}
-                    placeholder="~"
-                />
-            </div>
-
-            <div class="group">
-                <div class="setting-label">task backend</div>
-                <div class="radio-group">
-                    <RadioButton
-                        bind:group={settings.taskBackend}
-                        value="local"
-                    >
-                        local
-                    </RadioButton>
-                    <RadioButton
-                        bind:group={settings.taskBackend}
-                        value="todoist"
-                    >
-                        todoist
-                    </RadioButton>
-                    <RadioButton
-                        bind:group={settings.taskBackend}
-                        value="google-tasks"
-                    >
-                        google tasks
-                    </RadioButton>
-                </div>
-            </div>
-
-            {#if settings.taskBackend === 'todoist'}
+            <div class="inline-group">
                 <div class="group">
-                    <label for="todoist-token">todoist api token</label>
+                    <label for="font">font</label>
                     <input
-                        id="todoist-token"
-                        type="password"
-                        bind:value={settings.todoistApiToken}
+                        id="font"
+                        type="text"
+                        bind:value={settings.font}
+                        placeholder="Geist Mono Variable"
                     />
                 </div>
-            {/if}
+                <div class="group small">
+                    <label for="tab-title">tab title</label>
+                    <input
+                        id="tab-title"
+                        type="text"
+                        bind:value={settings.tabTitle}
+                        placeholder="~"
+                    />
+                </div>
+            </div>
 
-            {#if settings.taskBackend === 'google-tasks'}
-                <div class="group">
-                    <div class="setting-label">google tasks authentication</div>
+            <!-- INTEGRATIONS -->
+            <h3 class="section-title">integrations</h3>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <span class="integration-name">google</span>
+                    <span class="integration-desc">tasks & calendar</span>
+                    {#if settings.googleTasksSignedIn && googleUserEmail}
+                        <span class="integration-email">{googleUserEmail}</span>
+                    {/if}
+                </div>
+                <div class="integration-content">
                     <button
                         class="button"
                         onclick={settings.googleTasksSignedIn
@@ -303,184 +285,302 @@
                               ? signInError
                               : signingIn
                                 ? 'signing in...'
-                                : 'sign in with google'}]
+                                : 'sign in'}]
                     </button>
-                </div>
-            {/if}
-
-            <div class="group">
-                <div class="setting-label">weather location</div>
-                <div class="radio-group">
-                    <RadioButton
-                        bind:group={settings.locationMode}
-                        value="manual"
-                    >
-                        manual
-                    </RadioButton>
-                    <RadioButton
-                        bind:group={settings.locationMode}
-                        value="auto"
-                    >
-                        auto
-                    </RadioButton>
                 </div>
             </div>
 
-            {#if settings.locationMode === 'manual'}
-                <div class="supergroup short">
-                    <div class="group">
-                        <label for="latitude">weather latitude</label>
-                        <input
-                            id="latitude"
-                            type="number"
-                            bind:value={settings.latitude}
-                            step="0.01"
-                        />
-                    </div>
-                    <div class="group">
-                        <label for="longitude">weather longitude</label>
-                        <input
-                            id="longitude"
-                            type="number"
-                            bind:value={settings.longitude}
-                            step="0.01"
-                        />
+            <div class="integration-card">
+                <div class="integration-header">
+                    <span class="integration-name">todoist</span>
+                    <span class="integration-desc">tasks</span>
+                </div>
+                <div class="integration-content">
+                    <input
+                        id="todoist-token"
+                        type="password"
+                        bind:value={settings.todoistApiToken}
+                        placeholder="api token"
+                    />
+                </div>
+            </div>
+
+            <!-- CLOCK -->
+            <h3 class="section-title">clock</h3>
+
+            <div class="format-grid">
+                <div class="group">
+                    <div class="setting-label">time format</div>
+                    <div class="radio-group">
+                        <RadioButton bind:group={settings.timeFormat} value="12hr">
+                            12h
+                        </RadioButton>
+                        <RadioButton bind:group={settings.timeFormat} value="24hr">
+                            24h
+                        </RadioButton>
                     </div>
                 </div>
                 <div class="group">
-                    <button
-                        class="button"
-                        onclick={useCurrentLocation}
-                        disabled={locationLoading}
-                    >
-                        [{locationError
-                            ? locationError
-                            : locationLoading
-                              ? 'getting location...'
-                              : 'use current location'}]
-                    </button>
+                    <div class="setting-label">date format</div>
+                    <div class="radio-group">
+                        <RadioButton bind:group={settings.dateFormat} value="mdy">
+                            m/d/y
+                        </RadioButton>
+                        <RadioButton bind:group={settings.dateFormat} value="dmy">
+                            d/m/y
+                        </RadioButton>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEATHER -->
+            <h3 class="section-title">weather</h3>
+
+            <div class="group">
+                <label class="checkbox-label">
+                    <input type="checkbox" bind:checked={settings.showWeather} />
+                    enabled
+                </label>
+            </div>
+
+            {#if settings.showWeather}
+                <div class="group">
+                    <div class="setting-label">location</div>
+                    <div class="radio-group">
+                        <RadioButton
+                            bind:group={settings.locationMode}
+                            value="manual"
+                        >
+                            manual
+                        </RadioButton>
+                        <RadioButton
+                            bind:group={settings.locationMode}
+                            value="auto"
+                        >
+                            auto
+                        </RadioButton>
+                    </div>
+                </div>
+
+                {#if settings.locationMode === 'manual'}
+                    <div class="inline-group">
+                        <div class="group">
+                            <label for="latitude">latitude</label>
+                            <input
+                                id="latitude"
+                                type="number"
+                                bind:value={settings.latitude}
+                                step="0.01"
+                            />
+                        </div>
+                        <div class="group">
+                            <label for="longitude">longitude</label>
+                            <input
+                                id="longitude"
+                                type="number"
+                                bind:value={settings.longitude}
+                                step="0.01"
+                            />
+                        </div>
+                        <div class="group auto-width">
+                            <span class="spacer">&nbsp;</span>
+                            <button
+                                class="button"
+                                onclick={useCurrentLocation}
+                                disabled={locationLoading}
+                            >
+                                [{locationError
+                                    ? locationError
+                                    : locationLoading
+                                      ? '...'
+                                      : 'detect'}]
+                            </button>
+                        </div>
+                    </div>
+                {/if}
+
+                <div class="format-grid">
+                    <div class="group">
+                        <div class="setting-label">temperature</div>
+                        <div class="radio-group">
+                            <RadioButton
+                                bind:group={settings.tempUnit}
+                                value="fahrenheit"
+                            >
+                                °F
+                            </RadioButton>
+                            <RadioButton bind:group={settings.tempUnit} value="celsius">
+                                °C
+                            </RadioButton>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="setting-label">speed</div>
+                        <div class="radio-group">
+                            <RadioButton bind:group={settings.speedUnit} value="mph">
+                                mph
+                            </RadioButton>
+                            <RadioButton bind:group={settings.speedUnit} value="kmh">
+                                km/h
+                            </RadioButton>
+                        </div>
+                    </div>
                 </div>
             {/if}
 
+            <!-- TASKS -->
+            <h3 class="section-title">tasks</h3>
+
             <div class="group">
-                <div class="setting-label">time format</div>
-                <div class="radio-group">
-                    <RadioButton bind:group={settings.timeFormat} value="12hr">
-                        12 hour
-                    </RadioButton>
-                    <RadioButton bind:group={settings.timeFormat} value="24hr">
-                        24 hour
-                    </RadioButton>
-                </div>
+                <label class="checkbox-label">
+                    <input type="checkbox" bind:checked={settings.showTasks} />
+                    enabled
+                </label>
             </div>
-            <div class="group">
-                <div class="setting-label">date format</div>
-                <div class="radio-group">
-                    <RadioButton bind:group={settings.dateFormat} value="mdy">
-                        month-day-year
-                    </RadioButton>
-                    <RadioButton bind:group={settings.dateFormat} value="dmy">
-                        day-month-year
-                    </RadioButton>
-                </div>
-            </div>
-            <div class="group">
-                <div class="setting-label">temperature format</div>
-                <div class="radio-group">
-                    <RadioButton
-                        bind:group={settings.tempUnit}
-                        value="fahrenheit"
-                    >
-                        fahrenheit
-                    </RadioButton>
-                    <RadioButton bind:group={settings.tempUnit} value="celsius">
-                        celsius
-                    </RadioButton>
-                </div>
-            </div>
-            <div class="group">
-                <div class="setting-label">speed format</div>
-                <div class="radio-group">
-                    <RadioButton bind:group={settings.speedUnit} value="mph">
-                        mph
-                    </RadioButton>
-                    <RadioButton bind:group={settings.speedUnit} value="kmh">
-                        kmh
-                    </RadioButton>
-                </div>
-            </div>
-            <div class="group">
-                <div class="setting-label">link behavior</div>
-                <div class="radio-group">
-                    <RadioButton bind:group={settings.linkTarget} value="_self">
-                        same tab
-                    </RadioButton>
-                    <RadioButton
-                        bind:group={settings.linkTarget}
-                        value="_blank"
-                    >
-                        new tab
-                    </RadioButton>
-                </div>
-            </div>
-            <div class="group">
-                <label for="linksPerColumn">links per column</label>
-                <input
-                    id="linksPerColumn"
-                    type="number"
-                    bind:value={settings.linksPerColumn}
-                    step="1"
-                />
-            </div>
-            <div class="group">
-                <div class="links-header">
-                    <div class="setting-label">links</div>
-                    <button class="add-btn" onclick={addLink}>add link</button>
-                </div>
-                <div class="links-list">
-                    {#each settings.links as link, index}
-                        <div
-                            class="link"
-                            class:dragging={draggedIndex === index}
-                            class:drag-over={dragOverIndex === index}
-                            ondragover={(e) => handleDragOver(e, index)}
-                            ondragleave={handleDragLeave}
-                            ondrop={(e) => handleDrop(e, index)}
-                            role="listitem"
+
+            {#if settings.showTasks}
+                <div class="group">
+                    <div class="setting-label">source</div>
+                    <div class="radio-group">
+                        <RadioButton
+                            bind:group={settings.taskBackend}
+                            value="local"
                         >
-                            <span
-                                class="drag-handle"
-                                title="Drag to reorder"
-                                draggable="true"
-                                ondragstart={(e) => handleDragStart(e, index)}
-                                ondragend={handleDragEnd}
-                                role="button"
-                                tabindex="0">=</span
+                            local
+                        </RadioButton>
+                        <span
+                            class="radio-wrapper"
+                            class:disabled={!settings.todoistApiToken}
+                            title={!settings.todoistApiToken ? 'add todoist api token in integrations' : ''}
+                        >
+                            <RadioButton
+                                bind:group={settings.taskBackend}
+                                value="todoist"
+                                disabled={!settings.todoistApiToken}
                             >
-                            <input
-                                type="text"
-                                bind:value={link.title}
-                                placeholder="title"
-                                class="link-input name"
-                                draggable="false"
-                            />
-                            <input
-                                type="url"
-                                bind:value={link.url}
-                                placeholder="https://example.com"
-                                class="link-input"
-                                draggable="false"
-                            />
-                            <button
-                                class="remove-btn"
-                                onclick={() => removeLink(index)}
+                                todoist
+                            </RadioButton>
+                        </span>
+                        <span
+                            class="radio-wrapper"
+                            class:disabled={!settings.googleTasksSignedIn}
+                            title={!settings.googleTasksSignedIn ? 'sign in to google in integrations' : ''}
+                        >
+                            <RadioButton
+                                bind:group={settings.taskBackend}
+                                value="google-tasks"
+                                disabled={!settings.googleTasksSignedIn}
                             >
-                                x
-                            </button>
-                        </div>
-                    {/each}
+                                google
+                            </RadioButton>
+                        </span>
+                    </div>
                 </div>
+            {/if}
+
+            <!-- CALENDAR -->
+            {#if settings.googleTasksSignedIn}
+                <h3 class="section-title">calendar</h3>
+
+                <div class="group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" bind:checked={settings.showCalendar} />
+                        enabled
+                    </label>
+                </div>
+            {/if}
+
+            <!-- LINKS -->
+            <h3 class="section-title">links</h3>
+
+            <div class="group">
+                <label class="checkbox-label">
+                    <input type="checkbox" bind:checked={settings.showLinks} />
+                    enabled
+                </label>
             </div>
+
+            {#if settings.showLinks}
+                <div class="inline-group">
+                    <div class="group">
+                        <div class="setting-label">open in</div>
+                        <div class="radio-group">
+                            <RadioButton bind:group={settings.linkTarget} value="_self">
+                                same tab
+                            </RadioButton>
+                            <RadioButton
+                                bind:group={settings.linkTarget}
+                                value="_blank"
+                            >
+                                new tab
+                            </RadioButton>
+                        </div>
+                    </div>
+                    <div class="group small">
+                        <label for="linksPerColumn">per column</label>
+                        <input
+                            id="linksPerColumn"
+                            type="number"
+                            bind:value={settings.linksPerColumn}
+                            step="1"
+                        />
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="links-header">
+                        <div class="setting-label">edit links</div>
+                        <button class="add-btn" onclick={addLink}>+ add</button>
+                    </div>
+                    <div class="links-list">
+                        {#each settings.links as link, index}
+                            <div
+                                class="link"
+                                class:dragging={draggedIndex === index}
+                                class:drag-over={dragOverIndex === index}
+                                ondragover={(e) => handleDragOver(e, index)}
+                                ondragleave={handleDragLeave}
+                                ondrop={(e) => handleDrop(e, index)}
+                                role="listitem"
+                            >
+                                <span
+                                    class="drag-handle"
+                                    title="Drag to reorder"
+                                    draggable="true"
+                                    ondragstart={(e) => handleDragStart(e, index)}
+                                    ondragend={handleDragEnd}
+                                    role="button"
+                                    tabindex="0">=</span
+                                >
+                                <input
+                                    type="text"
+                                    bind:value={link.title}
+                                    placeholder="title"
+                                    class="link-input name"
+                                    draggable="false"
+                                />
+                                <input
+                                    type="url"
+                                    bind:value={link.url}
+                                    placeholder="https://example.com"
+                                    class="link-input"
+                                    draggable="false"
+                                />
+                                <button
+                                    class="remove-btn"
+                                    onclick={() => removeLink(index)}
+                                >
+                                    x
+                                </button>
+                            </div>
+                        {/each}
+                    </div>
+                </div>
+            {/if}
+
+            <!-- ADVANCED -->
+            <h3 class="section-title">advanced</h3>
+
             <div class="group">
                 <label for="custom-css">custom css</label>
                 <textarea
@@ -490,6 +590,8 @@
                     rows="6"
                 ></textarea>
             </div>
+
+            <!-- FOOTER -->
             <div class="version">
                 re-start
                 <a href="https://github.com/refact0r/re-start" target="_blank">
@@ -552,14 +654,6 @@
         scrollbar-width: thin;
         scrollbar-color: var(--bg-3) var(--bg-1);
     }
-    .supergroup {
-        display: flex;
-        gap: 1rem;
-
-        &.short .group {
-            margin-bottom: 1rem;
-        }
-    }
     .group {
         flex: 1;
         margin-bottom: 1.5rem;
@@ -570,7 +664,6 @@
         margin-bottom: 0.5rem;
     }
     .group input[type='text'],
-    .group input[type='password'],
     .group input[type='number'],
     .group input[type='url'] {
         width: 100%;
@@ -669,6 +762,9 @@
         display: flex;
         gap: 3ch;
     }
+    .radio-wrapper.disabled {
+        cursor: help;
+    }
     .reset-link {
         background: none;
         border: none;
@@ -680,5 +776,93 @@
     }
     .reset-link:hover {
         color: var(--txt-1);
+    }
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+    .spacer {
+        display: block;
+    }
+    .checkbox-label input[type='checkbox'] {
+        width: 1rem;
+        height: 1rem;
+        accent-color: var(--txt-2);
+        cursor: pointer;
+    }
+    .section-title {
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--bg-3);
+        color: var(--txt-2);
+        font-size: 0.875rem;
+        font-weight: normal;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    .section-title.first {
+        margin-top: 0;
+    }
+    .inline-group {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .inline-group .group {
+        flex: 1;
+        margin-bottom: 0;
+    }
+    .inline-group .group.small {
+        flex: 0 0 8rem;
+    }
+    .inline-group .group.auto-width {
+        flex: 0 0 auto;
+    }
+    .integration-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        background: var(--bg-2);
+        border: 1px solid var(--bg-3);
+    }
+    .integration-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+    .integration-name {
+        color: var(--txt-1);
+    }
+    .integration-desc {
+        font-size: 0.8rem;
+        color: var(--txt-3);
+    }
+    .integration-email {
+        font-size: 0.8rem;
+        color: var(--txt-2);
+    }
+    .integration-content {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .integration-content input {
+        width: 12rem;
+        padding: 0.375rem 0.5rem;
+        background: var(--bg-1);
+        border: 1px solid var(--bg-3);
+    }
+    .format-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 2rem;
+        margin-bottom: 1.5rem;
+    }
+    .format-grid .group {
+        margin-bottom: 0;
     }
 </style>

@@ -9,7 +9,7 @@
     "chrome_settings_overrides": {
         "homepage": "index.html"
     },
-    "permissions": ["identity"],
+    "permissions": [],
     "browser_specific_settings": {
         "gecko": {
             "id": "re-start@refact0r.dev",

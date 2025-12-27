@@ -1,11 +1,11 @@
 <script>
-    let { group = $bindable(), value, children } = $props()
+    let { group = $bindable(), value, disabled = false, children } = $props()
 
     let isChecked = $derived(group === value)
 </script>
 
-<label>
-    <input type="radio" bind:group {value} />
+<label class:disabled>
+    <input type="radio" bind:group {value} {disabled} />
     <span class="radio-indicator">
         {#if isChecked}
             [<span class="radio-x">x</span>]
@@ -44,6 +44,19 @@
         .radio-indicator::before,
         .radio-indicator::after {
             color: var(--txt-2);
+        }
+    }
+
+    label.disabled {
+        cursor: not-allowed;
+        opacity: 0.4;
+    }
+
+    label.disabled:hover {
+        .radio-indicator,
+        .radio-indicator::before,
+        .radio-indicator::after {
+            color: var(--txt-3);
         }
     }
 </style>

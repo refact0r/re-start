@@ -2,6 +2,7 @@
     import '@fontsource-variable/geist-mono'
     import { settings } from './lib/settings-store.svelte.js'
     import { themes } from './lib/themes.js'
+    import Calendar from './lib/components/Calendar.svelte'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
     import Settings from './lib/components/Settings.svelte'
@@ -70,10 +71,19 @@
             <Stats />
         </div>
         <div class="widgets">
-            <Weather />
-            <Tasks />
+            {#if settings.showWeather !== false}
+                <Weather />
+            {/if}
+            {#if settings.showTasks !== false}
+                <Tasks />
+            {/if}
+            {#if settings.googleTasksSignedIn && settings.showCalendar !== false}
+                <Calendar />
+            {/if}
         </div>
-        <Links />
+        {#if settings.showLinks !== false}
+            <Links />
+        {/if}
     </div>
 
     <button

@@ -2,16 +2,26 @@ let defaultSettings = {
     font: 'Geist Mono Variable',
     currentTheme: 'default',
     tabTitle: '~',
-    taskBackend: 'local',
+    // Integrations
     todoistApiToken: '',
     googleTasksSignedIn: false,
+    // Clock
+    timeFormat: '12hr',
+    dateFormat: 'mdy',
+    // Weather
+    showWeather: true,
     locationMode: 'manual',
     latitude: null,
     longitude: null,
-    timeFormat: '12hr',
-    dateFormat: 'mdy',
     tempUnit: 'fahrenheit',
     speedUnit: 'mph',
+    // Tasks
+    showTasks: true,
+    taskBackend: 'local',
+    // Calendar
+    showCalendar: true,
+    // Links
+    showLinks: true,
     linksPerColumn: 4,
     linkTarget: '_self',
     links: [
