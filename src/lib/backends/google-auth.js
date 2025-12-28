@@ -146,14 +146,14 @@ async function fetchUserEmail(accessToken) {
 /**
  * Exchange authorization code for tokens
  */
-async function exchangeCodeForTokens(code, codeVerifier) {
+async function exchangeCodeForTokens(code, codeVerifier, redirectUri) {
     const response = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
             code,
             client_id: CLIENT_ID,
-            redirect_uri: getRedirectUri(),
+            redirect_uri: redirectUri,
             grant_type: 'authorization_code',
             code_verifier: codeVerifier
         })
@@ -161,6 +161,7 @@ async function exchangeCodeForTokens(code, codeVerifier) {
 
     if (!response.ok) {
         const error = await response.json()
+        console.error('Token exchange failed:', error)
         throw new Error(error.error_description || error.error || 'Token exchange failed')
     }
 
@@ -225,14 +226,16 @@ export async function signIn() {
     const state = crypto.randomUUID()
     const codeVerifier = generateCodeVerifier()
     const codeChallenge = await generateCodeChallenge(codeVerifier)
+    const redirectUri = getRedirectUri()
 
     // Store for verification after redirect
     sessionStorage.setItem('oauth_state', state)
     sessionStorage.setItem('oauth_code_verifier', codeVerifier)
+    sessionStorage.setItem('oauth_redirect_uri', redirectUri)
 
     const authURL = new URL('https://accounts.google.com/o/oauth2/v2/auth')
     authURL.searchParams.set('client_id', CLIENT_ID)
-    authURL.searchParams.set('redirect_uri', getRedirectUri())
+    authURL.searchParams.set('redirect_uri', redirectUri)
     authURL.searchParams.set('response_type', 'code')
     authURL.searchParams.set('scope', SCOPES.join(' '))
     authURL.searchParams.set('state', state)
@@ -260,16 +263,21 @@ export async function signIn() {
             return
         }
 
+        let checkClosed
+
         const handleMessage = async (event) => {
             if (event.origin !== window.location.origin) return
 
             if (event.data?.type === 'oauth-callback') {
+                // Clear interval first to prevent race condition
+                clearInterval(checkClosed)
                 window.removeEventListener('message', handleMessage)
                 popup.close()
 
                 if (event.data.error) {
                     sessionStorage.removeItem('oauth_state')
                     sessionStorage.removeItem('oauth_code_verifier')
+                    sessionStorage.removeItem('oauth_redirect_uri')
                     reject(new Error(event.data.error_description || event.data.error))
                     return
                 }
@@ -277,10 +285,12 @@ export async function signIn() {
                 const { code, state: returnedState } = event.data
                 const savedState = sessionStorage.getItem('oauth_state')
                 const savedVerifier = sessionStorage.getItem('oauth_code_verifier')
+                const savedRedirectUri = sessionStorage.getItem('oauth_redirect_uri')
 
                 // Clean up
                 sessionStorage.removeItem('oauth_state')
                 sessionStorage.removeItem('oauth_code_verifier')
+                sessionStorage.removeItem('oauth_redirect_uri')
 
                 if (returnedState !== savedState) {
                     reject(new Error('State mismatch - possible CSRF attack'))
@@ -294,7 +304,7 @@ export async function signIn() {
 
                 try {
                     // Exchange code for tokens
-                    const tokens = await exchangeCodeForTokens(code, savedVerifier)
+                    const tokens = await exchangeCodeForTokens(code, savedVerifier, savedRedirectUri)
                     storeTokens(tokens.access_token, tokens.expires_in, tokens.refresh_token)
 
                     // Fetch user email
@@ -310,12 +320,13 @@ export async function signIn() {
         window.addEventListener('message', handleMessage)
 
         // Check if popup was closed without completing auth
-        const checkClosed = setInterval(() => {
+        checkClosed = setInterval(() => {
             if (popup.closed) {
                 clearInterval(checkClosed)
                 window.removeEventListener('message', handleMessage)
                 sessionStorage.removeItem('oauth_state')
                 sessionStorage.removeItem('oauth_code_verifier')
+                sessionStorage.removeItem('oauth_redirect_uri')
                 reject(new Error('Sign in cancelled'))
             }
         }, 500)
