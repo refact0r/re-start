@@ -1,0 +1,13 @@
+services:
+  backend:
+    build: .
+    container_name: re-start-backend
+    restart: unless-stopped
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      - ./db:/app/db

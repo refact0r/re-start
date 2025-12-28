@@ -22,9 +22,6 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      - name: Install backend dependencies
-        run: cd backend && npm ci
-
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -40,19 +37,14 @@ jobs:
 
       - name: Deploy backend
         run: |
-          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key" \
+          rsync -avz -e "ssh -i ~/.ssh/deploy_key" \
             --exclude 'node_modules' \
             --exclude '.env' \
             --exclude 'db/*.db' \
             backend/ \
             deploy@bini.io:/var/www/apps/re-start-backend/
 
-      - name: Install backend dependencies on server
+      - name: Rebuild and restart backend container
         run: |
           ssh -i ~/.ssh/deploy_key deploy@bini.io \
-            'cd /var/www/apps/re-start-backend && npm ci --production'
-
-      - name: Restart backend service
-        run: |
-          ssh -i ~/.ssh/deploy_key deploy@bini.io \
-            'pm2 restart re-start-backend || pm2 start /var/www/apps/re-start-backend/server.js --name re-start-backend'
+            'cd /var/www/apps/re-start-backend && docker compose up -d --build'
