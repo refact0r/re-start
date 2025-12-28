@@ -9,10 +9,8 @@ const TOKEN_EXPIRY_KEY = 'google_oauth_token_expiry'
 const USER_EMAIL_KEY = 'google_user_email'
 const USER_ID_KEY = 'google_user_id'
 
-// Backend API URL - use relative path in production, localhost in dev
-const API_URL = import.meta.env.DEV
-    ? 'http://localhost:3004'
-    : 'https://api.bini.io'
+// Backend API URL - use localhost in dev, empty string (relative) in production
+const API_URL = import.meta.env.DEV ? 'http://localhost:3004' : ''
 
 // Token refresh buffer (5 minutes before expiry)
 const REFRESH_BUFFER_MS = 5 * 60 * 1000

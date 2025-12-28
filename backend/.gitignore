@@ -1,3 +1,4 @@
 node_modules/
 .env
 db/*.db
+public/

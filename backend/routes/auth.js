@@ -6,8 +6,7 @@ const router = Router()
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001'
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3004'
 
 const SCOPES = [
     'https://www.googleapis.com/auth/tasks',
@@ -41,7 +40,7 @@ router.get('/google/url', (req, res) => {
 
     const params = new URLSearchParams({
         client_id: GOOGLE_CLIENT_ID,
-        redirect_uri: `${BACKEND_URL}/api/auth/google/callback`,
+        redirect_uri: `${BASE_URL}/api/auth/google/callback`,
         response_type: 'code',
         scope: SCOPES,
         state: state,
@@ -61,16 +60,16 @@ router.get('/google/callback', async (req, res) => {
     const { code, state, error } = req.query
 
     if (error) {
-        return res.redirect(`${FRONTEND_URL}?auth_error=${encodeURIComponent(error)}`)
+        return res.redirect(`${BASE_URL}?auth_error=${encodeURIComponent(error)}`)
     }
 
     if (!code || !state) {
-        return res.redirect(`${FRONTEND_URL}?auth_error=missing_params`)
+        return res.redirect(`${BASE_URL}?auth_error=missing_params`)
     }
 
     const stateData = pendingStates.get(state)
     if (!stateData) {
-        return res.redirect(`${FRONTEND_URL}?auth_error=invalid_state`)
+        return res.redirect(`${BASE_URL}?auth_error=invalid_state`)
     }
     pendingStates.delete(state)
 
@@ -84,14 +83,14 @@ router.get('/google/callback', async (req, res) => {
                 client_secret: GOOGLE_CLIENT_SECRET,
                 code: code,
                 grant_type: 'authorization_code',
-                redirect_uri: `${BACKEND_URL}/api/auth/google/callback`
+                redirect_uri: `${BASE_URL}/api/auth/google/callback`
             })
         })
 
         if (!tokenResponse.ok) {
             const errorData = await tokenResponse.json()
             console.error('Token exchange failed:', errorData)
-            return res.redirect(`${FRONTEND_URL}?auth_error=token_exchange_failed`)
+            return res.redirect(`${BASE_URL}?auth_error=token_exchange_failed`)
         }
 
         const tokens = await tokenResponse.json()
@@ -123,10 +122,10 @@ router.get('/google/callback', async (req, res) => {
             email: email || ''
         })
 
-        res.redirect(`${FRONTEND_URL}?${params}`)
+        res.redirect(`${BASE_URL}?${params}`)
     } catch (error) {
         console.error('OAuth callback error:', error)
-        res.redirect(`${FRONTEND_URL}?auth_error=server_error`)
+        res.redirect(`${BASE_URL}?auth_error=server_error`)
     }
 })
 

@@ -22,6 +22,9 @@ jobs:
       - name: Build frontend
         run: npm run build
 
+      - name: Copy frontend to backend/public
+        run: cp -r dist/firefox backend/public
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -29,13 +32,7 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H bini.io >> ~/.ssh/known_hosts
 
-      - name: Deploy frontend
-        run: |
-          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key" \
-            dist/firefox/ \
-            deploy@bini.io:/var/www/nginx-root/static/start/
-
-      - name: Deploy backend
+      - name: Deploy to server
         run: |
           rsync -avz -e "ssh -i ~/.ssh/deploy_key" \
             --exclude 'node_modules' \
@@ -44,7 +41,7 @@ jobs:
             backend/ \
             deploy@bini.io:/var/www/apps/re-start-backend/
 
-      - name: Rebuild and restart backend container
+      - name: Rebuild and restart container
         run: |
           ssh -i ~/.ssh/deploy_key deploy@bini.io \
             'cd /var/www/apps/re-start-backend && docker compose up -d --build'
