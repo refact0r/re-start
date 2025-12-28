@@ -1,6 +1,6 @@
 # Privacy Policy for re-start
 
-**Last Updated: December 24, 2025**
+**Last Updated: December 28, 2025**
 
 ## Introduction
 
@@ -10,7 +10,7 @@ re-start ("we", "our", or "the extension") is a browser extension that replaces 
 
 - **Task Data**: Task names, project/list names, due dates, and completion status you create within the extension
 - **Settings and Preferences**: Your theme preferences, display settings, and configuration choices
-- **API Credentials**: OAuth 2.0 access tokens and refresh tokens for third-party services you choose to connect (Google Tasks, Todoist)
+- **API Credentials**: OAuth 2.0 access tokens and refresh tokens for third-party services you choose to connect (Todoist). For Google Tasks in Chrome, authentication tokens are managed by Chrome's identity API
 - **Location Data**: If you enable weather features, you may provide location information manually or allow access to your device's location
 
 ## How We Use Your Information
@@ -29,19 +29,20 @@ We implement the following security measures to protect your data:
 - **Local Storage**: All data is stored locally in your browser using the browser's encrypted storage APIs
 - **Encryption in Transit**: All communications with third-party APIs (Google Tasks, Todoist, Open-Meteo) use HTTPS/TLS encryption to protect data during transmission
 - **Token Security**: OAuth 2.0 access tokens and refresh tokens are:
-  - Stored securely in browser storage with built-in encryption
+  - For Google Tasks (Chrome only): Managed entirely by Chrome's identity API with automatic token caching and refresh
+  - For Todoist: Stored securely in browser storage with built-in encryption
   - Never logged, exposed, or transmitted to any third parties except the authorizing service
   - Automatically refreshed using secure OAuth 2.0 flows
 - **Access Control**: Only you have access to your data through your local browser session - data is isolated per browser profile
 - **No Backend Servers**: We do not operate backend servers that collect, process, or store your personal data
 - **Password Protection**: We never request, collect, or store your passwords
-- **Minimal Permissions**: The extension only requests the minimum necessary browser permissions to function
+- **Minimal Permissions**: The extension only requests the minimum necessary browser permissions to function (identity permission in Chrome for Google Tasks OAuth)
 
 ## Third-Party Services
 
 This extension may integrate with:
 
-- **Google Tasks**: For task synchronization (requires your authorization)
+- **Google Tasks**: For task synchronization in Chrome only (requires your authorization via Chrome's identity API)
 - **Todoist**: For task synchronization (requires your authorization)
 - **Open-Meteo**: For weather information display (requires location data)
 
