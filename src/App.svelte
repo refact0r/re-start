@@ -3,6 +3,7 @@
     import { settings } from './lib/settings-store.svelte.js'
     import { themes } from './lib/themes.js'
     import { getBackground, loadCachedBackground, forceRefreshBackground } from './lib/unsplash-api.js'
+    import { handleAuthCallback } from './lib/backends/google-auth.js'
     import Calendar from './lib/components/Calendar.svelte'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
@@ -66,6 +67,16 @@
         saveSettings(settings)
     })
 
+    // Handle OAuth callback on page load
+    $effect(() => {
+        const result = handleAuthCallback()
+        if (result?.success) {
+            settings.googleTasksSignedIn = true
+        } else if (result?.error) {
+            console.error('Auth error:', result.error)
+        }
+    })
+
     // Toggle body class for background blur effect
     $effect(() => {
         if (settings.showBackground && background) {
@@ -118,7 +129,7 @@
             style="--bg-opacity: {settings.backgroundOpacity}; --bg-color: {background.color || '#000'}"
         >
             <img
-                src={background.url}
+                src={background.thumbUrl}
                 alt={background.description || 'Background'}
                 onload={handleBackgroundLoad}
             />

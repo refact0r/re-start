@@ -1,0 +1,17 @@
+{
+  "name": "re-start-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "OAuth backend for re-start",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

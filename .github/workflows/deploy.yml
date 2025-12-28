@@ -16,11 +16,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build frontend
         run: npm run build
+
+      - name: Install backend dependencies
+        run: cd backend && npm ci
 
       - name: Setup SSH
         run: |
@@ -29,8 +32,27 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H bini.io >> ~/.ssh/known_hosts
 
-      - name: Deploy to server
+      - name: Deploy frontend
         run: |
           rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key" \
             dist/firefox/ \
             deploy@bini.io:/var/www/nginx-root/static/start/
+
+      - name: Deploy backend
+        run: |
+          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key" \
+            --exclude 'node_modules' \
+            --exclude '.env' \
+            --exclude 'db/*.db' \
+            backend/ \
+            deploy@bini.io:/var/www/apps/re-start-backend/
+
+      - name: Install backend dependencies on server
+        run: |
+          ssh -i ~/.ssh/deploy_key deploy@bini.io \
+            'cd /var/www/apps/re-start-backend && npm ci --production'
+
+      - name: Restart backend service
+        run: |
+          ssh -i ~/.ssh/deploy_key deploy@bini.io \
+            'pm2 restart re-start-backend || pm2 start /var/www/apps/re-start-backend/server.js --name re-start-backend'
