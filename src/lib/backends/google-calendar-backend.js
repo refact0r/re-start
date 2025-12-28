@@ -1,58 +1,38 @@
+import * as googleAuth from './google-auth.js'
+
 /**
  * Google Calendar API client for Web Applications
- * Shares OAuth token with Google Tasks backend
+ * Uses shared Google OAuth module for authentication
  */
 class GoogleCalendarBackend {
     constructor(config = {}) {
         this.baseUrl = 'https://www.googleapis.com/calendar/v3'
-
         this.dataKey = 'google_calendar_data'
-        this.tokenKey = 'google_tasks_token' // Shared with Google Tasks
-        this.tokenExpiryKey = 'google_tasks_token_expiry' // Shared with Google Tasks
+
+        // Migrate old storage keys if needed
+        googleAuth.migrateStorageKeys()
 
         this.data = JSON.parse(localStorage.getItem(this.dataKey) ?? '{}')
-        this.accessToken = localStorage.getItem(this.tokenKey)
-        this.tokenExpiry = localStorage.getItem(this.tokenExpiryKey)
-        this.isSignedIn = !!this.accessToken && !this.isTokenExpired()
     }
 
     /**
-     * Check if current token is expired
-     */
-    isTokenExpired() {
-        if (!this.tokenExpiry) return true
-        return Date.now() > parseInt(this.tokenExpiry, 10)
-    }
-
-    /**
-     * Check if signed in (token shared with Google Tasks)
+     * Check if signed in (uses shared Google OAuth)
      */
     getIsSignedIn() {
-        this.accessToken = localStorage.getItem(this.tokenKey)
-        this.tokenExpiry = localStorage.getItem(this.tokenExpiryKey)
-        if (this.accessToken && this.isTokenExpired()) {
-            this.isSignedIn = false
-        } else {
-            this.isSignedIn = !!this.accessToken
-        }
-        return this.isSignedIn
+        return googleAuth.isSignedIn()
     }
 
     /**
-     * Make an authenticated API request
+     * Make an authenticated API request with auto-refresh
      */
     async apiRequest(endpoint, options = {}) {
-        this.accessToken = localStorage.getItem(this.tokenKey)
-
-        if (!this.accessToken) {
-            throw new Error('Not signed in')
-        }
+        const accessToken = await googleAuth.ensureValidToken()
 
         const url = `${this.baseUrl}${endpoint}`
         const response = await fetch(url, {
             ...options,
             headers: {
-                Authorization: `Bearer ${this.accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
                 ...options.headers,
             },
@@ -60,6 +40,23 @@ class GoogleCalendarBackend {
 
         if (!response.ok) {
             if (response.status === 401) {
+                // Token might have been revoked, try refresh once
+                try {
+                    const newToken = await googleAuth.refreshAccessToken()
+                    const retryResponse = await fetch(url, {
+                        ...options,
+                        headers: {
+                            Authorization: `Bearer ${newToken}`,
+                            'Content-Type': 'application/json',
+                            ...options.headers,
+                        },
+                    })
+                    if (retryResponse.ok) {
+                        return retryResponse.json()
+                    }
+                } catch {
+                    // Refresh failed, fall through to error
+                }
                 throw new Error('Authentication expired. Please sign in again.')
             }
             throw new Error(

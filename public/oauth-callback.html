@@ -27,16 +27,13 @@
         <p id="status"></p>
     </div>
     <script>
-        // Implicit flow returns token in hash fragment, not query params
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        // Authorization code flow returns code in query params
         const queryParams = new URLSearchParams(window.location.search);
 
-        // Check both hash (implicit flow) and query (error responses)
-        const access_token = hashParams.get('access_token');
-        const expires_in = hashParams.get('expires_in');
-        const state = hashParams.get('state') || queryParams.get('state');
-        const error = hashParams.get('error') || queryParams.get('error');
-        const errorDescription = hashParams.get('error_description') || queryParams.get('error_description');
+        const code = queryParams.get('code');
+        const state = queryParams.get('state');
+        const error = queryParams.get('error');
+        const errorDescription = queryParams.get('error_description');
 
         if (window.opener) {
             if (error) {
@@ -45,17 +42,16 @@
                     error: error,
                     error_description: errorDescription
                 }, window.location.origin);
-            } else if (access_token) {
+            } else if (code) {
                 window.opener.postMessage({
                     type: 'oauth-callback',
-                    access_token: access_token,
-                    expires_in: expires_in,
+                    code: code,
                     state: state
                 }, window.location.origin);
             } else {
                 window.opener.postMessage({
                     type: 'oauth-callback',
-                    error: 'No access token received'
+                    error: 'No authorization code received'
                 }, window.location.origin);
             }
             document.getElementById('status').textContent = 'You can close this window.';
