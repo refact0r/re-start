@@ -39,9 +39,9 @@ jobs:
             --exclude '.env' \
             --exclude 'db/*.db' \
             backend/ \
-            deploy@bini.io:/var/www/apps/re-start-backend/
+            deploy@bini.io:/data/re-start/
 
       - name: Rebuild and restart container
         run: |
           ssh -i ~/.ssh/deploy_key deploy@bini.io \
-            'cd /var/www/apps/re-start-backend && docker compose up -d --build'
+            'cd /data/re-start && docker compose up -d --build'
