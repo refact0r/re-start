@@ -40,23 +40,6 @@ class GoogleCalendarBackend {
 
         if (!response.ok) {
             if (response.status === 401) {
-                // Token might have been revoked, try refresh once
-                try {
-                    const newToken = await googleAuth.refreshAccessToken()
-                    const retryResponse = await fetch(url, {
-                        ...options,
-                        headers: {
-                            Authorization: `Bearer ${newToken}`,
-                            'Content-Type': 'application/json',
-                            ...options.headers,
-                        },
-                    })
-                    if (retryResponse.ok) {
-                        return retryResponse.json()
-                    }
-                } catch {
-                    // Refresh failed, fall through to error
-                }
                 throw new Error('Authentication expired. Please sign in again.')
             }
             throw new Error(

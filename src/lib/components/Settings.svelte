@@ -9,7 +9,9 @@
     import RadioButton from './RadioButton.svelte'
     import { createTaskBackend } from '../backends/index.js'
 
-    let { showSettings = false, closeSettings } = $props()
+    let { showSettings = false, closeSettings, refreshBackground = null, background = null } = $props()
+
+    let refreshingBackground = $state(false)
 
     // @ts-ignore
     const version = __APP_VERSION__
@@ -137,6 +139,18 @@
 
     let locationLoading = $state(false)
     let locationError = $state(null)
+
+    async function handleRefreshBackground() {
+        if (!refreshBackground) return
+        try {
+            refreshingBackground = true
+            await refreshBackground()
+        } catch (err) {
+            console.error('Failed to refresh background:', err)
+        } finally {
+            refreshingBackground = false
+        }
+    }
 
     async function useCurrentLocation() {
         if (!navigator.geolocation) {
@@ -487,6 +501,50 @@
                         <input type="checkbox" bind:checked={settings.showCalendar} />
                         enabled
                     </label>
+                </div>
+            {/if}
+
+            <!-- BACKGROUND -->
+            <h3 class="section-title">background</h3>
+
+            <div class="group">
+                <label class="checkbox-label">
+                    <input type="checkbox" bind:checked={settings.showBackground} />
+                    enabled
+                </label>
+            </div>
+
+            {#if settings.showBackground}
+                <div class="group">
+                    <label for="bg-opacity">opacity: {Math.round(settings.backgroundOpacity * 100)}%</label>
+                    <input
+                        id="bg-opacity"
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        bind:value={settings.backgroundOpacity}
+                    />
+                </div>
+
+                <div class="group">
+                    <div class="background-info">
+                        {#if background}
+                            <span class="bg-topic">{background.topic || 'random'}</span>
+                            <span class="bg-photographer">
+                                by <a href={background.photographer?.profileUrl} target="_blank" rel="noopener noreferrer">{background.photographer?.name}</a>
+                            </span>
+                        {:else}
+                            <span class="bg-loading">loading...</span>
+                        {/if}
+                        <button
+                            class="button"
+                            onclick={handleRefreshBackground}
+                            disabled={refreshingBackground}
+                        >
+                            [{refreshingBackground ? '...' : 'new image'}]
+                        </button>
+                    </div>
                 </div>
             {/if}
 
@@ -864,5 +922,47 @@
     }
     .format-grid .group {
         margin-bottom: 0;
+    }
+    input[type='range'] {
+        width: 100%;
+        height: 0.5rem;
+        appearance: none;
+        background: var(--bg-3);
+        border-radius: 0;
+        cursor: pointer;
+    }
+    input[type='range']::-webkit-slider-thumb {
+        appearance: none;
+        width: 1rem;
+        height: 1rem;
+        background: var(--txt-2);
+        border: none;
+        cursor: pointer;
+    }
+    input[type='range']::-moz-range-thumb {
+        width: 1rem;
+        height: 1rem;
+        background: var(--txt-2);
+        border: none;
+        cursor: pointer;
+    }
+    .background-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: var(--txt-3);
+        font-size: 0.875rem;
+    }
+    .bg-topic {
+        color: var(--txt-2);
+    }
+    .bg-photographer a {
+        color: var(--txt-2);
+    }
+    .bg-photographer a:hover {
+        color: var(--txt-1);
+    }
+    .bg-loading {
+        color: var(--txt-3);
     }
 </style>

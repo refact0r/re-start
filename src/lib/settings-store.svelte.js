@@ -20,6 +20,9 @@ let defaultSettings = {
     taskBackend: 'local',
     // Calendar
     showCalendar: true,
+    // Background
+    showBackground: false,
+    backgroundOpacity: 0.15,
     // Links
     showLinks: true,
     linksPerColumn: 4,

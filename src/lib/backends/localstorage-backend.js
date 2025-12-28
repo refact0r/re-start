@@ -163,7 +163,6 @@ class LocalStorageBackend extends TaskBackend {
      * Delete a task
      */
     async deleteTask(taskId) {
-        throw new Error('test error')
         const idx = this.data.items.findIndex((item) => item.id === taskId)
         if (idx !== -1) {
             this.data.items.splice(idx, 1)
@@ -176,7 +175,6 @@ class LocalStorageBackend extends TaskBackend {
      * Add a new task
      */
     async addTask(content, due) {
-        throw new Error('test error')
         const newTask = {
             id: crypto.randomUUID(),
             content: content,

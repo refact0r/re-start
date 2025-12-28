@@ -1,7 +1,6 @@
 /**
- * Google OAuth module for Web Applications
- * Uses OAuth 2.0 implicit flow with silent refresh via hidden iframe
- * Shared by Google Tasks and Google Calendar backends
+ * Google OAuth module using Google Identity Services (GIS)
+ * https://developers.google.com/identity/oauth2/web/guides/use-token-model
  */
 
 // Storage keys
@@ -9,23 +8,67 @@ const TOKEN_KEY = 'google_oauth_token'
 const TOKEN_EXPIRY_KEY = 'google_oauth_token_expiry'
 const USER_EMAIL_KEY = 'google_user_email'
 
-// OAuth configuration - Web application client
+// OAuth configuration
 const CLIENT_ID = '317653837986-8hsogqkfab632ducq6k0jcpngn1iub6a.apps.googleusercontent.com'
 const SCOPES = [
     'https://www.googleapis.com/auth/tasks',
     'https://www.googleapis.com/auth/calendar.readonly',
     'https://www.googleapis.com/auth/userinfo.email'
-]
+].join(' ')
 
 // Token refresh buffer (5 minutes before expiry)
 const REFRESH_BUFFER_MS = 5 * 60 * 1000
 
+// GIS token client instance
+let tokenClient = null
+let gsiLoaded = false
+
 /**
- * Get the redirect URI based on current location
+ * Load Google Identity Services library
  */
-function getRedirectUri() {
-    const basePath = window.location.pathname.replace(/\/[^/]*$/, '')
-    return `${window.location.origin}${basePath}/oauth-callback.html`
+function loadGsiScript() {
+    return new Promise((resolve, reject) => {
+        if (gsiLoaded) {
+            resolve()
+            return
+        }
+
+        // Check if already loaded
+        if (window.google?.accounts?.oauth2) {
+            gsiLoaded = true
+            resolve()
+            return
+        }
+
+        const script = document.createElement('script')
+        script.src = 'https://accounts.google.com/gsi/client'
+        script.async = true
+        script.defer = true
+        script.onload = () => {
+            gsiLoaded = true
+            resolve()
+        }
+        script.onerror = () => reject(new Error('Failed to load Google Identity Services'))
+        document.head.appendChild(script)
+    })
+}
+
+/**
+ * Initialize the token client
+ */
+async function getTokenClient() {
+    if (tokenClient) return tokenClient
+
+    await loadGsiScript()
+
+    return new Promise((resolve) => {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: CLIENT_ID,
+            scope: SCOPES,
+            callback: () => {}, // Will be overridden per-request
+        })
+        resolve(tokenClient)
+    })
 }
 
 /**
@@ -61,11 +104,18 @@ export function getUserEmail() {
 }
 
 /**
- * Check if signed in (has valid token)
+ * Check if signed in (has valid non-expired token)
  */
 export function isSignedIn() {
     const token = getAccessToken()
     return !!token && !isTokenExpired()
+}
+
+/**
+ * Check if signed in (alias)
+ */
+export function getIsSignedIn() {
+    return isSignedIn()
 }
 
 /**
@@ -103,91 +153,33 @@ async function fetchUserEmail(accessToken) {
 }
 
 /**
- * Build OAuth URL for implicit flow
+ * Request a new access token (for refresh)
  */
-function buildAuthUrl(prompt = 'consent') {
-    const state = crypto.randomUUID()
-    sessionStorage.setItem('oauth_state', state)
+async function requestToken(prompt = '') {
+    const client = await getTokenClient()
 
-    const authURL = new URL('https://accounts.google.com/o/oauth2/v2/auth')
-    authURL.searchParams.set('client_id', CLIENT_ID)
-    authURL.searchParams.set('redirect_uri', getRedirectUri())
-    authURL.searchParams.set('response_type', 'token')
-    authURL.searchParams.set('scope', SCOPES.join(' '))
-    authURL.searchParams.set('state', state)
-    authURL.searchParams.set('include_granted_scopes', 'true')
-
-    if (prompt) {
-        authURL.searchParams.set('prompt', prompt)
-    }
-
-    return { url: authURL.href, state }
-}
-
-/**
- * Silent token refresh using hidden iframe with prompt=none
- */
-export function refreshAccessToken() {
     return new Promise((resolve, reject) => {
-        const { url, state } = buildAuthUrl('none')
-
-        // Create hidden iframe for silent refresh
-        const iframe = document.createElement('iframe')
-        iframe.style.display = 'none'
-
-        let timeoutId
-        let resolved = false
-
-        const cleanup = () => {
-            if (resolved) return
-            resolved = true
-            clearTimeout(timeoutId)
-            window.removeEventListener('message', handleMessage)
-            if (iframe.parentNode) {
-                iframe.parentNode.removeChild(iframe)
+        client.callback = async (response) => {
+            if (response.error) {
+                reject(new Error(response.error_description || response.error))
+                return
             }
+
+            storeTokens(response.access_token, response.expires_in)
+            await fetchUserEmail(response.access_token)
+            resolve(response.access_token)
         }
 
-        const handleMessage = (event) => {
-            if (event.origin !== window.location.origin) return
-            if (event.data?.type !== 'oauth-callback') return
-
-            cleanup()
-
-            if (event.data.error) {
-                // Silent refresh failed - user needs to sign in again
-                reject(new Error(event.data.error_description || event.data.error))
-                return
-            }
-
-            const { access_token, expires_in, state: returnedState } = event.data
-            const savedState = sessionStorage.getItem('oauth_state')
-            sessionStorage.removeItem('oauth_state')
-
-            if (returnedState !== savedState) {
-                reject(new Error('State mismatch'))
-                return
-            }
-
-            if (!access_token) {
-                reject(new Error('No access token received'))
-                return
-            }
-
-            storeTokens(access_token, expires_in)
-            resolve(access_token)
+        client.error_callback = (error) => {
+            reject(new Error(error.message || 'Token request failed'))
         }
 
-        window.addEventListener('message', handleMessage)
-
-        // Timeout after 10 seconds
-        timeoutId = setTimeout(() => {
-            cleanup()
-            reject(new Error('Silent refresh timed out'))
-        }, 10000)
-
-        document.body.appendChild(iframe)
-        iframe.src = url
+        // Request token - prompt='' for silent refresh, 'consent' for new sign-in
+        if (prompt) {
+            client.requestAccessToken({ prompt })
+        } else {
+            client.requestAccessToken()
+        }
     })
 }
 
@@ -195,105 +187,51 @@ export function refreshAccessToken() {
  * Ensure we have a valid access token, refreshing if needed
  */
 export async function ensureValidToken() {
-    if (!getAccessToken()) {
+    const token = getAccessToken()
+
+    if (!token) {
         throw new Error('Not signed in')
     }
 
     if (needsRefresh()) {
         try {
-            return await refreshAccessToken()
+            // Try silent token refresh
+            return await requestToken('')
         } catch (error) {
-            // Silent refresh failed, token is still valid for a bit
+            // If silent refresh fails and token is still valid, use it
             if (!isTokenExpired()) {
-                return getAccessToken()
+                return token
             }
             throw new Error('Session expired. Please sign in again.')
         }
     }
 
-    return getAccessToken()
+    return token
 }
 
 /**
- * Sign in using popup-based OAuth implicit flow
+ * Sign in - request access token with user consent
  */
 export async function signIn() {
-    const { url, state } = buildAuthUrl('consent')
-
-    return new Promise((resolve, reject) => {
-        const width = 500
-        const height = 600
-        const left = window.screenX + (window.outerWidth - width) / 2
-        const top = window.screenY + (window.outerHeight - height) / 2
-
-        const popup = window.open(
-            url,
-            'Google Sign In',
-            `width=${width},height=${height},left=${left},top=${top},popup=1`
-        )
-
-        if (!popup) {
-            sessionStorage.removeItem('oauth_state')
-            reject(new Error('Popup blocked. Please allow popups for this site.'))
-            return
-        }
-
-        let checkClosed
-
-        const handleMessage = async (event) => {
-            if (event.origin !== window.location.origin) return
-
-            if (event.data?.type === 'oauth-callback') {
-                clearInterval(checkClosed)
-                window.removeEventListener('message', handleMessage)
-                popup.close()
-
-                if (event.data.error) {
-                    sessionStorage.removeItem('oauth_state')
-                    reject(new Error(event.data.error_description || event.data.error))
-                    return
-                }
-
-                const { access_token, expires_in, state: returnedState } = event.data
-                const savedState = sessionStorage.getItem('oauth_state')
-                sessionStorage.removeItem('oauth_state')
-
-                if (returnedState !== savedState) {
-                    reject(new Error('State mismatch - possible CSRF attack'))
-                    return
-                }
-
-                if (!access_token) {
-                    reject(new Error('No access token received'))
-                    return
-                }
-
-                storeTokens(access_token, expires_in)
-
-                // Fetch user email
-                await fetchUserEmail(access_token)
-
-                resolve(access_token)
-            }
-        }
-
-        window.addEventListener('message', handleMessage)
-
-        checkClosed = setInterval(() => {
-            if (popup.closed) {
-                clearInterval(checkClosed)
-                window.removeEventListener('message', handleMessage)
-                sessionStorage.removeItem('oauth_state')
-                reject(new Error('Sign in cancelled'))
-            }
-        }, 500)
-    })
+    return requestToken('consent')
 }
 
 /**
- * Sign out - clear all tokens
+ * Sign out - clear all tokens and revoke
  */
-export function signOut() {
+export async function signOut() {
+    const token = getAccessToken()
+
+    if (token && window.google?.accounts?.oauth2) {
+        try {
+            google.accounts.oauth2.revoke(token, () => {
+                console.log('Token revoked')
+            })
+        } catch (e) {
+            console.warn('Failed to revoke token:', e)
+        }
+    }
+
     clearTokens()
 }
 
@@ -307,7 +245,7 @@ function clearTokens() {
 }
 
 /**
- * Migrate from old storage keys (google_tasks_*) to new ones (google_oauth_*)
+ * Migrate from old storage keys to new ones
  */
 export function migrateStorageKeys() {
     const oldTokenKey = 'google_tasks_token'

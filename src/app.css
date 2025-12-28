@@ -63,6 +63,14 @@ button {
     overflow: hidden;
     width: 100%;
     min-width: 8rem;
+    background: var(--bg-1);
+}
+
+/* Frosted glass effect when background image is enabled */
+body.has-background .panel {
+    background: color-mix(in oklch, var(--bg-1) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .panel-label,
@@ -74,6 +82,14 @@ button {
     color: var(--txt-4);
     padding: 0 4px;
     z-index: 10;
+}
+
+body.has-background .panel-label,
+body.has-background .widget-label {
+    background: color-mix(in oklch, var(--bg-1) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--txt-2);
 }
 
 .widget-label:hover:not(:disabled) {

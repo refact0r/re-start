@@ -2,6 +2,7 @@
     import '@fontsource-variable/geist-mono'
     import { settings } from './lib/settings-store.svelte.js'
     import { themes } from './lib/themes.js'
+    import { getBackground, loadCachedBackground, forceRefreshBackground } from './lib/unsplash-api.js'
     import Calendar from './lib/components/Calendar.svelte'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
@@ -12,6 +13,8 @@
     import { saveSettings } from './lib/settings-store.svelte.js'
 
     let showSettings = $state(false)
+    let background = $state(null)
+    let backgroundLoaded = $state(false)
 
     let needsConfiguration = $derived(
         (settings.locationMode === 'manual' &&
@@ -62,9 +65,74 @@
     $effect(() => {
         saveSettings(settings)
     })
+
+    // Toggle body class for background blur effect
+    $effect(() => {
+        if (settings.showBackground && background) {
+            document.body.classList.add('has-background')
+        } else {
+            document.body.classList.remove('has-background')
+        }
+    })
+
+    // Background image loading
+    $effect(() => {
+        if (!settings.showBackground) {
+            background = null
+            backgroundLoaded = false
+            return
+        }
+
+        // Load cached first for instant display
+        const cached = loadCachedBackground()
+        if (cached) {
+            background = cached
+        }
+
+        // Then fetch (will return cached if still valid, or fetch new)
+        getBackground()
+            .then((bg) => {
+                background = bg
+            })
+            .catch((err) => {
+                console.error('Failed to load background:', err)
+            })
+    })
+
+    function handleBackgroundLoad() {
+        backgroundLoaded = true
+    }
+
+    // Expose refresh function for Settings component
+    async function refreshBackground() {
+        backgroundLoaded = false
+        background = await forceRefreshBackground()
+    }
 </script>
 
 <main>
+    {#if settings.showBackground && background}
+        <div
+            class="background"
+            class:loaded={backgroundLoaded}
+            style="--bg-opacity: {settings.backgroundOpacity}; --bg-color: {background.color || '#000'}"
+        >
+            <img
+                src={background.url}
+                alt={background.description || 'Background'}
+                onload={handleBackgroundLoad}
+            />
+        </div>
+        <a
+            class="attribution"
+            href={background.unsplashUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Photo by {background.photographer.name} on Unsplash
+        </a>
+    {/if}
+
     <div class="container">
         <div class="top">
             <Clock />
@@ -95,7 +163,7 @@
         settings
     </button>
 
-    <Settings {showSettings} {closeSettings} />
+    <Settings {showSettings} {closeSettings} {refreshBackground} {background} />
 </main>
 
 <style>
@@ -106,6 +174,47 @@
         justify-content: center;
         align-items: center;
         padding: 2rem 1rem;
+        position: relative;
+    }
+
+    .background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-color: var(--bg-color);
+        overflow: hidden;
+    }
+
+    .background img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .background.loaded img {
+        opacity: var(--bg-opacity);
+    }
+
+    .attribution {
+        position: fixed;
+        bottom: 0.5rem;
+        left: 0.5rem;
+        font-size: 0.7rem;
+        color: var(--txt-4);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        text-decoration: none;
+        z-index: 10;
+    }
+
+    .attribution:hover {
+        opacity: 1;
+        color: var(--txt-3);
     }
     .container {
         display: flex;
