@@ -15,6 +15,21 @@ const API_URL = ''
 // Token refresh buffer (5 minutes before expiry)
 const REFRESH_BUFFER_MS = 5 * 60 * 1000
 
+// Logging prefix for easy filtering
+const LOG_PREFIX = '[GoogleAuth]'
+
+function log(...args) {
+    console.log(LOG_PREFIX, ...args)
+}
+
+function logWarn(...args) {
+    console.warn(LOG_PREFIX, ...args)
+}
+
+function logError(...args) {
+    console.error(LOG_PREFIX, ...args)
+}
+
 /**
  * Generate a UUID v4
  */
@@ -34,6 +49,7 @@ function getUserId() {
     if (!userId) {
         userId = generateUUID()
         localStorage.setItem(USER_ID_KEY, userId)
+        log('Created new user ID:', userId)
     }
     return userId
 }
@@ -75,7 +91,10 @@ export function getUserEmail() {
  */
 export function isSignedIn() {
     const token = getAccessToken()
-    return !!token && !isTokenExpired()
+    const expired = isTokenExpired()
+    const signedIn = !!token && !expired
+    log('isSignedIn check:', { hasToken: !!token, expired, result: signedIn })
+    return signedIn
 }
 
 /**
@@ -91,12 +110,20 @@ function storeTokens(accessToken, expiresIn, email = null) {
     if (email) {
         localStorage.setItem(USER_EMAIL_KEY, email)
     }
+
+    const expiresInMin = Math.round(expiresInMs / 60000)
+    log('Tokens stored', {
+        email,
+        expiresIn: `${expiresInMin} minutes`,
+        expiryTime: new Date(expiryTime).toISOString()
+    })
 }
 
 /**
  * Clear all stored tokens
  */
 function clearTokens() {
+    log('Clearing all tokens from localStorage')
     localStorage.removeItem(TOKEN_KEY)
     localStorage.removeItem(TOKEN_EXPIRY_KEY)
     localStorage.removeItem(USER_EMAIL_KEY)
@@ -110,6 +137,7 @@ export function handleAuthCallback() {
     const params = new URLSearchParams(window.location.search)
 
     if (params.has('auth_success')) {
+        log('OAuth callback: SUCCESS')
         const accessToken = params.get('access_token')
         const expiresIn = params.get('expires_in')
         const email = params.get('email')
@@ -121,11 +149,13 @@ export function handleAuthCallback() {
         // Clean URL
         const cleanUrl = window.location.pathname
         window.history.replaceState({}, '', cleanUrl)
+        log('OAuth callback complete, user signed in:', email)
         return { success: true, email }
     }
 
     if (params.has('auth_error')) {
         const error = params.get('auth_error')
+        logError('OAuth callback: ERROR', error)
 
         // Clean URL
         const cleanUrl = window.location.pathname
@@ -133,6 +163,7 @@ export function handleAuthCallback() {
         return { success: false, error }
     }
 
+    log('No OAuth callback params in URL')
     return null
 }
 
@@ -141,6 +172,7 @@ export function handleAuthCallback() {
  */
 async function refreshToken() {
     const userId = getUserId()
+    log('Refreshing token for user:', userId)
 
     const response = await fetch(`${API_URL}/api/auth/google/refresh`, {
         method: 'POST',
@@ -150,6 +182,7 @@ async function refreshToken() {
 
     if (!response.ok) {
         const error = await response.json()
+        logError('Token refresh failed:', error.error)
         if (error.error === 'not_authenticated' || error.error === 'refresh_token_expired') {
             clearTokens()
             throw new Error('Session expired. Please sign in again.')
@@ -158,6 +191,7 @@ async function refreshToken() {
     }
 
     const data = await response.json()
+    log('Token refresh successful')
     storeTokens(data.access_token, data.expires_in, data.email)
     return data.access_token
 }
@@ -167,29 +201,43 @@ async function refreshToken() {
  */
 export async function ensureValidToken() {
     const token = getAccessToken()
+    const expired = isTokenExpired()
+    const needs = needsRefresh()
+
+    log('ensureValidToken check:', {
+        hasToken: !!token,
+        isExpired: expired,
+        needsRefresh: needs
+    })
 
     // If no token, try to refresh from backend
     if (!token) {
+        log('No token found, attempting refresh')
         try {
             return await refreshToken()
         } catch (error) {
+            logError('No token and refresh failed')
             throw new Error('Not signed in')
         }
     }
 
     // If token needs refresh, refresh it
-    if (needsRefresh()) {
+    if (needs) {
+        log('Token needs refresh, attempting refresh')
         try {
             return await refreshToken()
         } catch (error) {
             // If refresh fails but token is still valid, use it
-            if (!isTokenExpired()) {
+            if (!expired) {
+                logWarn('Refresh failed but token still valid, using existing token')
                 return token
             }
+            logError('Refresh failed and token expired')
             throw error
         }
     }
 
+    log('Token is valid, no refresh needed')
     return token
 }
 
@@ -198,13 +246,16 @@ export async function ensureValidToken() {
  */
 export async function signIn() {
     const userId = getUserId()
+    log('Starting sign in flow for user:', userId)
 
     const response = await fetch(`${API_URL}/api/auth/google/url?user_id=${userId}`)
     if (!response.ok) {
+        logError('Failed to get auth URL')
         throw new Error('Failed to get auth URL')
     }
 
     const data = await response.json()
+    log('Redirecting to Google OAuth:', data.url.substring(0, 80) + '...')
     window.location.href = data.url
 }
 
@@ -213,6 +264,7 @@ export async function signIn() {
  */
 export async function signOut() {
     const userId = getUserId()
+    log('Signing out user:', userId)
 
     try {
         await fetch(`${API_URL}/api/auth/google/logout`, {
@@ -220,11 +272,13 @@ export async function signOut() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id: userId })
         })
+        log('Backend logout successful')
     } catch (e) {
-        console.warn('Failed to logout on backend:', e)
+        logWarn('Failed to logout on backend:', e)
     }
 
     clearTokens()
+    log('Sign out complete')
 }
 
 /**
@@ -233,23 +287,30 @@ export async function signOut() {
  * Returns true if session was restored, false otherwise
  */
 export async function tryRestoreSession() {
+    log('Attempting to restore session...')
+
     // Already have valid token
     if (isSignedIn()) {
+        log('Session already active (valid token exists)')
         return true
     }
 
     // Check if we have a stored user_id (indicates previous session)
     const userId = localStorage.getItem(USER_ID_KEY)
     if (!userId) {
+        log('No stored user ID, cannot restore session')
         return false
     }
+
+    log('Found stored user ID:', userId, '- attempting token refresh')
 
     // Try to refresh the token
     try {
         await refreshToken()
+        log('Session restored successfully')
         return true
     } catch (error) {
-        // Refresh failed - no valid session
+        logError('Session restore failed:', error.message)
         return false
     }
 }

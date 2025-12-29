@@ -70,18 +70,25 @@
     })
 
     // Handle OAuth callback on page load (runs once)
+    console.log('[App] Checking for OAuth callback...')
     const authResult = handleAuthCallback()
     if (authResult?.success) {
+        console.log('[App] OAuth callback success, marking user as signed in')
         settings.googleTasksSignedIn = true
         saveSettings(settings)
     } else if (authResult?.error) {
-        console.error('Auth error:', authResult.error)
+        console.error('[App] Auth error:', authResult.error)
     }
 
     // Try to restore Google session if user was previously signed in
+    console.log('[App] googleTasksSignedIn from settings:', settings.googleTasksSignedIn)
     if (settings.googleTasksSignedIn && !authResult) {
+        console.log('[App] User was previously signed in, attempting session restore...')
         tryRestoreSession().then((restored) => {
-            if (!restored) {
+            if (restored) {
+                console.log('[App] Session restore succeeded')
+            } else {
+                console.log('[App] Session restore failed, marking user as signed out')
                 settings.googleTasksSignedIn = false
                 saveSettings(settings)
             }
