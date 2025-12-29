@@ -371,37 +371,28 @@ export async function signOut() {
 export async function tryRestoreSession() {
     log('Attempting to restore session...')
 
-    // Check if we have a stored user_id (indicates previous session)
     const userId = localStorage.getItem(USER_ID_KEY)
     if (!userId) {
         log('No stored user ID, cannot restore session')
         return false
     }
 
-    // Check if we have a token that appears valid
     const token = getAccessToken()
     const expired = isTokenExpiredInternal()
+    const email = localStorage.getItem(USER_EMAIL_KEY)
 
-    if (token && !expired) {
-        // Token appears valid based on localStorage, but validate it with Google
-        log('Token appears valid, validating with Google...')
-        const isValid = await validateToken(token)
-
-        if (isValid) {
-            log('Token validated successfully')
-            authState.update(true, localStorage.getItem(USER_EMAIL_KEY))
-            return true
-        }
-
-        log('Token validation failed, attempting refresh...')
-    } else {
-        log('No valid token (expired:', expired, '), attempting refresh...')
+    // If token exists and not expired, validate it with Google
+    if (token && !expired && await validateToken(token)) {
+        log('Existing token is valid')
+        authState.update(true, email)
+        return true
     }
 
-    // Try to refresh the token
+    // Token missing, expired, or invalid - try to refresh
+    log('Token needs refresh (missing:', !token, ', expired:', expired, ')')
     try {
         await refreshToken()
-        log('Session restored successfully')
+        log('Session restored via refresh')
         return true
     } catch (error) {
         logError('Session restore failed:', error.message)
