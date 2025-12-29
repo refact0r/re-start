@@ -59,6 +59,9 @@
     })
 
     async function initializeAPI(backend, token, clearLocalData = false) {
+        // Clear error at start of initialization
+        error = ''
+
         if (backend === 'todoist' && !token) {
             api = null
             tasks = []
