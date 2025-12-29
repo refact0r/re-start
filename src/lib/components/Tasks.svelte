@@ -2,6 +2,7 @@
     import { onMount, onDestroy, untrack } from 'svelte'
     import { createTaskBackend } from '../backends/index.js'
     import { settings } from '../settings-store.svelte.js'
+    import { authState } from '../backends/google-auth.js'
     import AddTask from './AddTask.svelte'
     import {
         parseSmartDate,
@@ -22,6 +23,8 @@
     let parsedDate = $state(null)
     let togglingTasks = $state(new Set())
     let syncInProgress = false
+    let googleSignedIn = $state(authState.isSignedIn)
+    let unsubscribeAuth = null
 
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible' && api) {
@@ -32,7 +35,10 @@
     $effect(() => {
         const backend = settings.taskBackend
         const token = settings.todoistApiToken
-        const googleSignedIn = settings.googleTasksSignedIn
+        // Use reactive googleSignedIn state for Google Tasks
+        const isGoogleSignedIn = googleSignedIn
+
+        console.log('[Tasks] Effect triggered:', { backend, googleSignedIn: isGoogleSignedIn })
 
         if (untrack(() => initialLoad)) {
             initialLoad = false
@@ -61,7 +67,8 @@
             return
         }
 
-        if (backend === 'google-tasks' && !settings.googleTasksSignedIn) {
+        if (backend === 'google-tasks' && !googleSignedIn) {
+            console.log('[Tasks] Google Tasks backend but not signed in')
             api = null
             tasks = []
             syncing = false
@@ -71,18 +78,8 @@
 
         try {
             if (backend === 'google-tasks') {
+                console.log('[Tasks] Initializing Google Tasks backend')
                 api = createTaskBackend(backend)
-
-                // Try to ensure we have a valid token (will refresh if needed)
-                try {
-                    await api.ensureValidToken()
-                } catch (tokenError) {
-                    console.log('[Tasks] Token validation failed:', tokenError.message)
-                    settings.googleTasksSignedIn = false
-                    error = 'google sign in expired'
-                    syncing = false
-                    return
-                }
             } else {
                 api = createTaskBackend(backend, { token })
             }
@@ -268,11 +265,18 @@
     }
 
     onMount(() => {
+        // Subscribe to auth state changes
+        unsubscribeAuth = authState.subscribe((state) => {
+            console.log('[Tasks] Auth state update:', state)
+            googleSignedIn = state.isSignedIn
+        })
+
         initializeAPI(settings.taskBackend, settings.todoistApiToken)
         document.addEventListener('visibilitychange', handleVisibilityChange)
     })
 
     onDestroy(() => {
+        if (unsubscribeAuth) unsubscribeAuth()
         document.removeEventListener('visibilitychange', handleVisibilityChange)
     })
 </script>

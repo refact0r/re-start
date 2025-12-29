@@ -30,6 +30,50 @@ function logError(...args) {
     console.error(LOG_PREFIX, ...args)
 }
 
+// Reactive auth state - components can subscribe to changes
+let authStateListeners = []
+
+export const authState = {
+    isSignedIn: false,
+    email: null,
+
+    subscribe(listener) {
+        authStateListeners.push(listener)
+        // Immediately call with current state
+        listener({ isSignedIn: this.isSignedIn, email: this.email })
+        return () => {
+            authStateListeners = authStateListeners.filter(l => l !== listener)
+        }
+    },
+
+    update(isSignedIn, email = null) {
+        const changed = this.isSignedIn !== isSignedIn || this.email !== email
+        this.isSignedIn = isSignedIn
+        this.email = email ?? this.email
+        if (changed) {
+            log('Auth state changed:', { isSignedIn, email: this.email })
+            authStateListeners.forEach(l => l({ isSignedIn: this.isSignedIn, email: this.email }))
+        }
+    }
+}
+
+// Initialize auth state from localStorage
+function initAuthState() {
+    const token = getAccessToken()
+    const expired = isTokenExpiredInternal()
+    const email = localStorage.getItem(USER_EMAIL_KEY)
+    authState.isSignedIn = !!token && !expired
+    authState.email = email
+    log('Initial auth state:', { isSignedIn: authState.isSignedIn, email })
+}
+
+// Internal version that doesn't update state (to avoid circular calls)
+function isTokenExpiredInternal() {
+    const expiry = localStorage.getItem(TOKEN_EXPIRY_KEY)
+    if (!expiry) return true
+    return Date.now() > parseInt(expiry, 10)
+}
+
 /**
  * Generate a UUID v4
  */
@@ -124,6 +168,9 @@ function storeTokens(accessToken, expiresIn, email = null) {
         expiresIn: `${expiresInMin} minutes`,
         expiryTime: new Date(expiryTime).toISOString()
     })
+
+    // Update reactive auth state
+    authState.update(true, email)
 }
 
 /**
@@ -134,6 +181,9 @@ function clearTokens() {
     localStorage.removeItem(TOKEN_KEY)
     localStorage.removeItem(TOKEN_EXPIRY_KEY)
     localStorage.removeItem(USER_EMAIL_KEY)
+
+    // Update reactive auth state
+    authState.update(false, null)
 }
 
 /**
@@ -341,3 +391,6 @@ export function migrateStorageKeys() {
         localStorage.removeItem(oldExpiryKey)
     }
 }
+
+// Initialize auth state on module load
+initAuthState()

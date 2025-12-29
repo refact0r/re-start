@@ -3,7 +3,7 @@
     import { settings } from './lib/settings-store.svelte.js'
     import { themes } from './lib/themes.js'
     import { getBackground, loadCachedBackground, forceRefreshBackground } from './lib/unsplash-api.js'
-    import { handleAuthCallback, tryRestoreSession, hasStoredUserId } from './lib/backends/google-auth.js'
+    import { handleAuthCallback, tryRestoreSession, hasStoredUserId, authState } from './lib/backends/google-auth.js'
     import Calendar from './lib/components/Calendar.svelte'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
@@ -73,31 +73,27 @@
     console.log('[App] Checking for OAuth callback...')
     const authResult = handleAuthCallback()
     if (authResult?.success) {
-        console.log('[App] OAuth callback success, marking user as signed in')
-        settings.googleTasksSignedIn = true
-        saveSettings(settings)
+        console.log('[App] OAuth callback success')
     } else if (authResult?.error) {
         console.error('[App] Auth error:', authResult.error)
     }
 
-    // Try to restore Google session if user was previously signed in or has stored user ID
+    // Try to restore Google session if we have a stored user ID
     const storedUserId = hasStoredUserId()
-    console.log('[App] googleTasksSignedIn from settings:', settings.googleTasksSignedIn)
-    console.log('[App] hasStoredUserId:', storedUserId)
-    if ((settings.googleTasksSignedIn || storedUserId) && !authResult) {
-        console.log('[App] Attempting session restore (setting:', settings.googleTasksSignedIn, ', hasUserId:', storedUserId, ')')
+    console.log('[App] hasStoredUserId:', storedUserId, 'authState.isSignedIn:', authState.isSignedIn)
+    if (storedUserId && !authState.isSignedIn && !authResult) {
+        console.log('[App] Attempting session restore...')
         tryRestoreSession().then((restored) => {
-            if (restored) {
-                console.log('[App] Session restore succeeded, marking user as signed in')
-                settings.googleTasksSignedIn = true
-                saveSettings(settings)
-            } else {
-                console.log('[App] Session restore failed, marking user as signed out')
-                settings.googleTasksSignedIn = false
-                saveSettings(settings)
-            }
+            console.log('[App] Session restore result:', restored)
         })
     }
+
+    // Keep settings.googleTasksSignedIn in sync with authState
+    authState.subscribe((state) => {
+        console.log('[App] Auth state changed, syncing settings:', state.isSignedIn)
+        settings.googleTasksSignedIn = state.isSignedIn
+        saveSettings(settings)
+    })
 
     // Toggle body class for background blur effect
     $effect(() => {
