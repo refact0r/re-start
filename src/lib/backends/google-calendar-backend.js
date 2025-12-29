@@ -168,6 +168,7 @@ class GoogleCalendarBackend {
                     title: event.summary || '(No title)',
                     description: event.description || '',
                     location: event.location || '',
+                    hangoutLink: event.hangoutLink || '',
                     startTime,
                     endTime,
                     isAllDay,

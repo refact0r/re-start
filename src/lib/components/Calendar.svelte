@@ -3,7 +3,7 @@
     import { createCalendarBackend } from '../backends/index.js'
     import { settings } from '../settings-store.svelte.js'
     import { authState } from '../backends/google-auth.js'
-    import { RefreshCw } from 'lucide-svelte'
+    import { RefreshCw, Video } from 'lucide-svelte'
 
     let api = null
     let events = $state([])
@@ -149,17 +149,32 @@
                             class:ongoing={event.isOngoing}
                         >
                             <span class="event-time">{formatEventTime(event)}</span>
-                            <a
-                                href={event.htmlLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="event-title"
-                            >
-                                {event.title}
-                            </a>
-                            {#if event.location}
-                                <span class="event-location">@ {event.location}</span>
-                            {/if}
+                            <div class="event-details">
+                                <div class="event-title-row">
+                                    <a
+                                        href={event.htmlLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="event-title"
+                                    >
+                                        {event.title}
+                                    </a>
+                                    {#if event.hangoutLink}
+                                        <a
+                                            href={event.hangoutLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="event-meet"
+                                            title="Join Google Meet"
+                                        >
+                                            <Video size={14} />
+                                        </a>
+                                    {/if}
+                                </div>
+                                {#if event.location}
+                                    <div class="event-location">{event.location}</div>
+                                {/if}
+                            </div>
                         </div>
                     {/each}
                     {#if events.length === 0 && !syncing}
@@ -191,24 +206,41 @@
     }
     .event {
         display: flex;
-        align-items: baseline;
+        align-items: flex-start;
         gap: 1ch;
         max-width: 40rem;
         scroll-snap-align: start;
+        margin-bottom: 0.25rem;
     }
     .event-time {
         color: var(--txt-2);
         min-width: 7ch;
+        flex-shrink: 0;
     }
-    .event-title {
+    .event-details {
         flex: 1 1 auto;
         min-width: 0;
+    }
+    .event-title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5ch;
+    }
+    .event-title {
     }
     .event-title:hover {
         color: var(--txt-1);
     }
+    .event-meet {
+        color: var(--txt-3);
+        flex-shrink: 0;
+    }
+    .event-meet:hover {
+        color: var(--txt-1);
+    }
     .event-location {
         color: var(--txt-3);
+        font-size: 0.8rem;
     }
     .event.past {
         opacity: 0.5;
