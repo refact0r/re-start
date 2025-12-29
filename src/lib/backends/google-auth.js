@@ -87,6 +87,13 @@ export function getUserEmail() {
 }
 
 /**
+ * Check if there's a stored user ID (indicates previous sign-in attempt)
+ */
+export function hasStoredUserId() {
+    return !!localStorage.getItem(USER_ID_KEY)
+}
+
+/**
  * Check if signed in (has valid non-expired token)
  */
 export function isSignedIn() {
