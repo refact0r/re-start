@@ -194,7 +194,6 @@
         align-items: baseline;
         gap: 1ch;
         max-width: 40rem;
-        white-space: nowrap;
         scroll-snap-align: start;
     }
     .event-time {
@@ -204,17 +203,12 @@
     .event-title {
         flex: 1 1 auto;
         min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .event-title:hover {
         color: var(--txt-1);
     }
     .event-location {
         color: var(--txt-3);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 15ch;
     }
     .event.past {
         opacity: 0.5;

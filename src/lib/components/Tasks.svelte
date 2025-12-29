@@ -412,14 +412,11 @@
         align-items: baseline;
         gap: 1ch;
         max-width: 40rem;
-        white-space: nowrap;
         scroll-snap-align: start;
     }
     .task-title {
         flex: 1 1 auto;
         min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     .task-due {
         color: var(--txt-3);
