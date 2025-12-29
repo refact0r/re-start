@@ -227,32 +227,4 @@
     a:hover {
         color: var(--txt-1);
     }
-    .panel {
-        position: relative;
-    }
-    .sync-btn {
-        position: absolute;
-        bottom: 0.25rem;
-        right: 0.25rem;
-        padding: 0;
-        color: var(--txt-3);
-        opacity: 0;
-        transition: opacity 0.15s ease, color 0.15s ease;
-    }
-    .sync-btn:hover {
-        color: var(--txt-1);
-    }
-    .sync-btn:disabled {
-        cursor: not-allowed;
-    }
-    .panel:hover .sync-btn {
-        opacity: 1;
-    }
-    :global(.spinning) {
-        animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
 </style>

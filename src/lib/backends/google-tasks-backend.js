@@ -22,14 +22,6 @@ class GoogleTasksBackend extends TaskBackend {
     }
 
     /**
-     * Check if cache is stale
-     */
-    isCacheStale() {
-        if (!this.data.timestamp) return true
-        return Date.now() - this.data.timestamp >= this.cacheExpiry
-    }
-
-    /**
      * Sign in using Google OAuth
      */
     async signIn() {
@@ -214,13 +206,6 @@ class GoogleTasksBackend extends TaskBackend {
      */
     getTasklistName(tasklistId) {
         return this.data.tasklists?.find((tl) => tl.id === tasklistId)?.title ?? ''
-    }
-
-    /**
-     * Invalidate cache to force fresh sync
-     */
-    invalidateCache() {
-        this.data.timestamp = 0
     }
 
     /**

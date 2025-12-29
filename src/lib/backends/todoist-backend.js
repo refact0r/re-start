@@ -17,14 +17,6 @@ class TodoistBackend extends TaskBackend {
     }
 
     /**
-     * Check if cache is stale
-     */
-    isCacheStale() {
-        if (!this.data.timestamp) return true
-        return Date.now() - this.data.timestamp >= this.cacheExpiry
-    }
-
-    /**
      * Perform a sync request to get tasks and related data
      */
     async sync(
@@ -221,13 +213,6 @@ class TodoistBackend extends TaskBackend {
         return labelIds
             .map((id) => this.data.labels.find((l) => l.id === id)?.name)
             .filter(Boolean)
-    }
-
-    /**
-     * Invalidate cache to force fresh sync
-     */
-    invalidateCache() {
-        this.data.timestamp = 0
     }
 
     /**

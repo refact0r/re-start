@@ -106,5 +106,3 @@ export const themes = {
 }
 
 export const themeNames = Object.keys(themes)
-
-export const defaultTheme = 'default'

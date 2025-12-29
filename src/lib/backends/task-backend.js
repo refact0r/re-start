@@ -75,6 +75,26 @@ class TaskBackend {
     }
 
     /**
+     * Check if cache is stale (default implementation)
+     * Subclasses should set this.data.timestamp and this.cacheExpiry
+     * @returns {boolean}
+     */
+    isCacheStale() {
+        if (!this.data?.timestamp) return true
+        return Date.now() - this.data.timestamp >= (this.cacheExpiry || 0)
+    }
+
+    /**
+     * Invalidate cache to force fresh sync
+     * @returns {void}
+     */
+    invalidateCache() {
+        if (this.data) {
+            this.data.timestamp = 0
+        }
+    }
+
+    /**
      * Get project name by ID
      * @param {string} projectId - Project ID
      * @returns {string} Project name or empty string

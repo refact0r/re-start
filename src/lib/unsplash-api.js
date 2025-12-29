@@ -59,16 +59,6 @@ export function clearBackgroundCache() {
 }
 
 /**
- * Check if the cached background is still valid (same day)
- * @returns {boolean} True if cache is valid for today
- */
-export function isCacheValid() {
-    const cached = loadCachedBackground()
-    if (!cached || !cached.fetchDate) return false
-    return cached.fetchDate === getTodayDate()
-}
-
-/**
  * Fetch a random background image from Unsplash
  * @param {string} [topic] Optional topic override
  * @returns {Promise<Object>} Background data object
@@ -180,12 +170,4 @@ export async function forceRefreshBackground(topic) {
     triggerDownloadTracking(background.downloadLocation)
 
     return background
-}
-
-/**
- * Get available topics for UI selection
- * @returns {string[]} Array of topic names
- */
-export function getAvailableTopics() {
-    return [...TOPICS]
 }
