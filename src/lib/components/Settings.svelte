@@ -385,10 +385,10 @@
             <h3 class="section-title">weather</h3>
 
             <div class="group">
-                <label class="checkbox-label">
-                    <input type="checkbox" bind:checked={settings.showWeather} />
+                <button class="checkbox-label" onclick={() => settings.showWeather = !settings.showWeather}>
+                    <span class="checkbox">{settings.showWeather ? '[x]' : '[ ]'}</span>
                     enabled
-                </label>
+                </button>
             </div>
 
             {#if settings.showWeather}
@@ -480,10 +480,10 @@
             <h3 class="section-title">tasks</h3>
 
             <div class="group">
-                <label class="checkbox-label">
-                    <input type="checkbox" bind:checked={settings.showTasks} />
+                <button class="checkbox-label" onclick={() => settings.showTasks = !settings.showTasks}>
+                    <span class="checkbox">{settings.showTasks ? '[x]' : '[ ]'}</span>
                     enabled
-                </label>
+                </button>
             </div>
 
             {#if settings.showTasks}
@@ -531,10 +531,10 @@
                 <h3 class="section-title">calendar</h3>
 
                 <div class="group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" bind:checked={settings.showCalendar} />
+                    <button class="checkbox-label" onclick={() => settings.showCalendar = !settings.showCalendar}>
+                        <span class="checkbox">{settings.showCalendar ? '[x]' : '[ ]'}</span>
                         enabled
-                    </label>
+                    </button>
                 </div>
 
                 {#if settings.showCalendar}
@@ -547,12 +547,8 @@
                         {:else}
                             <div class="calendar-list">
                                 {#each availableCalendars as calendar}
-                                    <label class="checkbox-label calendar-item">
-                                        <input
-                                            type="checkbox"
-                                            checked={settings.selectedCalendars.length === 0 || settings.selectedCalendars.includes(calendar.id)}
-                                            onchange={() => toggleCalendar(calendar.id)}
-                                        />
+                                    <button class="checkbox-label calendar-item" onclick={() => toggleCalendar(calendar.id)}>
+                                        <span class="checkbox">{settings.selectedCalendars.length === 0 || settings.selectedCalendars.includes(calendar.id) ? '[x]' : '[ ]'}</span>
                                         <span
                                             class="calendar-color"
                                             style="background-color: {calendar.color}"
@@ -561,7 +557,7 @@
                                         {#if calendar.primary}
                                             <span class="calendar-primary">(primary)</span>
                                         {/if}
-                                    </label>
+                                    </button>
                                 {/each}
                             </div>
                             {#if settings.selectedCalendars.length === 0}
@@ -576,10 +572,10 @@
             <h3 class="section-title">background</h3>
 
             <div class="group">
-                <label class="checkbox-label">
-                    <input type="checkbox" bind:checked={settings.showBackground} />
+                <button class="checkbox-label" onclick={() => settings.showBackground = !settings.showBackground}>
+                    <span class="checkbox">{settings.showBackground ? '[x]' : '[ ]'}</span>
                     enabled
-                </label>
+                </button>
             </div>
 
             {#if settings.showBackground}
@@ -620,10 +616,10 @@
             <h3 class="section-title">links</h3>
 
             <div class="group">
-                <label class="checkbox-label">
-                    <input type="checkbox" bind:checked={settings.showLinks} />
+                <button class="checkbox-label" onclick={() => settings.showLinks = !settings.showLinks}>
+                    <span class="checkbox">{settings.showLinks ? '[x]' : '[ ]'}</span>
                     enabled
-                </label>
+                </button>
             </div>
 
             {#if settings.showLinks}
@@ -908,15 +904,18 @@
         align-items: center;
         gap: 0.5rem;
         cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        font: inherit;
+        color: inherit;
+        text-align: left;
+    }
+    .checkbox-label .checkbox {
+        color: var(--txt-2);
     }
     .spacer {
         display: block;
-    }
-    .checkbox-label input[type='checkbox'] {
-        width: 1rem;
-        height: 1rem;
-        accent-color: var(--txt-2);
-        cursor: pointer;
     }
     .section-title {
         margin: 2rem 0 1rem 0;
