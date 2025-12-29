@@ -2,6 +2,7 @@
     import { onMount, onDestroy } from 'svelte'
     import { createCalendarBackend } from '../backends/index.js'
     import { settings } from '../settings-store.svelte.js'
+    import { authState } from '../backends/google-auth.js'
     import { RefreshCw } from 'lucide-svelte'
 
     let api = null
@@ -10,6 +11,8 @@
     let error = $state('')
     let eventCount = $derived(events.length)
     let syncInProgress = false
+    let googleSignedIn = $state(authState.isSignedIn)
+    let unsubscribeAuth = null
 
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible' && api) {
@@ -18,9 +21,12 @@
     }
 
     $effect(() => {
-        const googleSignedIn = settings.googleTasksSignedIn
+        // React to googleSignedIn state changes
+        const isSignedIn = googleSignedIn
 
-        if (googleSignedIn) {
+        console.log('[Calendar] Effect triggered:', { googleSignedIn: isSignedIn })
+
+        if (isSignedIn) {
             initializeAPI()
         } else {
             api = null
@@ -31,14 +37,12 @@
     })
 
     async function initializeAPI() {
-        try {
-            api = createCalendarBackend()
+        // Clear error at start
+        error = ''
 
-            if (!api.getIsSignedIn()) {
-                error = 'google sign in expired'
-                syncing = false
-                return
-            }
+        try {
+            console.log('[Calendar] Initializing Calendar backend')
+            api = createCalendarBackend()
 
             // Load cached data immediately if available
             const cachedEvents = api.getEvents()
@@ -101,16 +105,17 @@
     }
 
     onMount(() => {
-        if (settings.googleTasksSignedIn) {
-            initializeAPI()
-        } else {
-            syncing = false
-            error = 'not signed in to google'
-        }
+        // Subscribe to auth state changes
+        unsubscribeAuth = authState.subscribe((state) => {
+            console.log('[Calendar] Auth state update:', state)
+            googleSignedIn = state.isSignedIn
+        })
+
         document.addEventListener('visibilitychange', handleVisibilityChange)
     })
 
     onDestroy(() => {
+        if (unsubscribeAuth) unsubscribeAuth()
         document.removeEventListener('visibilitychange', handleVisibilityChange)
     })
 </script>
