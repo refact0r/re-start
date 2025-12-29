@@ -135,6 +135,113 @@ Vite with custom plugins in `vite.config.js`:
 - `excludeManifest()` - removes manifest.json (generated per-target by `scripts/build-manifest.js`)
 - Version injected via `__APP_VERSION__` from manifest.json
 
+### Development & Production Architecture
+
+The app runs as a web app (not just browser extension) with a Node.js backend for Google OAuth.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         DEVELOPMENT                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   Browser (:5173)     Vite Dev Server        Node Backend       │
+│   ┌──────────┐        ┌──────────────┐       ┌──────────────┐   │
+│   │          │───────▶│   Frontend   │       │              │   │
+│   │  User    │        │   (HMR)      │       │  /api/auth/* │   │
+│   │          │───────▶│──────────────│──────▶│  OAuth flow  │   │
+│   └──────────┘        │ Proxy /api/* │       │              │   │
+│                       │ → :3004      │       │  Port 3004   │   │
+│                       └──────────────┘       └──────────────┘   │
+│                          Port 5173                              │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         PRODUCTION                              │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   Browser             Node Backend (single server)              │
+│   ┌──────────┐        ┌─────────────────────────────────┐       │
+│   │          │───────▶│  Static files (backend/public/) │       │
+│   │  User    │        │  ├── index.html                 │       │
+│   │          │───────▶│  ├── assets/*                   │       │
+│   └──────────┘        │  └── ...                        │       │
+│                       │                                 │       │
+│                       │  /api/auth/* → OAuth flow       │       │
+│                       │  /* → SPA fallback (index.html) │       │
+│                       └─────────────────────────────────┘       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Development Setup:**
+```bash
+# Terminal 1 - Backend (OAuth API)
+cd backend && node server.js    # Runs on :3004
+
+# Terminal 2 - Frontend (Vite dev server)
+npm run dev                      # Runs on :5173, proxies /api/* to :3004
+```
+Open `http://localhost:5173`. Vite proxies `/api/*` requests to the backend (configured in `vite.config.js`).
+
+**Production Setup:**
+The Node backend serves everything:
+- Static frontend files from `backend/public/`
+- OAuth API routes at `/api/auth/*`
+- SPA fallback for client-side routing
+
+**Deployment Flow (GitHub Actions):**
+```yaml
+# .github/workflows/deploy.yml
+1. npm ci && npm run build          # Build frontend → dist/firefox/
+2. cp -r dist/firefox backend/public # Copy to backend static folder
+3. rsync backend/ → server          # Deploy backend (with frontend inside)
+4. docker compose up -d --build     # Restart container
+```
+
+**Key Files:**
+- `vite.config.js` - Dev proxy: `/api` → `http://localhost:3004`
+- `src/lib/backends/google-auth.js` - Uses relative `/api/auth/*` paths (works in both dev/prod)
+- `backend/server.js` - Express server serving static files + OAuth routes
+- `.github/workflows/deploy.yml` - Copies frontend build to backend before deploy
+
+## Code Navigation with Serena (REQUIRED)
+
+**IMPORTANT: Always use Serena's MCP tools (`mcp__serena__*`) for code exploration and editing instead of Read/Grep/Glob tools.**
+
+### When to use Serena tools (ALWAYS for code files):
+- Understanding a file → `mcp__serena__get_symbols_overview`
+- Finding a function/class/method → `mcp__serena__find_symbol`
+- Finding usages/references → `mcp__serena__find_referencing_symbols`
+- Searching code patterns → `mcp__serena__search_for_pattern`
+- Editing symbols → `mcp__serena__replace_symbol_body`, `mcp__serena__insert_after_symbol`, `mcp__serena__insert_before_symbol`
+- Renaming across codebase → `mcp__serena__rename_symbol`
+
+### When to use standard tools (non-code files only):
+- Reading config files (JSON, YAML, etc.)
+- Reading markdown/documentation
+- Reading non-code assets
+
+### Workflow example:
+```
+# 1. Understand file structure (NOT Read tool)
+mcp__serena__get_symbols_overview("src/lib/backends/google-auth.js")
+
+# 2. Find specific symbol with body
+mcp__serena__find_symbol(name_path_pattern="signIn", include_body=True)
+
+# 3. Find all usages
+mcp__serena__find_referencing_symbols(name_path="signIn", relative_path="src/lib/backends/google-auth.js")
+
+# 4. Edit a symbol
+mcp__serena__replace_symbol_body(name_path="signIn", relative_path="...", body="new code")
+```
+
+### Key benefits:
+- Token-efficient: reads only what's needed
+- Semantic awareness: understands code structure
+- Safe refactoring: rename across entire codebase
+
 ## Key Patterns
 
 - Components use document visibility API to pause updates when tab is hidden (Clock, Stats, Weather, Tasks)
