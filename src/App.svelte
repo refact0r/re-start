@@ -187,7 +187,7 @@
             {#if settings.showTasks !== false}
                 <Tasks />
             {/if}
-            {#if settings.googleTasksSignedIn && settings.showCalendar !== false}
+            {#if hasStoredUserId() && settings.showCalendar !== false}
                 <Calendar />
             {/if}
         </div>
