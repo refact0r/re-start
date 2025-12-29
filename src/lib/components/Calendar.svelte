@@ -3,14 +3,14 @@
     import { createCalendarBackend } from '../backends/index.js'
     import { settings } from '../settings-store.svelte.js'
     import { authState } from '../backends/google-auth.js'
-    import { RefreshCw, Video, Monitor } from 'lucide-svelte'
+    import { RefreshCw, Video } from 'lucide-svelte'
 
     function getVideoProvider(url) {
         if (!url) return null
         if (url.includes('meet.google.com') || url.includes('hangouts.google.com')) return 'meet'
         if (url.includes('teams.microsoft.com') || url.includes('teams.live.com')) return 'teams'
         if (url.includes('zoom.us') || url.includes('zoom.com')) return 'zoom'
-        return 'video'
+        return 'other'
     }
 
     let api = null
@@ -178,14 +178,23 @@
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 class="event-video"
-                                                title="Join {videoProvider}"
+                                                title="Join video call"
                                             >
-                                                {#if videoProvider === 'video'}
-                                                    <Video size={12} />
+                                                {#if videoProvider === 'meet'}
+                                                    <svg class="video-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                                    </svg>
+                                                {:else if videoProvider === 'teams'}
+                                                    <svg class="video-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M19.5 5h-3V3.5A1.5 1.5 0 0015 2H9a1.5 1.5 0 00-1.5 1.5V5h-3A1.5 1.5 0 003 6.5v11A1.5 1.5 0 004.5 19H9v1.5A1.5 1.5 0 0010.5 22h3a1.5 1.5 0 001.5-1.5V19h4.5a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0019.5 5zM9 3.5h6V5H9V3.5zM13.5 20.5h-3V19h3v1.5zM19.5 17.5h-15v-11h15v11z"/>
+                                                    </svg>
+                                                {:else if videoProvider === 'zoom'}
+                                                    <svg class="video-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M4 4h10a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm14 3l4-2v10l-4-2V7z"/>
+                                                    </svg>
                                                 {:else}
-                                                    <Monitor size={12} />
+                                                    <Video size={12} />
                                                 {/if}
-                                                {videoProvider}
                                             </a>
                                         {/if}
                                     </div>
@@ -250,11 +259,14 @@
     .event-video {
         display: inline-flex;
         align-items: center;
-        gap: 0.25ch;
         color: var(--txt-3);
     }
     .event-video:hover {
         color: var(--txt-1);
+    }
+    .video-icon {
+        width: 14px;
+        height: 14px;
     }
     .event.past {
         opacity: 0.5;
