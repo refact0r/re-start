@@ -3,7 +3,15 @@
     import { createCalendarBackend } from '../backends/index.js'
     import { settings } from '../settings-store.svelte.js'
     import { authState } from '../backends/google-auth.js'
-    import { RefreshCw, Video } from 'lucide-svelte'
+    import { RefreshCw, Video, Monitor } from 'lucide-svelte'
+
+    function getVideoProvider(url) {
+        if (!url) return null
+        if (url.includes('meet.google.com') || url.includes('hangouts.google.com')) return 'meet'
+        if (url.includes('teams.microsoft.com') || url.includes('teams.live.com')) return 'teams'
+        if (url.includes('zoom.us') || url.includes('zoom.com')) return 'zoom'
+        return 'video'
+    }
 
     let api = null
     let events = $state([])
@@ -143,6 +151,7 @@
             <div class="events">
                 <div class="events-list">
                     {#each events as event}
+                        {@const videoProvider = getVideoProvider(event.hangoutLink)}
                         <div
                             class="event"
                             class:past={event.isPast}
@@ -150,29 +159,36 @@
                         >
                             <span class="event-time">{formatEventTime(event)}</span>
                             <div class="event-details">
-                                <div class="event-title-row">
-                                    <a
-                                        href={event.htmlLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="event-title"
-                                    >
-                                        {event.title}
-                                    </a>
-                                    {#if event.hangoutLink}
-                                        <a
-                                            href={event.hangoutLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="event-meet"
-                                            title="Join Google Meet"
-                                        >
-                                            <Video size={14} />
-                                        </a>
-                                    {/if}
-                                </div>
-                                {#if event.location}
-                                    <div class="event-location">{event.location}</div>
+                                <a
+                                    href={event.htmlLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="event-title"
+                                >
+                                    {event.title}
+                                </a>
+                                {#if event.location || videoProvider}
+                                    <div class="event-meta">
+                                        {#if event.location}
+                                            <span class="event-location">{event.location}</span>
+                                        {/if}
+                                        {#if videoProvider}
+                                            <a
+                                                href={event.hangoutLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="event-video"
+                                                title="Join {videoProvider}"
+                                            >
+                                                {#if videoProvider === 'video'}
+                                                    <Video size={12} />
+                                                {:else}
+                                                    <Monitor size={12} />
+                                                {/if}
+                                                {videoProvider}
+                                            </a>
+                                        {/if}
+                                    </div>
                                 {/if}
                             </div>
                         </div>
@@ -221,26 +237,24 @@
         flex: 1 1 auto;
         min-width: 0;
     }
-    .event-title-row {
-        display: flex;
-        align-items: center;
-        gap: 0.5ch;
-    }
-    .event-title {
-    }
     .event-title:hover {
         color: var(--txt-1);
     }
-    .event-meet {
-        color: var(--txt-3);
-        flex-shrink: 0;
-    }
-    .event-meet:hover {
-        color: var(--txt-1);
-    }
-    .event-location {
-        color: var(--txt-3);
+    .event-meta {
+        display: flex;
+        align-items: center;
+        gap: 1ch;
         font-size: 0.8rem;
+        color: var(--txt-3);
+    }
+    .event-video {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25ch;
+        color: var(--txt-3);
+    }
+    .event-video:hover {
+        color: var(--txt-1);
     }
     .event.past {
         opacity: 0.5;
