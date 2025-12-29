@@ -103,7 +103,7 @@
         }
 
         // Then fetch (will return cached if still valid, or fetch new)
-        getBackground()
+        getBackground(settings.unsplashApiKey)
             .then((bg) => {
                 background = bg
             })
@@ -124,7 +124,7 @@
     async function refreshBackground() {
         thumbLoaded = false
         fullLoaded = false
-        background = await forceRefreshBackground()
+        background = await forceRefreshBackground(settings.unsplashApiKey)
     }
 </script>
 

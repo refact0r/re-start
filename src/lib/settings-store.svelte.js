@@ -5,6 +5,7 @@ let defaultSettings = {
     // Integrations
     todoistApiToken: '',
     googleTasksSignedIn: false,
+    unsplashApiKey: '',
     // Clock
     timeFormat: '12hr',
     dateFormat: 'mdy',
