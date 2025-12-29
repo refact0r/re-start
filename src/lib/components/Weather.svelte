@@ -6,11 +6,12 @@
 
     let current = $state(null)
     let forecast = $state([])
-    let loading = $state(false)
+    let syncing = $state(true)
     let error = $state(null)
     let initialLoad = $state(true)
+    let syncInProgress = false
 
-    const weatherAPI = new WeatherAPI()
+    const api = new WeatherAPI()
 
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible') {
@@ -31,7 +32,8 @@
             return
         }
 
-        refreshWeather()
+        api.invalidateCache()
+        loadWeather(true)
     })
 
     async function getCurrentLocation() {
@@ -60,70 +62,68 @@
         })
     }
 
-    export async function loadWeather() {
-        loading = true
-        let lat = settings.latitude
-        let lon = settings.longitude
-
+    async function getCoordinates() {
         if (settings.locationMode === 'auto') {
             try {
-                const location = await getCurrentLocation()
-                lat = location.latitude
-                lon = location.longitude
+                return await getCurrentLocation()
             } catch (err) {
                 console.error('failed to get location:', err)
-                error = 'failed to get location'
-                loading = false
-                return
+                throw new Error('failed to get location')
             }
         }
 
-        if (lat === null || lon === null) {
-            error = 'location not configured'
-            loading = false
-            return
+        if (settings.latitude === null || settings.longitude === null) {
+            throw new Error('location not configured')
         }
 
-        const cached = weatherAPI.getCachedWeather(
-            settings.timeFormat,
-            lat,
-            lon
-        )
-        if (cached.data) {
-            current = cached.data.current
-            forecast = cached.data.forecast
-
-            if (!cached.isStale) {
-                error = null
-                loading = false
-                return
-            }
+        return {
+            latitude: settings.latitude,
+            longitude: settings.longitude,
         }
+    }
+
+    export async function loadWeather(showSyncing = false) {
+        if (syncInProgress) return
+        syncInProgress = true
 
         try {
+            if (showSyncing) syncing = true
             error = null
 
-            const data = await weatherAPI.getWeather(
-                lat,
-                lon,
-                settings.tempUnit,
-                settings.speedUnit,
-                settings.timeFormat
-            )
+            const { latitude, longitude } = await getCoordinates()
 
-            current = data.current
-            forecast = data.forecast
+            // Load cached data immediately
+            const cachedData = api.getWeather(settings.timeFormat)
+            if (cachedData) {
+                current = cachedData.current
+                forecast = cachedData.forecast
+                syncing = false
+            }
+
+            // Sync if cache is stale or empty
+            if (api.isCacheStale(latitude, longitude) || !cachedData) {
+                await api.sync(
+                    latitude,
+                    longitude,
+                    settings.tempUnit,
+                    settings.speedUnit
+                )
+                const freshData = api.getWeather(settings.timeFormat)
+                current = freshData.current
+                forecast = freshData.forecast
+            }
         } catch (err) {
-            error = 'failed to load weather'
+            error = err.message
             console.error(err)
         } finally {
-            loading = false
+            syncing = false
+            syncInProgress = false
         }
     }
 
     export function refreshWeather() {
-        weatherAPI.clearCache()
-        loadWeather()
+        api.invalidateCache()
+        loadWeather(true)
     }
 
     onMount(() => {
@@ -137,8 +137,8 @@
 </script>
 
 <div class="panel-wrapper">
-    <button class="widget-label" onclick={refreshWeather} disabled={loading}>
-        {loading ? 'loading...' : 'weather'}
+    <button class="widget-label" onclick={() => loadWeather(true)} disabled={syncing}>
+        {syncing ? 'syncing...' : 'weather'}
     </button>
 
     <div class="panel">
@@ -198,11 +198,11 @@
             </div>
             <button
                 class="sync-btn"
-                onclick={refreshWeather}
-                disabled={loading}
-                title="refresh"
+                onclick={() => loadWeather(true)}
+                disabled={syncing}
+                title="sync"
             >
-                <RefreshCw size={14} class={loading ? 'spinning' : ''} />
+                <RefreshCw size={14} class={syncing ? 'spinning' : ''} />
             </button>
         {/if}
     </div>

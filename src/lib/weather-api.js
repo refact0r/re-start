@@ -1,120 +1,118 @@
 import descriptions from '../assets/descriptions.json'
 
 /**
- * OpenMeteo Weather API client with data processing utilities
+ * OpenMeteo Weather API client with caching
+ * Follows same pattern as task/calendar backends
  */
 class WeatherAPI {
     constructor() {
         this.baseUrl = 'https://api.open-meteo.com/v1/forecast'
-        this.cacheKey = `weather_data`
-        this.cacheExpiry = 15 * 60 * 1000
+        this.dataKey = 'weather_data'
+        this.cacheExpiry = 15 * 60 * 1000 // 15 minutes
+
+        this.data = this._loadFromStorage()
     }
 
     /**
-     * Get weather data from API and cache it
+     * Load cached data from localStorage
      */
-    async getWeather(
-        latitude,
-        longitude,
-        tempUnit,
-        speedUnit,
-        timeFormat = '12hr'
-    ) {
+    _loadFromStorage() {
+        try {
+            const stored = localStorage.getItem(this.dataKey)
+            return stored ? JSON.parse(stored) : {}
+        } catch (error) {
+            console.error('Failed to load weather cache:', error)
+            return {}
+        }
+    }
+
+    /**
+     * Save data to localStorage
+     */
+    _saveToStorage() {
+        localStorage.setItem(this.dataKey, JSON.stringify(this.data))
+    }
+
+    /**
+     * Check if cache is stale (older than expiry time)
+     */
+    isCacheStale(latitude = null, longitude = null) {
+        if (!this.data.timestamp) return true
+
+        // Check if coordinates changed
+        if (latitude != null && longitude != null) {
+            if (this._coordinatesChanged(
+                this.data.latitude,
+                this.data.longitude,
+                latitude,
+                longitude
+            )) {
+                return true
+            }
+        }
+
+        return Date.now() - this.data.timestamp >= this.cacheExpiry
+    }
+
+    /**
+     * Invalidate cache (force next sync to fetch fresh data)
+     */
+    invalidateCache() {
+        this.data.timestamp = 0
+        this._saveToStorage()
+    }
+
+    /**
+     * Clear all cached data
+     */
+    clearLocalData() {
+        localStorage.removeItem(this.dataKey)
+        this.data = {}
+    }
+
+    /**
+     * Get cached weather data (processed for display)
+     */
+    getWeather(timeFormat = '12hr') {
+        if (!this.data.raw) return null
+
+        return {
+            current: this._processCurrentWeather(this.data.raw.current),
+            forecast: this._processHourlyForecast(
+                this.data.raw.hourly,
+                this.data.raw.current.time,
+                timeFormat
+            ),
+        }
+    }
+
+    /**
+     * Sync weather data from API
+     */
+    async sync(latitude, longitude, tempUnit, speedUnit) {
         const rawData = await this._fetchWeatherData(
             latitude,
             longitude,
             tempUnit,
             speedUnit
         )
-        this._cacheWeather(rawData, latitude, longitude)
 
-        return {
-            current: this._processCurrentWeather(rawData.current),
-            forecast: this._processHourlyForecast(
-                rawData.hourly,
-                rawData.current.time,
-                timeFormat
-            ),
+        this.data = {
+            raw: rawData,
+            timestamp: Date.now(),
+            latitude,
+            longitude,
         }
+        this._saveToStorage()
+
+        return this.data
     }
 
     /**
-     * Get cached weather data with staleness info
-     */
-    getCachedWeather(timeFormat = '12hr', latitude = null, longitude = null) {
-        const cached = this._getCachedData(latitude, longitude)
-
-        if (!cached.data) {
-            return { data: null, isStale: false }
-        }
-
-        const processedData = {
-            current: this._processCurrentWeather(cached.data.current),
-            forecast: this._processHourlyForecast(
-                cached.data.hourly,
-                cached.data.current.time,
-                timeFormat
-            ),
-        }
-
-        return {
-            data: processedData,
-            isStale: cached.isStale,
-        }
-    }
-
-    /**
-     * Get cached data with expiration status
-     */
-    _getCachedData(latitude = null, longitude = null) {
-        try {
-            const cached = localStorage.getItem(this.cacheKey)
-            if (!cached) return { data: null, isStale: false }
-
-            const {
-                data,
-                timestamp,
-                latitude: cachedLat,
-                longitude: cachedLon,
-            } = JSON.parse(cached)
-
-            // Check if coordinates have changed significantly
-            if (
-                latitude != null &&
-                longitude != null &&
-                cachedLat != null &&
-                cachedLon != null &&
-                this._coordinatesChanged(
-                    cachedLat,
-                    cachedLon,
-                    latitude,
-                    longitude
-                )
-            ) {
-                this.clearCache()
-                return { data: null, isStale: false }
-            }
-
-            const isStale = Date.now() - timestamp >= this.cacheExpiry
-            return { data, isStale }
-        } catch (error) {
-            console.error('failed to get cached weather data:', error)
-            localStorage.removeItem(this.cacheKey)
-            return { data: null, isStale: false }
-        }
-    }
-
-    /**
-     * Clear the weather cache
-     */
-    clearCache() {
-        localStorage.removeItem(this.cacheKey)
-    }
-
-    /**
-     * Check if coordinates have changed significantly (more than ~0.5 degrees / ~30 miles)
+     * Check if coordinates have changed significantly (more than ~0.1 degrees)
      */
     _coordinatesChanged(oldLat, oldLon, newLat, newLon) {
+        if (oldLat == null || oldLon == null) return true
         const threshold = 0.1
         return (
             Math.abs(oldLat - newLat) > threshold ||
@@ -123,7 +121,7 @@ class WeatherAPI {
     }
 
     /**
-     * Private method to fetch raw weather data from API
+     * Fetch raw weather data from API
      */
     async _fetchWeatherData(latitude, longitude, tempUnit, speedUnit) {
         const params = new URLSearchParams({
@@ -142,8 +140,7 @@ class WeatherAPI {
         if (!response.ok) {
             throw new Error(`HTTP ${response.status} ${response.statusText}`)
         }
-        const data = await response.json()
-        return data
+        return response.json()
     }
 
     /**
@@ -236,19 +233,6 @@ class WeatherAPI {
                 hour12: false,
             })
         }
-    }
-
-    /**
-     * Cache weather data with timestamp and coordinates
-     */
-    _cacheWeather(data, latitude, longitude) {
-        const cacheData = {
-            data,
-            timestamp: Date.now(),
-            latitude,
-            longitude,
-        }
-        localStorage.setItem(this.cacheKey, JSON.stringify(cacheData))
     }
 }
 
