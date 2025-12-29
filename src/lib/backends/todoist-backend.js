@@ -10,9 +10,18 @@ class TodoistBackend extends TaskBackend {
         this.baseUrl = 'https://api.todoist.com/api/v1'
         this.syncTokenKey = 'todoist_sync_token'
         this.dataKey = 'todoist_data'
+        this.cacheExpiry = 5 * 60 * 1000 // 5 minutes
 
         this.syncToken = localStorage.getItem(this.syncTokenKey) || '*'
         this.data = JSON.parse(localStorage.getItem(this.dataKey) || '{}')
+    }
+
+    /**
+     * Check if cache is stale
+     */
+    isCacheStale() {
+        if (!this.data.timestamp) return true
+        return Date.now() - this.data.timestamp >= this.cacheExpiry
     }
 
     /**
@@ -77,6 +86,7 @@ class TodoistBackend extends TaskBackend {
             this.mergeData('projects', syncData.projects)
         }
 
+        this.data.timestamp = Date.now()
         localStorage.setItem(this.dataKey, JSON.stringify(this.data))
     }
 

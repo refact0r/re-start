@@ -37,6 +37,9 @@
 </div>
 
 <style>
+    .panel-wrapper {
+        grid-column: span 3;
+    }
     .panel {
         display: flex;
     }

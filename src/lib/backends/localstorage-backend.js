@@ -34,6 +34,13 @@ class LocalStorageBackend extends TaskBackend {
     }
 
     /**
+     * Check if cache is stale (always false for localStorage - it's the source of truth)
+     */
+    isCacheStale() {
+        return false
+    }
+
+    /**
      * Sync method (no-op for localStorage, but maintains interface)
      */
     async sync(resourceTypes) {

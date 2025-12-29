@@ -89,7 +89,7 @@
 
 <style>
     .panel-wrapper {
-        flex-grow: 1;
+        grid-column: span 2;
     }
     .clock {
         font-size: 3.125rem;

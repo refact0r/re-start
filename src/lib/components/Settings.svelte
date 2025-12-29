@@ -22,6 +22,15 @@
         { id: 'links', icon: Link, title: 'Links' }
     ]
     let activeTab = $state('appearance')
+    let tabElements = $state({})
+    let indicatorStyle = $state('')
+
+    $effect(() => {
+        const el = tabElements[activeTab]
+        if (el) {
+            indicatorStyle = `left: ${el.offsetLeft}px; width: ${el.offsetWidth}px`
+        }
+    })
 
     let refreshingBackground = $state(false)
 
@@ -267,17 +276,21 @@
                     class:active={activeTab === tab.id}
                     onclick={() => activeTab = tab.id}
                     title={tab.title}
+                    bind:this={tabElements[tab.id]}
                 >
                     <tab.icon size={18} strokeWidth={2} />
                 </button>
             {/each}
+            <div class="tab-indicator" style={indicatorStyle}></div>
         </nav>
 
         <div class="content">
             <!-- APPEARANCE -->
             {#if activeTab === 'appearance'}
+            <h3 class="section-title first">theme</h3>
+
             <div class="group">
-                <div class="setting-label">theme</div>
+                <div class="setting-label">color scheme</div>
                 <div class="theme-grid">
                     {#each themeNames as themeName}
                         <div class="theme-option">
@@ -332,7 +345,7 @@
                 </div>
             </div>
 
-            <h3 class="section-title">background</h3>
+            <h3 class="section-title">background image</h3>
 
             <div class="group">
                 <button class="checkbox-label" onclick={() => settings.showBackground = !settings.showBackground}>
@@ -799,6 +812,7 @@
         font-weight: 300;
     }
     .tabs {
+        position: relative;
         display: flex;
         border-bottom: 2px solid var(--bg-3);
         padding: 0 1rem;
@@ -818,18 +832,25 @@
     }
     .tab.active {
         color: var(--txt-1);
-        border-bottom: 2px solid var(--txt-2);
-        margin-bottom: -2px;
+    }
+    .tab-indicator {
+        position: absolute;
+        bottom: -2px;
+        height: 2px;
+        background: var(--txt-2);
+        transition: left 0.2s ease, width 0.2s ease;
     }
     .content {
         flex: 1;
+        width: 100%;
         padding: 1.5rem;
         overflow-y: auto;
         scrollbar-width: thin;
         scrollbar-color: var(--bg-3) var(--bg-1);
+        box-sizing: border-box;
     }
     .group {
-        flex: 1;
+        width: 100%;
         margin-bottom: 1.5rem;
     }
     .group > label,
@@ -979,7 +1000,7 @@
         text-transform: uppercase;
         letter-spacing: 0.1em;
     }
-    .section-title:first-child {
+    .section-title.first {
         margin-top: 0;
     }
     .inline-group {

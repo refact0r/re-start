@@ -12,12 +12,21 @@ class GoogleTasksBackend extends TaskBackend {
 
         this.dataKey = 'google_tasks_data'
         this.tasklistIdKey = 'google_tasks_default_list'
+        this.cacheExpiry = 5 * 60 * 1000 // 5 minutes
 
         // Migrate old storage keys if needed
         googleAuth.migrateStorageKeys()
 
         this.data = JSON.parse(localStorage.getItem(this.dataKey) ?? '{}')
         this.defaultTasklistId = localStorage.getItem(this.tasklistIdKey) ?? '@default'
+    }
+
+    /**
+     * Check if cache is stale
+     */
+    isCacheStale() {
+        if (!this.data.timestamp) return true
+        return Date.now() - this.data.timestamp >= this.cacheExpiry
     }
 
     /**
@@ -121,6 +130,7 @@ class GoogleTasksBackend extends TaskBackend {
                 }
             }
 
+            this.data.timestamp = Date.now()
             localStorage.setItem(this.dataKey, JSON.stringify(this.data))
 
             return this.data

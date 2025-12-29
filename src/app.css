@@ -61,7 +61,6 @@ button {
     padding: 1.5rem;
     overflow: hidden;
     width: 100%;
-    min-width: 8rem;
     background: var(--bg-1);
 }
 

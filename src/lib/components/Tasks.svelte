@@ -85,7 +85,22 @@
                 api.clearLocalData()
                 tasks = []
             }
-            await loadTasks(true)
+
+            // Load cached data immediately
+            tasks = api.getTasks()
+
+            // Only show syncing if no cached data
+            const hasCachedData = tasks.length > 0
+            if (hasCachedData) {
+                syncing = false
+            }
+
+            // Sync if cache is stale
+            if (api.isCacheStale()) {
+                await loadTasks(!hasCachedData)
+            } else {
+                syncing = false
+            }
         } catch (err) {
             error = `failed to initialize ${backend} backend`
             console.error(err)

@@ -12,6 +12,7 @@
     import Tasks from './lib/components/Tasks.svelte'
     import Weather from './lib/components/Weather.svelte'
     import { saveSettings } from './lib/settings-store.svelte.js'
+    import { Settings as SettingsIcon } from 'lucide-svelte'
 
     let showSettings = $state(false)
     let background = $state(null)
@@ -189,7 +190,7 @@
         onclick={() => (showSettings = true)}
         aria-label="Open settings"
     >
-        settings
+        <SettingsIcon size={20} strokeWidth={2} />
     </button>
 
     <Settings {showSettings} {closeSettings} {refreshBackground} {background} />
@@ -256,26 +257,27 @@
         color: var(--txt-3);
     }
     .container {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
     }
     .top,
     .widgets {
-        display: flex;
-        gap: 1.5rem;
+        display: contents;
     }
     .settings-btn {
         position: fixed;
         top: 0;
         right: 0;
         padding: 1rem 1.5rem;
-        opacity: 0;
+        opacity: 0.15;
         z-index: 100;
         color: var(--txt-3);
+        transition: opacity 0.2s ease, color 0.2s ease;
     }
     .settings-btn:hover {
         opacity: 1;
+        color: var(--txt-1);
     }
     .settings-btn.needs-config {
         opacity: 1;

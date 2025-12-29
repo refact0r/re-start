@@ -8,11 +8,20 @@ class GoogleCalendarBackend {
     constructor(config = {}) {
         this.baseUrl = 'https://www.googleapis.com/calendar/v3'
         this.dataKey = 'google_calendar_data'
+        this.cacheExpiry = 5 * 60 * 1000 // 5 minutes
 
         // Migrate old storage keys if needed
         googleAuth.migrateStorageKeys()
 
         this.data = JSON.parse(localStorage.getItem(this.dataKey) ?? '{}')
+    }
+
+    /**
+     * Check if cache is stale
+     */
+    isCacheStale() {
+        if (!this.data.timestamp) return true
+        return Date.now() - this.data.timestamp >= this.cacheExpiry
     }
 
     /**
@@ -116,6 +125,7 @@ class GoogleCalendarBackend {
 
             const eventArrays = await Promise.all(eventPromises)
             this.data.events = eventArrays.flat()
+            this.data.timestamp = Date.now()
 
             console.log('Google Calendar: total events synced:', this.data.events.length)
 
