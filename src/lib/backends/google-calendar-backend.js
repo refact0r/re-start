@@ -86,15 +86,12 @@ class GoogleCalendarBackend {
             const calendarsData = await this.apiRequest('/users/me/calendarList?maxResults=50')
             this.data.calendars = (calendarsData.items || []).filter(cal => cal.selected !== false)
 
-            console.log('Google Calendar: found', this.data.calendars.length, 'calendars')
-
             // Filter to selected calendars if specified
             let calendarsToSync = this.data.calendars
             if (selectedCalendarIds && selectedCalendarIds.length > 0) {
                 calendarsToSync = this.data.calendars.filter(cal => 
                     selectedCalendarIds.includes(cal.id)
                 )
-                console.log('Google Calendar: syncing', calendarsToSync.length, 'selected calendars')
             }
 
             // Get today's events from calendars
@@ -126,8 +123,6 @@ class GoogleCalendarBackend {
             const eventArrays = await Promise.all(eventPromises)
             this.data.events = eventArrays.flat()
             this.data.timestamp = Date.now()
-
-            console.log('Google Calendar: total events synced:', this.data.events.length)
 
             localStorage.setItem(this.dataKey, JSON.stringify(this.data))
             return this.data

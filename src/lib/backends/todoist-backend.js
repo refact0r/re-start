@@ -47,12 +47,9 @@ class TodoistBackend extends TaskBackend {
             this.syncToken = data.sync_token
             localStorage.setItem(this.syncTokenKey, this.syncToken)
 
-            console.log(data)
-
             return data
         } catch (error) {
             if (!isRetry && this.syncToken !== '*') {
-                console.log('retrying with full sync...')
                 this.syncToken = '*'
                 localStorage.setItem(this.syncTokenKey, this.syncToken)
                 return this.sync(resourceTypes, true)
@@ -153,49 +150,7 @@ class TodoistBackend extends TaskBackend {
                 }
             })
 
-        return TodoistBackend.sortTasks(mappedTasks)
-    }
-
-    /**
-     * Static method to sort tasks
-     */
-    static sortTasks(tasks) {
-        return tasks.sort((a, b) => {
-            // Unchecked tasks first
-            if (a.checked !== b.checked) return a.checked ? 1 : -1
-
-            // Checked tasks: sort by completed_at (recent first)
-            if (a.checked) {
-                if (a.completed_at && b.completed_at) {
-                    const diff =
-                        new Date(b.completed_at).getTime() -
-                        new Date(a.completed_at).getTime()
-                    if (diff !== 0) return diff
-                }
-            }
-
-            // Tasks with due dates first
-            if (!a.due_date && b.due_date) return 1
-            if (a.due_date && !b.due_date) return -1
-
-            // Sort by due date (earliest first)
-            if (a.due_date && b.due_date) {
-                const diff = a.due_date.getTime() - b.due_date.getTime()
-                if (diff !== 0) return diff
-            }
-
-            // If both have no due dates, non-project tasks come first
-            if (!a.due_date && !b.due_date) {
-                const aHasProject = a.project_id && a.project_name !== 'Inbox'
-                const bHasProject = b.project_id && b.project_name !== 'Inbox'
-
-                if (aHasProject !== bHasProject) {
-                    return aHasProject ? 1 : -1
-                }
-            }
-
-            return a.child_order - b.child_order
-        })
+        return TaskBackend.sortTasks(mappedTasks)
     }
 
     /**
@@ -311,11 +266,7 @@ class TodoistBackend extends TaskBackend {
             throw new Error(`todoist command fetch failed: ${response.status}`)
         }
 
-        const data = await response.json()
-
-        console.log(data)
-
-        return data
+        return response.json()
     }
 
     /**

@@ -51,7 +51,6 @@ class LocalStorageBackend extends TaskBackend {
     async sync(resourceTypes) {
         // LocalStorage doesn't need to sync with a server
         // This method exists to maintain interface compatibility
-        return Promise.resolve()
     }
 
     /**
@@ -100,49 +99,7 @@ class LocalStorageBackend extends TaskBackend {
                 }
             })
 
-        return LocalStorageBackend.sortTasks(mappedTasks)
-    }
-
-    /**
-     * Static method to sort tasks (same logic as Todoist)
-     */
-    static sortTasks(tasks) {
-        return tasks.sort((a, b) => {
-            // Unchecked tasks first
-            if (a.checked !== b.checked) return a.checked ? 1 : -1
-
-            // Checked tasks: sort by completed_at (recent first)
-            if (a.checked) {
-                if (a.completed_at && b.completed_at) {
-                    const diff =
-                        new Date(b.completed_at).getTime() -
-                        new Date(a.completed_at).getTime()
-                    if (diff !== 0) return diff
-                }
-            }
-
-            // Tasks with due dates first
-            if (!a.due_date && b.due_date) return 1
-            if (a.due_date && !b.due_date) return -1
-
-            // Sort by due date (earliest first)
-            if (a.due_date && b.due_date) {
-                const diff = a.due_date.getTime() - b.due_date.getTime()
-                if (diff !== 0) return diff
-            }
-
-            // If both have no due dates, non-project tasks come first
-            if (!a.due_date && !b.due_date) {
-                const aHasProject = a.project_id && a.project_name !== 'Inbox'
-                const bHasProject = b.project_id && b.project_name !== 'Inbox'
-
-                if (aHasProject !== bHasProject) {
-                    return aHasProject ? 1 : -1
-                }
-            }
-
-            return a.child_order - b.child_order
-        })
+        return TaskBackend.sortTasks(mappedTasks)
     }
 
     /**
@@ -155,7 +112,6 @@ class LocalStorageBackend extends TaskBackend {
             task.completed_at = new Date().toISOString()
             this.saveData()
         }
-        return Promise.resolve()
     }
 
     /**
@@ -168,7 +124,6 @@ class LocalStorageBackend extends TaskBackend {
             task.completed_at = null
             this.saveData()
         }
-        return Promise.resolve()
     }
 
     /**
@@ -180,7 +135,6 @@ class LocalStorageBackend extends TaskBackend {
             this.data.items.splice(idx, 1)
             this.saveData()
         }
-        return Promise.resolve()
     }
 
     /**
@@ -201,7 +155,6 @@ class LocalStorageBackend extends TaskBackend {
 
         this.data.items.push(newTask)
         this.saveData()
-        return Promise.resolve()
     }
 
     /**

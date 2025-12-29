@@ -79,13 +79,6 @@ export function isSignedIn() {
 }
 
 /**
- * Check if signed in (alias)
- */
-export function getIsSignedIn() {
-    return isSignedIn()
-}
-
-/**
  * Store tokens in localStorage
  */
 function storeTokens(accessToken, expiresIn, email = null) {
@@ -141,21 +134,6 @@ export function handleAuthCallback() {
     }
 
     return null
-}
-
-/**
- * Check authentication status with backend
- */
-export async function checkAuthStatus() {
-    const userId = getUserId()
-    try {
-        const response = await fetch(`${API_URL}/api/auth/google/status?user_id=${userId}`)
-        if (!response.ok) return { authenticated: false }
-        return await response.json()
-    } catch (error) {
-        console.error('Failed to check auth status:', error)
-        return { authenticated: false }
-    }
 }
 
 /**

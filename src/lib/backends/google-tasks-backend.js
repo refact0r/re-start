@@ -176,29 +176,7 @@ class GoogleTasksBackend extends TaskBackend {
                 }
             })
 
-        return GoogleTasksBackend.sortTasks(mappedTasks)
-    }
-
-    /**
-     * Sort tasks
-     */
-    static sortTasks(tasks) {
-        return tasks.sort((a, b) => {
-            if (a.checked !== b.checked) return a.checked ? 1 : -1
-
-            if (a.checked && a.completed_at && b.completed_at) {
-                const diff = new Date(b.completed_at) - new Date(a.completed_at)
-                if (diff !== 0) return diff
-            }
-
-            if (a.due_date && b.due_date) {
-                const diff = a.due_date - b.due_date
-                if (diff !== 0) return diff
-            }
-            if (a.due_date !== b.due_date) return a.due_date ? -1 : 1
-
-            return a.child_order - b.child_order
-        })
+        return TaskBackend.sortTasks(mappedTasks)
     }
 
     /**
