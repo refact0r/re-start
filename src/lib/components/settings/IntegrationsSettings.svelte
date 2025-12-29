@@ -175,6 +175,7 @@
         <input
             id="todoist-token"
             type="password"
+            autocomplete="off"
             bind:value={settings.todoistApiToken}
             placeholder="api token"
         />
@@ -199,6 +200,7 @@
         <input
             id="unsplash-key"
             type="password"
+            autocomplete="off"
             bind:value={settings.unsplashApiKey}
             placeholder="api key"
         />
