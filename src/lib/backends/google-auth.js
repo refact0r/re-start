@@ -379,25 +379,25 @@ export async function tryRestoreSession() {
 
     const token = getAccessToken()
     const expired = isTokenExpiredInternal()
-    const email = localStorage.getItem(USER_EMAIL_KEY)
 
     // If token exists and not expired, validate it with Google
-    if (token && !expired && await validateToken(token)) {
-        log('Existing token is valid')
-        authState.update(true, email)
-        return true
+    const tokenValid = token && !expired && await validateToken(token)
+
+    if (!tokenValid) {
+        // Token missing, expired, or invalid - try to refresh
+        log('Token needs refresh (missing:', !token, ', expired:', expired, ')')
+        try {
+            await refreshToken()
+        } catch (error) {
+            logError('Session restore failed:', error.message)
+            return false
+        }
     }
 
-    // Token missing, expired, or invalid - try to refresh
-    log('Token needs refresh (missing:', !token, ', expired:', expired, ')')
-    try {
-        await refreshToken()
-        log('Session restored via refresh')
-        return true
-    } catch (error) {
-        logError('Session restore failed:', error.message)
-        return false
-    }
+    // Session restored - update auth state
+    log('Session restored successfully')
+    authState.update(true, localStorage.getItem(USER_EMAIL_KEY))
+    return true
 }
 
 /**
