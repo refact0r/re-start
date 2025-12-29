@@ -174,7 +174,8 @@
     <div class="integration-content stacked">
         <input
             id="todoist-token"
-            type="password"
+            type="text"
+            class="secret"
             autocomplete="off"
             bind:value={settings.todoistApiToken}
             placeholder="api token"
@@ -199,7 +200,8 @@
     <div class="integration-content stacked">
         <input
             id="unsplash-key"
-            type="password"
+            type="text"
+            class="secret"
             autocomplete="off"
             bind:value={settings.unsplashApiKey}
             placeholder="api key"
@@ -278,5 +280,12 @@
     }
     .verify-link.invalid {
         color: var(--txt-err);
+    }
+    .secret {
+        filter: blur(4px);
+        transition: filter 0.15s ease;
+    }
+    .secret:focus {
+        filter: none;
     }
 </style>
