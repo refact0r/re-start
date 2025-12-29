@@ -270,8 +270,9 @@
     }
     .container {
         display: grid;
-        grid-template-columns: repeat(3, auto);
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 1.5rem;
+        max-width: 1100px;
     }
     .top,
     .widgets {
