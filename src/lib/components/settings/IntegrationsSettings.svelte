@@ -174,9 +174,12 @@
     <div class="integration-content stacked">
         <input
             id="todoist-token"
-            type="text"
-            class="secret"
+            type="password"
             autocomplete="off"
+            data-1p-ignore
+            data-bwignore
+            data-lpignore="true"
+            data-form-type="other"
             bind:value={settings.todoistApiToken}
             placeholder="api token"
         />
@@ -200,9 +203,12 @@
     <div class="integration-content stacked">
         <input
             id="unsplash-key"
-            type="text"
-            class="secret"
+            type="password"
             autocomplete="off"
+            data-1p-ignore
+            data-bwignore
+            data-lpignore="true"
+            data-form-type="other"
             bind:value={settings.unsplashApiKey}
             placeholder="api key"
         />
@@ -280,12 +286,5 @@
     }
     .verify-link.invalid {
         color: var(--txt-err);
-    }
-    .secret {
-        filter: blur(4px);
-        transition: filter 0.15s ease;
-    }
-    .secret:focus {
-        filter: none;
     }
 </style>
