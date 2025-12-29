@@ -38,20 +38,16 @@
                 return
             }
 
-            // Load cached data immediately
-            events = api.getEvents()
-
-            // Only show syncing if no cached data
-            const hasCachedData = events.length > 0
-            if (hasCachedData) {
+            // Load cached data immediately if available
+            const cachedEvents = api.getEvents()
+            if (cachedEvents.length > 0) {
+                events = cachedEvents
                 syncing = false
             }
 
-            // Sync if cache is stale
-            if (api.isCacheStale()) {
-                await loadEvents(!hasCachedData)
-            } else {
-                syncing = false
+            // Sync in background if cache is stale or empty
+            if (api.isCacheStale() || cachedEvents.length === 0) {
+                loadEvents(cachedEvents.length === 0)
             }
         } catch (err) {
             error = 'failed to initialize calendar'

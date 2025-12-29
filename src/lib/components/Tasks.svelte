@@ -86,20 +86,16 @@
                 tasks = []
             }
 
-            // Load cached data immediately
-            tasks = api.getTasks()
-
-            // Only show syncing if no cached data
-            const hasCachedData = tasks.length > 0
-            if (hasCachedData) {
+            // Load cached data immediately if available
+            const cachedTasks = api.getTasks()
+            if (cachedTasks.length > 0) {
+                tasks = cachedTasks
                 syncing = false
             }
 
-            // Sync if cache is stale
-            if (api.isCacheStale()) {
-                await loadTasks(!hasCachedData)
-            } else {
-                syncing = false
+            // Sync in background if cache is stale or empty
+            if (api.isCacheStale() || cachedTasks.length === 0) {
+                loadTasks(cachedTasks.length === 0)
             }
         } catch (err) {
             error = `failed to initialize ${backend} backend`
