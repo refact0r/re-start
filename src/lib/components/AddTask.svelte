@@ -7,9 +7,16 @@
         disabled = false,
         loading = false,
         show = false,
-        onsubmit,
-        oninput,
+        onsubmit = undefined,
+        oninput = undefined,
     } = $props()
+
+    let inputElement
+
+    // Expose focus method to parent
+    export function focus() {
+        inputElement?.focus()
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -88,6 +95,7 @@
             {/if}
         </div>
         <input
+            bind:this={inputElement}
             class="add-task-input"
             type="text"
             bind:value

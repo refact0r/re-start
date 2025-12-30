@@ -22,6 +22,7 @@
     let newTaskContent = $state('')
     let addingTask = $state(false)
     let togglingTasks = $state(new Set())
+    let addTaskComponent = $state()
 
     // Derived project match
     let parsedProject = $derived(
@@ -80,6 +81,28 @@
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible' && api) {
             loadTasks()
+        }
+    }
+
+    function handleGlobalKeydown(event) {
+        // Only auto-focus if:
+        // 1. No input, textarea, or contenteditable element is currently focused
+        // 2. The key is a printable character (not a modifier or special key)
+        const activeElement = document.activeElement
+        const isInputFocused =
+            activeElement?.tagName === 'INPUT' ||
+            activeElement?.tagName === 'TEXTAREA' ||
+            (activeElement instanceof HTMLElement && activeElement.isContentEditable)
+
+        if (
+            addTaskComponent &&
+            !isInputFocused &&
+            event.key.length === 1 && // Printable character
+            !event.ctrlKey &&
+            !event.metaKey &&
+            !event.altKey
+        ) {
+            addTaskComponent.focus()
         }
     }
 
@@ -334,10 +357,12 @@
     onMount(() => {
         initializeAPI(settings.taskBackend, settings.todoistApiToken)
         document.addEventListener('visibilitychange', handleVisibilityChange)
+        document.addEventListener('keydown', handleGlobalKeydown)
     })
 
     onDestroy(() => {
         document.removeEventListener('visibilitychange', handleVisibilityChange)
+        document.removeEventListener('keydown', handleGlobalKeydown)
     })
 </script>
 
@@ -379,6 +404,7 @@
                     </span>
                 {/if}
                 <AddTask
+                    bind:this={addTaskComponent}
                     bind:value={newTaskContent}
                     bind:parsed={parsedDate}
                     {parsedProject}
