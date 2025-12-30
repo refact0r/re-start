@@ -204,16 +204,6 @@
                     <span class="bright">{eventCount}</span>
                     event{eventCount === 1 ? '' : 's'} today
                 </a>
-                <button
-                    class="instant-meet-btn"
-                    onclick={createInstantMeet}
-                    disabled={creatingMeet}
-                    title="Create instant Meet"
-                >
-                    <svg class="meet-icon" viewBox="0 0 50 50" fill="currentColor">
-                        <path d="M2 18L2 32 12 32 12 18zM39 9v4.31l-10 9V16H14V6h22C37.66 6 39 7.34 39 9zM29 27.69l10 9V41c0 1.66-1.34 3-3 3H14V34h15V27.69zM12 34v10H5c-1.657 0-3-1.343-3-3v-7H12zM12 6L12 16 2 16zM29 25L39 16 39 34zM49 9.25v31.5c0 .87-1.03 1.33-1.67.75L41 35.8V14.2l6.33-5.7C47.97 7.92 49 8.38 49 9.25z"/>
-                    </svg>
-                </button>
             </div>
 
             <br />
@@ -283,6 +273,13 @@
                     {/if}
                 </div>
             </div>
+            <button
+                class="instant-meet-btn"
+                onclick={createInstantMeet}
+                disabled={creatingMeet}
+            >
+                + instant conf
+            </button>
             <button
                 class="sync-btn"
                 onclick={() => loadEvents(true)}
@@ -408,59 +405,52 @@
         color: var(--txt-1);
     }
 
-    /* Widget header with Meet button */
-    .widget-header {
-        display: flex;
-        align-items: center;
-        gap: 0.75ch;
-    }
+    /* Instant Meet button */
     .instant-meet-btn {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.2rem;
+        position: absolute;
+        bottom: 0.25rem;
+        left: 0;
+        padding: 0;
+        font-size: 0.75rem;
         color: var(--txt-3);
         background: transparent;
-        border: 1px solid var(--txt-4);
-        border-radius: 3px;
+        border: none;
         cursor: pointer;
-        transition: all 0.15s ease;
+        transition: color 0.15s ease;
     }
     .instant-meet-btn:hover {
         color: var(--txt-1);
-        border-color: var(--txt-3);
     }
     .instant-meet-btn:disabled {
         opacity: 0.5;
         cursor: not-allowed;
-    }
-    .meet-icon {
-        width: 12px;
-        height: 12px;
     }
 
     /* Meet popup overlay */
     .meet-popup-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 1000;
+        backdrop-filter: blur(2px);
     }
     .meet-popup {
         position: relative;
-        background: var(--bg-2);
+        background: var(--bg-1);
         border: 1px solid var(--txt-4);
         border-radius: 8px;
-        padding: 1.5rem;
-        min-width: 320px;
+        padding: 1.5rem 2rem;
+        min-width: 340px;
         max-width: 90vw;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
     .meet-popup-close {
         position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
+        top: 0.75rem;
+        right: 0.75rem;
         background: transparent;
         border: none;
         color: var(--txt-3);
@@ -474,55 +464,62 @@
         text-align: center;
     }
     .meet-popup-content p {
-        margin: 0 0 1rem 0;
+        margin: 0 0 1.25rem 0;
         color: var(--txt-2);
+        line-height: 1.5;
     }
     .meet-link-label {
         font-size: 0.85rem;
+        color: var(--txt-3);
     }
     .meet-link-row {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        background: var(--bg-3);
-        padding: 0.5rem;
-        border-radius: 4px;
+        background: var(--bg-2);
+        padding: 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--txt-4);
     }
     .meet-link {
         flex: 1;
         font-size: 0.85rem;
         word-break: break-all;
-        color: var(--txt-2);
+        color: var(--txt-1);
     }
     .meet-link:hover {
-        color: var(--txt-1);
+        text-decoration: underline;
     }
     .meet-copy-btn {
         flex-shrink: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0.35rem;
-        background: transparent;
+        padding: 0.4rem;
+        background: var(--bg-3);
         border: 1px solid var(--txt-4);
         border-radius: 4px;
-        color: var(--txt-3);
+        color: var(--txt-2);
         cursor: pointer;
+        transition: all 0.15s ease;
     }
     .meet-copy-btn:hover {
         color: var(--txt-1);
-        border-color: var(--txt-3);
+        background: var(--txt-4);
     }
     .meet-reauth-btn {
-        padding: 0.5rem 1rem;
-        background: var(--txt-accent);
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: var(--txt-1);
         color: var(--bg-1);
         border: none;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: opacity 0.15s ease;
     }
     .meet-reauth-btn:hover {
-        opacity: 0.9;
+        opacity: 0.85;
     }
 </style>
