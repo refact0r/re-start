@@ -2,8 +2,8 @@
     import { onMount, onDestroy } from 'svelte'
     import { createCalendarBackend } from '../backends/index.js'
     import { settings } from '../settings-store.svelte.js'
-    import { authState } from '../backends/google-auth.js'
-    import { RefreshCw, Video, MapPin } from 'lucide-svelte'
+    import { authState, hasMeetScope, signIn, refreshScopes } from '../backends/google-auth.js'
+    import { RefreshCw, Video, MapPin, Plus, Copy, Check, X } from 'lucide-svelte'
 
     function getVideoProvider(url) {
         if (!url) return null
@@ -21,6 +21,65 @@
     let syncInProgress = false
     let googleAuthStatus = $state(authState.status)
     let unsubscribeAuth = null
+
+    // Meet link popup state
+    let showMeetPopup = $state(false)
+    let meetLink = $state('')
+    let meetError = $state('')
+    let creatingMeet = $state(false)
+    let copied = $state(false)
+    let needsReauth = $state(false)
+
+    async function createInstantMeet() {
+        // First check if we have the required scope
+        await refreshScopes()
+        if (!hasMeetScope()) {
+            needsReauth = true
+            showMeetPopup = true
+            return
+        }
+
+        creatingMeet = true
+        meetError = ''
+        meetLink = ''
+        needsReauth = false
+        showMeetPopup = true
+
+        try {
+            const link = await api.createMeetLink()
+            meetLink = link
+        } catch (err) {
+            console.error('Failed to create Meet link:', err)
+            if (err.message?.includes('403') || err.message?.includes('insufficient')) {
+                needsReauth = true
+            } else {
+                meetError = 'Failed to create meeting'
+            }
+        } finally {
+            creatingMeet = false
+        }
+    }
+
+    async function handleReauth() {
+        await signIn()
+    }
+
+    async function copyMeetLink() {
+        try {
+            await navigator.clipboard.writeText(meetLink)
+            copied = true
+            setTimeout(() => { copied = false }, 2000)
+        } catch (err) {
+            console.error('Failed to copy:', err)
+        }
+    }
+
+    function closeMeetPopup() {
+        showMeetPopup = false
+        meetLink = ''
+        meetError = ''
+        needsReauth = false
+    }
 
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible' && api) {
@@ -145,6 +204,15 @@
                     <span class="bright">{eventCount}</span>
                     event{eventCount === 1 ? '' : 's'} today
                 </a>
+                <button
+                    class="instant-meet-btn"
+                    onclick={createInstantMeet}
+                    disabled={creatingMeet}
+                    title="Create instant Meet"
+                >
+                    <Plus size={12} />
+                    instant conf
+                </button>
             </div>
 
             <br />
@@ -226,6 +294,51 @@
     </div>
 </div>
 
+{#if showMeetPopup}
+    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+    <div class="meet-popup-overlay" onclick={closeMeetPopup}>
+        <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+        <div class="meet-popup" onclick={(e) => e.stopPropagation()}>
+            <button class="meet-popup-close" onclick={closeMeetPopup}>
+                <X size={16} />
+            </button>
+
+            {#if needsReauth}
+                <div class="meet-popup-content">
+                    <p>Additional permissions required to create Meet links.</p>
+                    <button class="meet-reauth-btn" onclick={handleReauth}>
+                        Grant permissions
+                    </button>
+                </div>
+            {:else if creatingMeet}
+                <div class="meet-popup-content">
+                    <p>Creating meeting...</p>
+                </div>
+            {:else if meetError}
+                <div class="meet-popup-content">
+                    <p class="error">{meetError}</p>
+                </div>
+            {:else if meetLink}
+                <div class="meet-popup-content">
+                    <p class="meet-link-label">Your meeting link:</p>
+                    <div class="meet-link-row">
+                        <a href={meetLink} target="_blank" rel="noopener noreferrer" class="meet-link">
+                            {meetLink}
+                        </a>
+                        <button class="meet-copy-btn" onclick={copyMeetLink} title="Copy link">
+                            {#if copied}
+                                <Check size={14} />
+                            {:else}
+                                <Copy size={14} />
+                            {/if}
+                        </button>
+                    </div>
+                </div>
+            {/if}
+        </div>
+    </div>
+{/if}
+
 <style>
     .panel-wrapper {
         flex: 1;
@@ -292,5 +405,122 @@
     }
     a:hover {
         color: var(--txt-1);
+    }
+
+    /* Instant Meet button */
+    .widget-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1ch;
+    }
+    .instant-meet-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25ch;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        color: var(--txt-3);
+        background: transparent;
+        border: 1px solid var(--txt-4);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    .instant-meet-btn:hover {
+        color: var(--txt-1);
+        border-color: var(--txt-3);
+    }
+    .instant-meet-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Meet popup overlay */
+    .meet-popup-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    .meet-popup {
+        position: relative;
+        background: var(--bg-2);
+        border: 1px solid var(--txt-4);
+        border-radius: 8px;
+        padding: 1.5rem;
+        min-width: 320px;
+        max-width: 90vw;
+    }
+    .meet-popup-close {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: transparent;
+        border: none;
+        color: var(--txt-3);
+        cursor: pointer;
+        padding: 0.25rem;
+    }
+    .meet-popup-close:hover {
+        color: var(--txt-1);
+    }
+    .meet-popup-content {
+        text-align: center;
+    }
+    .meet-popup-content p {
+        margin: 0 0 1rem 0;
+        color: var(--txt-2);
+    }
+    .meet-link-label {
+        font-size: 0.85rem;
+    }
+    .meet-link-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg-3);
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    .meet-link {
+        flex: 1;
+        font-size: 0.85rem;
+        word-break: break-all;
+        color: var(--txt-2);
+    }
+    .meet-link:hover {
+        color: var(--txt-1);
+    }
+    .meet-copy-btn {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem;
+        background: transparent;
+        border: 1px solid var(--txt-4);
+        border-radius: 4px;
+        color: var(--txt-3);
+        cursor: pointer;
+    }
+    .meet-copy-btn:hover {
+        color: var(--txt-1);
+        border-color: var(--txt-3);
+    }
+    .meet-reauth-btn {
+        padding: 0.5rem 1rem;
+        background: var(--txt-accent);
+        color: var(--bg-1);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+    .meet-reauth-btn:hover {
+        opacity: 0.9;
     }
 </style>

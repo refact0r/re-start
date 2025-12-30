@@ -8,6 +8,10 @@ const TOKEN_KEY = 'google_oauth_token'
 const TOKEN_EXPIRY_KEY = 'google_oauth_token_expiry'
 const USER_EMAIL_KEY = 'google_user_email'
 const USER_ID_KEY = 'google_user_id'
+const SCOPES_KEY = 'google_oauth_scopes'
+
+// Required scope for creating Meet links
+const MEET_SCOPE = 'https://www.googleapis.com/auth/calendar.events'
 
 // Backend API URL - always relative, Vite proxy handles dev routing
 const API_URL = ''
@@ -82,6 +86,7 @@ function isTokenExpiredInternal() {
 /**
  * Validate token by making a test API call to Google
  * Returns true if token is valid, false otherwise
+ * Also stores granted scopes
  */
 async function validateToken(token) {
     if (!token) return false
@@ -91,7 +96,14 @@ async function validateToken(token) {
         const response = await fetch('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + token)
 
         if (response.ok) {
-            log('Token is valid')
+            const data = await response.json()
+            // Store granted scopes
+            if (data.scope) {
+                localStorage.setItem(SCOPES_KEY, data.scope)
+                log('Token is valid, scopes:', data.scope)
+            } else {
+                log('Token is valid')
+            }
             return true
         } else {
             const data = await response.json()
@@ -168,6 +180,43 @@ export function hasStoredUserId() {
 }
 
 /**
+ * Check if a specific scope is granted
+ */
+export function hasScope(scope) {
+    const scopes = localStorage.getItem(SCOPES_KEY) || ''
+    return scopes.split(' ').includes(scope)
+}
+
+/**
+ * Check if Meet scope is granted
+ */
+export function hasMeetScope() {
+    return hasScope(MEET_SCOPE)
+}
+
+/**
+ * Fetch and update scopes from token
+ */
+export async function refreshScopes() {
+    const token = getAccessToken()
+    if (!token) return false
+
+    try {
+        const response = await fetch('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + token)
+        if (response.ok) {
+            const data = await response.json()
+            if (data.scope) {
+                localStorage.setItem(SCOPES_KEY, data.scope)
+                return true
+            }
+        }
+    } catch (error) {
+        logError('Failed to refresh scopes:', error.message)
+    }
+    return false
+}
+
+/**
  * Check if authenticated (based on authState status)
  */
 export function isSignedIn() {
@@ -206,6 +255,7 @@ function clearTokens() {
     localStorage.removeItem(TOKEN_KEY)
     localStorage.removeItem(TOKEN_EXPIRY_KEY)
     localStorage.removeItem(USER_EMAIL_KEY)
+    localStorage.removeItem(SCOPES_KEY)
 
     authState.setUnauthenticated()
 }

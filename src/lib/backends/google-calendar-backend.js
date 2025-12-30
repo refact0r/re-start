@@ -220,6 +220,77 @@ class GoogleCalendarBackend {
         localStorage.removeItem(this.dataKey)
         this.data = {}
     }
+
+    /**
+     * Create an instant Google Meet link
+     * Creates a temporary calendar event with conference data and returns the Meet link
+     */
+    async createMeetLink() {
+        if (!this.getIsSignedIn()) {
+            throw new Error('Not signed in to Google account')
+        }
+
+        // Generate a unique request ID for idempotency
+        const requestId = crypto.randomUUID ? crypto.randomUUID() :
+            'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                const r = (Math.random() * 16) | 0
+                const v = c === 'x' ? r : (r & 0x3) | 0x8
+                return v.toString(16)
+            })
+
+        // Create a minimal event with conference data
+        const now = new Date()
+        const endTime = new Date(now.getTime() + 60 * 60 * 1000) // 1 hour from now
+
+        const event = {
+            summary: 'Instant Meeting',
+            start: {
+                dateTime: now.toISOString(),
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            },
+            end: {
+                dateTime: endTime.toISOString(),
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            },
+            conferenceData: {
+                createRequest: {
+                    requestId: requestId,
+                    conferenceSolutionKey: {
+                        type: 'hangoutsMeet'
+                    }
+                }
+            }
+        }
+
+        try {
+            const response = await this.apiRequest(
+                '/calendars/primary/events?conferenceDataVersion=1',
+                {
+                    method: 'POST',
+                    body: JSON.stringify(event)
+                }
+            )
+
+            if (!response.hangoutLink) {
+                throw new Error('No Meet link returned from Google')
+            }
+
+            // Delete the temporary event (Meet link will still work)
+            try {
+                await this.apiRequest(`/calendars/primary/events/${response.id}`, {
+                    method: 'DELETE'
+                })
+            } catch (deleteError) {
+                console.warn('Failed to delete temporary event:', deleteError)
+                // Non-critical, Meet link still works
+            }
+
+            return response.hangoutLink
+        } catch (error) {
+            console.error('Failed to create Meet link:', error)
+            throw error
+        }
+    }
 }
 
 export default GoogleCalendarBackend
