@@ -4,11 +4,11 @@
     import { themes } from './lib/themes.js'
     import { getBackground, loadCachedBackground, forceRefreshBackground } from './lib/unsplash-api.js'
     import { handleAuthCallback, tryRestoreSession, hasStoredUserId, authState } from './lib/backends/google-auth.js'
+    import Agenda from './lib/components/Agenda.svelte'
     import Calendar from './lib/components/Calendar.svelte'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
     import Settings from './lib/components/Settings.svelte'
-    import Stats from './lib/components/Stats.svelte'
     import Tasks from './lib/components/Tasks.svelte'
     import Weather from './lib/components/Weather.svelte'
     import { saveSettings } from './lib/settings-store.svelte.js'
@@ -178,7 +178,7 @@
     <div class="container">
         <div class="top">
             <Clock />
-            <Stats />
+            <Calendar />
         </div>
         <div class="widgets">
             {#if settings.showWeather !== false}
@@ -188,7 +188,7 @@
                 <Tasks />
             {/if}
             {#if hasStoredUserId() && settings.showCalendar !== false}
-                <Calendar />
+                <Agenda />
             {/if}
         </div>
         {#if settings.showLinks !== false}
