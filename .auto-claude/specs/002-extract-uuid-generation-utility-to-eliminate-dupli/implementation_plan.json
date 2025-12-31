@@ -49,7 +49,7 @@
           "id": "2.1",
           "title": "Update google-auth.ts to use UUID utility",
           "description": "Remove local generateUUID() function and import from uuid.ts instead",
-          "status": "pending",
+          "status": "completed",
           "files": ["src/lib/backends/google-auth.ts"],
           "acceptance_criteria": [
             "Local generateUUID function is removed",
@@ -61,7 +61,7 @@
           "id": "2.2",
           "title": "Update google-calendar-backend.ts to use UUID utility",
           "description": "Replace inline UUID generation with import from uuid.ts",
-          "status": "pending",
+          "status": "completed",
           "files": ["src/lib/backends/google-calendar-backend.ts"],
           "acceptance_criteria": [
             "Inline UUID generation code is removed",
@@ -73,7 +73,7 @@
           "id": "2.3",
           "title": "Update localstorage-backend.ts to use UUID utility",
           "description": "Replace direct crypto.randomUUID() call with centralized utility for consistency",
-          "status": "pending",
+          "status": "completed",
           "files": ["src/lib/backends/localstorage-backend.ts"],
           "acceptance_criteria": [
             "Direct crypto.randomUUID() call is replaced",
@@ -85,7 +85,7 @@
           "id": "2.4",
           "title": "Update todoist-backend.ts to use UUID utility",
           "description": "Replace all 5 direct crypto.randomUUID() calls with centralized utility",
-          "status": "pending",
+          "status": "completed",
           "files": ["src/lib/backends/todoist-backend.ts"],
           "acceptance_criteria": [
             "All 5 crypto.randomUUID() calls are replaced",

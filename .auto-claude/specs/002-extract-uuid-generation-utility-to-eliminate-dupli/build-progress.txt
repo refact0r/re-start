@@ -44,3 +44,31 @@ Extracting duplicated UUID generation logic into a centralized utility module.
   - Tests verify format details (length, hyphen positions, version, variant bits)
   - Tests verify fallback implementation when crypto.randomUUID is unavailable
   - All 8 tests passing
+- [2025-12-31] ✅ Subtask 2.1: Updated google-auth.ts to use UUID utility
+  - Removed local generateUUID() function (lines 109-115)
+  - Added import statement: import { generateUUID } from '../uuid'
+  - getUserId() function continues to work correctly using imported function
+  - All tests passing (38 tests passed)
+- [2025-12-31] ✅ Subtask 2.2: Updated google-calendar-backend.ts to use UUID utility
+  - Removed inline UUID generation code with fallback (lines 288-293)
+  - Added import statement: import { generateUUID } from '../uuid'
+  - Replaced 7-line inline implementation with single generateUUID() call
+  - createMeetLink() function continues to work correctly using imported function
+  - All tests passing (38 tests passed)
+- [2025-12-31] ✅ Subtask 2.3: Updated localstorage-backend.ts to use UUID utility
+  - Replaced direct crypto.randomUUID() call on line 154
+  - Added import statement: import { generateUUID } from '../uuid'
+  - Replaced crypto.randomUUID() with generateUUID() in addTask() method
+  - addTask() function continues to work correctly using imported function
+  - All tests passing (38 tests passed)
+- [2025-12-31] ✅ Subtask 2.4: Updated todoist-backend.ts to use UUID utility
+  - Added import statement: import { generateUUID } from '../uuid'
+  - Replaced crypto.randomUUID() in completeTask() method (line 240)
+  - Replaced crypto.randomUUID() in uncompleteTask() method (line 257)
+  - Replaced crypto.randomUUID() in deleteTask() method (line 274)
+  - Replaced crypto.randomUUID() in addTask() method for temp_id (line 288)
+  - Replaced crypto.randomUUID() in addTask() method for uuid (line 298)
+  - All 5 crypto.randomUUID() calls successfully replaced
+  - All command methods continue to work correctly using imported function
+  - All tests passing (38 tests passed)
+  - Verified no direct crypto.randomUUID() calls remain in any backend files
