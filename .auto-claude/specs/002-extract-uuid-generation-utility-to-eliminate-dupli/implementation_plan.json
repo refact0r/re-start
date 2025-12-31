@@ -2,9 +2,9 @@
   "feature": "Extract UUID generation utility to eliminate duplication",
   "description": "UUID generation logic is duplicated in two places: `google-auth.ts` has a `generateUUID()` function (lines 109-114), and `google-calendar-backend.ts` has inline UUID generation with a fallback pattern (lines 288-293). The calendar backend even implements a fallback for `crypto.randomUUID` that the auth module's version doesn't have.",
   "created_at": "2025-12-31T16:16:02.352Z",
-  "updated_at": "2025-12-31T16:30:00.000Z",
-  "status": "in_progress",
-  "planStatus": "complete",
+  "updated_at": "2025-12-31T21:39:52.472Z",
+  "status": "done",
+  "planStatus": "completed",
   "phases": [
     {
       "id": "phase-1",
@@ -17,7 +17,9 @@
           "title": "Create src/lib/uuid.ts utility module",
           "description": "Create new utility file with generateUUID() function that uses crypto.randomUUID with fallback to manual implementation for older environments",
           "status": "completed",
-          "files": ["src/lib/uuid.ts"],
+          "files": [
+            "src/lib/uuid.ts"
+          ],
           "acceptance_criteria": [
             "Function uses crypto.randomUUID when available",
             "Falls back to manual UUID v4 generation when crypto.randomUUID is unavailable",
@@ -30,7 +32,9 @@
           "title": "Add unit tests for UUID utility",
           "description": "Create test file to verify UUID generation works correctly in both paths",
           "status": "completed",
-          "files": ["src/lib/tests/uuid.test.ts"],
+          "files": [
+            "src/lib/tests/uuid.test.ts"
+          ],
           "acceptance_criteria": [
             "Tests verify output matches UUID v4 format",
             "Tests verify uniqueness of generated UUIDs",
@@ -50,7 +54,9 @@
           "title": "Update google-auth.ts to use UUID utility",
           "description": "Remove local generateUUID() function and import from uuid.ts instead",
           "status": "completed",
-          "files": ["src/lib/backends/google-auth.ts"],
+          "files": [
+            "src/lib/backends/google-auth.ts"
+          ],
           "acceptance_criteria": [
             "Local generateUUID function is removed",
             "Imports generateUUID from '../uuid'",
@@ -62,7 +68,9 @@
           "title": "Update google-calendar-backend.ts to use UUID utility",
           "description": "Replace inline UUID generation with import from uuid.ts",
           "status": "completed",
-          "files": ["src/lib/backends/google-calendar-backend.ts"],
+          "files": [
+            "src/lib/backends/google-calendar-backend.ts"
+          ],
           "acceptance_criteria": [
             "Inline UUID generation code is removed",
             "Imports generateUUID from '../uuid'",
@@ -74,7 +82,9 @@
           "title": "Update localstorage-backend.ts to use UUID utility",
           "description": "Replace direct crypto.randomUUID() call with centralized utility for consistency",
           "status": "completed",
-          "files": ["src/lib/backends/localstorage-backend.ts"],
+          "files": [
+            "src/lib/backends/localstorage-backend.ts"
+          ],
           "acceptance_criteria": [
             "Direct crypto.randomUUID() call is replaced",
             "Imports generateUUID from '../uuid'",
@@ -86,7 +96,9 @@
           "title": "Update todoist-backend.ts to use UUID utility",
           "description": "Replace all 5 direct crypto.randomUUID() calls with centralized utility",
           "status": "completed",
-          "files": ["src/lib/backends/todoist-backend.ts"],
+          "files": [
+            "src/lib/backends/todoist-backend.ts"
+          ],
           "acceptance_criteria": [
             "All 5 crypto.randomUUID() calls are replaced",
             "Imports generateUUID from '../uuid'",
@@ -129,7 +141,13 @@
     }
   ],
   "workflow_type": "development",
-  "services_involved": ["src/lib/uuid.ts", "src/lib/backends/google-auth.ts", "src/lib/backends/google-calendar-backend.ts", "src/lib/backends/localstorage-backend.ts", "src/lib/backends/todoist-backend.ts"],
+  "services_involved": [
+    "src/lib/uuid.ts",
+    "src/lib/backends/google-auth.ts",
+    "src/lib/backends/google-calendar-backend.ts",
+    "src/lib/backends/localstorage-backend.ts",
+    "src/lib/backends/todoist-backend.ts"
+  ],
   "final_acceptance": [
     "Single source of truth for UUID generation in src/lib/uuid.ts",
     "All backends use the centralized utility",
