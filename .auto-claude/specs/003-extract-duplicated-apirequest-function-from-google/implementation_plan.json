@@ -1,0 +1,105 @@
+{
+  "title": "Extract duplicated apiRequest function from Google backends",
+  "description": "Extract the duplicated apiRequest function from google-tasks-backend.ts and google-calendar-backend.ts into a shared utility in google-auth.ts",
+  "phases": [
+    {
+      "id": "phase-1",
+      "name": "Create shared utility function",
+      "description": "Add the apiRequest function to google-auth.ts as an exported utility",
+      "subtasks": [
+        {
+          "id": "1.1",
+          "title": "Add apiRequest function to google-auth.ts",
+          "description": "Create a generic apiRequest<T> function that handles authenticated Google API requests. The function should:\n- Accept url (full URL string), options (RequestInit)\n- Call ensureValidToken() to get access token\n- Make fetch request with Bearer authorization header\n- Handle 401 errors with descriptive message\n- Handle other HTTP errors with status info\n- Return parsed JSON response typed as T",
+          "status": "completed",
+          "dependencies": [],
+          "estimated_effort": "small",
+          "files_to_modify": ["src/lib/backends/google-auth.ts"],
+          "acceptance_criteria": [
+            "Function is exported from google-auth.ts",
+            "Function signature: apiRequest<T>(url: string, options?: RequestInit): Promise<T>",
+            "Uses ensureValidToken() for authentication",
+            "Sets Authorization: Bearer and Content-Type headers",
+            "Throws descriptive error on 401",
+            "Throws descriptive error on other HTTP errors"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phase-2",
+      "name": "Update backends to use shared function",
+      "description": "Replace the private apiRequest methods in both backend classes with calls to the shared function",
+      "subtasks": [
+        {
+          "id": "2.1",
+          "title": "Update google-tasks-backend.ts to use shared apiRequest",
+          "description": "Replace the private apiRequest method with a wrapper that calls the shared function. The wrapper constructs the full URL from baseUrl + endpoint and delegates to googleAuth.apiRequest.",
+          "status": "pending",
+          "dependencies": ["1.1"],
+          "estimated_effort": "small",
+          "files_to_modify": ["src/lib/backends/google-tasks-backend.ts"],
+          "acceptance_criteria": [
+            "Private apiRequest method is simplified to construct URL and call googleAuth.apiRequest",
+            "All existing API calls continue to work",
+            "No changes to public API"
+          ]
+        },
+        {
+          "id": "2.2",
+          "title": "Update google-calendar-backend.ts to use shared apiRequest",
+          "description": "Replace the private apiRequest method with a wrapper that calls the shared function. The wrapper constructs the full URL from baseUrl + endpoint and delegates to googleAuth.apiRequest.",
+          "status": "pending",
+          "dependencies": ["1.1"],
+          "estimated_effort": "small",
+          "files_to_modify": ["src/lib/backends/google-calendar-backend.ts"],
+          "acceptance_criteria": [
+            "Private apiRequest method is simplified to construct URL and call googleAuth.apiRequest",
+            "All existing API calls continue to work",
+            "No changes to public API"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phase-3",
+      "name": "Verification",
+      "description": "Verify the refactoring works correctly",
+      "subtasks": [
+        {
+          "id": "3.1",
+          "title": "Run TypeScript compilation check",
+          "description": "Ensure TypeScript compiles without errors after the refactoring",
+          "status": "pending",
+          "dependencies": ["2.1", "2.2"],
+          "estimated_effort": "small",
+          "files_to_modify": [],
+          "acceptance_criteria": [
+            "npm run build:firefox completes without TypeScript errors",
+            "No type errors in modified files"
+          ]
+        },
+        {
+          "id": "3.2",
+          "title": "Run tests",
+          "description": "Run existing tests to ensure no regressions",
+          "status": "pending",
+          "dependencies": ["3.1"],
+          "estimated_effort": "small",
+          "files_to_modify": [],
+          "acceptance_criteria": [
+            "npm test passes all existing tests"
+          ]
+        }
+      ]
+    }
+  ],
+  "total_subtasks": 5,
+  "files_affected": [
+    "src/lib/backends/google-auth.ts",
+    "src/lib/backends/google-tasks-backend.ts",
+    "src/lib/backends/google-calendar-backend.ts"
+  ],
+  "risk_assessment": "Low - This is a straightforward extraction of identical code with no behavioral changes",
+  "notes": "The apiRequest functions in both backends are character-for-character identical except they use different baseUrl values. The refactoring preserves existing behavior while centralizing the authentication and error handling logic."
+}

@@ -1,0 +1,37 @@
+# Build Progress: Extract duplicated apiRequest function from Google backends
+
+## Status: In Progress
+
+## Implementation Plan Created
+- Phase 1: Create shared utility function in google-auth.ts ✓
+- Phase 2: Update both backends to use shared function
+- Phase 3: Verification (TypeScript build + tests)
+
+## Subtasks
+- [x] 1.1: Add apiRequest function to google-auth.ts - COMPLETED
+- [ ] 2.1: Update google-tasks-backend.ts to use shared apiRequest
+- [ ] 2.2: Update google-calendar-backend.ts to use shared apiRequest
+- [ ] 3.1: Run TypeScript compilation check
+- [ ] 3.2: Run tests
+
+## Recent Changes
+### 2024-12-31 - Subtask 1.1 Completed
+- Created generic `apiRequest<T>()` function in google-auth.ts
+- Function accepts url (string) and options (RequestInit)
+- Calls ensureValidToken() to get access token
+- Sets Authorization: Bearer header automatically
+- Handles 401 errors with descriptive message "Unauthorized: Access token is invalid or expired"
+- Handles other HTTP errors with "HTTP {status}: {statusText}" format
+- Returns parsed JSON typed as T
+- Placed after ensureValidToken() function (line 382-402)
+- Commit: 67884f5
+
+## Notes
+The two apiRequest implementations are identical - they both:
+1. Get access token via ensureValidToken()
+2. Make fetch request with Bearer auth header
+3. Handle 401 with "Authentication expired" error
+4. Handle other HTTP errors with status info
+5. Return parsed JSON
+
+Only difference: each uses its own baseUrl property.
