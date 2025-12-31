@@ -372,6 +372,35 @@ export async function ensureValidToken(): Promise<string> {
     return token
 }
 
+/**
+ * Generic API request helper for Google APIs
+ * Handles authentication, error handling, and response parsing
+ * @param url - Full URL to request
+ * @param options - Fetch options (method, headers, body, etc.)
+ * @returns Parsed JSON response typed as T
+ */
+export async function apiRequest<T>(url: string, options: RequestInit = {}): Promise<T> {
+    const token = await ensureValidToken()
+
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    if (response.status === 401) {
+        throw new Error('Unauthorized: Access token is invalid or expired')
+    }
+
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
+
+    return await response.json() as T
+}
+
 interface AuthUrlResponse {
     url: string
 }

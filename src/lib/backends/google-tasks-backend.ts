@@ -101,30 +101,17 @@ class GoogleTasksBackend extends TaskBackend {
 
     /**
      * Make an authenticated API request with auto-refresh
+     * Delegates to shared googleAuth.apiRequest
      */
     private async apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-        const accessToken = await googleAuth.ensureValidToken()
-
         const url = `${this.baseUrl}${endpoint}`
-        const response = await fetch(url, {
+        return googleAuth.apiRequest<T>(url, {
             ...options,
             headers: {
-                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
                 ...options.headers,
             },
         })
-
-        if (!response.ok) {
-            if (response.status === 401) {
-                throw new Error('Authentication expired. Please sign in again.')
-            }
-            throw new Error(
-                `API request failed: ${response.status} ${response.statusText}`
-            )
-        }
-
-        return response.json() as Promise<T>
     }
 
     /**
