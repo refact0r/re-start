@@ -1,5 +1,6 @@
 import TaskBackend from './task-backend'
 import type { TaskBackendConfig, EnrichedTask, TaskDue } from '../types'
+import { generateUUID } from '../uuid'
 
 interface TodoistItem {
     id: string
@@ -236,7 +237,7 @@ class TodoistBackend extends TaskBackend {
         const commands: TodoistCommand[] = [
             {
                 type: 'item_close',
-                uuid: crypto.randomUUID(),
+                uuid: generateUUID(),
                 args: {
                     id: taskId,
                 },
@@ -253,7 +254,7 @@ class TodoistBackend extends TaskBackend {
         const commands: TodoistCommand[] = [
             {
                 type: 'item_uncomplete',
-                uuid: crypto.randomUUID(),
+                uuid: generateUUID(),
                 args: {
                     id: taskId,
                 },
@@ -270,7 +271,7 @@ class TodoistBackend extends TaskBackend {
         const commands: TodoistCommand[] = [
             {
                 type: 'item_delete',
-                uuid: crypto.randomUUID(),
+                uuid: generateUUID(),
                 args: {
                     id: taskId,
                 },
@@ -284,7 +285,7 @@ class TodoistBackend extends TaskBackend {
      * Add a new task
      */
     async addTask(content: string, due: string | null): Promise<void> {
-        const tempId = crypto.randomUUID()
+        const tempId = generateUUID()
         const args: Record<string, unknown> = { content }
         if (due) {
             args.due = { date: due }
@@ -294,7 +295,7 @@ class TodoistBackend extends TaskBackend {
             {
                 type: 'item_add',
                 temp_id: tempId,
-                uuid: crypto.randomUUID(),
+                uuid: generateUUID(),
                 args,
             },
         ]
