@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 reference
+
+# Auto Claude data directory
+.auto-claude
+.worktrees

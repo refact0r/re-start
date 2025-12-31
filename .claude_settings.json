@@ -1,0 +1,34 @@
+{
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Glob(./**)",
+      "Grep(./**)",
+      "Read(/Users/benjaminbini/dev/projects/re-start/**)",
+      "Write(/Users/benjaminbini/dev/projects/re-start/**)",
+      "Edit(/Users/benjaminbini/dev/projects/re-start/**)",
+      "Glob(/Users/benjaminbini/dev/projects/re-start/**)",
+      "Grep(/Users/benjaminbini/dev/projects/re-start/**)",
+      "Read(/Users/benjaminbini/dev/projects/re-start/.auto-claude/roadmap/**)",
+      "Write(/Users/benjaminbini/dev/projects/re-start/.auto-claude/roadmap/**)",
+      "Edit(/Users/benjaminbini/dev/projects/re-start/.auto-claude/roadmap/**)",
+      "Bash(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "mcp__context7__resolve-library-id(*)",
+      "mcp__context7__get-library-docs(*)",
+      "mcp__graphiti-memory__search_nodes(*)",
+      "mcp__graphiti-memory__search_facts(*)",
+      "mcp__graphiti-memory__add_episode(*)",
+      "mcp__graphiti-memory__get_episodes(*)",
+      "mcp__graphiti-memory__get_entity_edge(*)"
+    ]
+  }
+}
