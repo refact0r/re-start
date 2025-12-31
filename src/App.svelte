@@ -4,6 +4,8 @@
     import { themes } from './lib/themes'
     import { getBackground, loadCachedBackground, forceRefreshBackground } from './lib/unsplash-api'
     import { handleAuthCallback, tryRestoreSession, hasStoredUserId, authState } from './lib/backends/google-auth'
+    import { checkBackendHealth } from './lib/backend-status.svelte'
+    import BackendErrorBanner from './lib/components/BackendErrorBanner.svelte'
     import Agenda from './lib/components/Agenda.svelte'
     import Calendar from './lib/components/Calendar.svelte'
     import Clock from './lib/components/Clock.svelte'
@@ -78,6 +80,9 @@
         console.error('[App] Auth error:', authResult.error)
     }
 
+    // Check backend health on load
+    checkBackendHealth()
+
     // Try to restore session if we have a stored user ID
     if (hasStoredUserId() && !authResult) {
         console.log('[App] Attempting session restore...')
@@ -140,6 +145,8 @@
         background = await forceRefreshBackground(settings.unsplashApiKey)
     }
 </script>
+
+<BackendErrorBanner />
 
 <main>
     {#if settings.showBackground && background}
