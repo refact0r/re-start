@@ -3,7 +3,8 @@
     import { settings } from './lib/settings-store.svelte'
     import { themes } from './lib/themes'
     import { getBackground, loadCachedBackground, forceRefreshBackground } from './lib/unsplash-api'
-    import { handleAuthCallback, tryRestoreSession, hasStoredUserId, authState } from './lib/backends/google-auth'
+    import { handleAuthCallback, tryRestoreSession, hasStoredUserId } from './lib/backends/google-auth'
+    import { authStore } from './lib/stores/auth-store'
     import { checkBackendHealth } from './lib/backend-status.svelte'
     import BackendErrorBanner from './lib/components/BackendErrorBanner.svelte'
     import Agenda from './lib/components/Agenda.svelte'
@@ -90,7 +91,8 @@
     }
 
     // Sync settings with auth state
-    authState.subscribe((state) => {
+    $effect(() => {
+        const state = $authStore
         console.log('[App] Auth state:', state.status)
         settings.googleTasksSignedIn = state.status === 'authenticated'
         saveSettings(settings)

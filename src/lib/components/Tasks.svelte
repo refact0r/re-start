@@ -2,7 +2,8 @@
     import { onMount, onDestroy, untrack } from 'svelte'
     import { createTaskBackend } from '../backends/index'
     import { settings } from '../settings-store.svelte'
-    import { authState } from '../backends/google-auth'
+    import { authStore } from '../stores/auth-store'
+    import type { AuthStatus } from '../stores/auth-store'
     import {
         parseSmartDate,
         stripDateMatch,
@@ -14,8 +15,6 @@
     import AddTask from './AddTask.svelte'
     import type TaskBackend from '../backends/task-backend'
     import type { EnrichedTask, ParsedDate, TaskBackendType } from '../types'
-
-    type AuthStatus = 'unknown' | 'authenticated' | 'unauthenticated'
 
     let api: TaskBackend | null = null
     let tasks = $state<EnrichedTask[]>([])
@@ -29,8 +28,6 @@
     let parsedDate = $state<ParsedDate | null>(null)
     let togglingTasks = $state(new Set<string>())
     let syncInProgress = false
-    let googleAuthStatus = $state<AuthStatus>(authState.status as AuthStatus)
-    let unsubscribeAuth: (() => void) | null = null
 
     function handleVisibilityChange() {
         if (document.visibilityState === 'visible' && api) {
@@ -41,7 +38,7 @@
     $effect(() => {
         const backend = settings.taskBackend
         const token = settings.todoistApiToken
-        const authStatus = googleAuthStatus
+        const authStatus = $authStore.status
 
         console.log('[Tasks] Effect triggered:', { backend, authStatus })
 
@@ -245,17 +242,11 @@
     }
 
     onMount(() => {
-        unsubscribeAuth = authState.subscribe((state) => {
-            console.log('[Tasks] Auth state update:', state.status)
-            googleAuthStatus = state.status
-        })
-
-        initializeAPI(settings.taskBackend, settings.todoistApiToken, googleAuthStatus)
+        initializeAPI(settings.taskBackend, settings.todoistApiToken, $authStore.status)
         document.addEventListener('visibilitychange', handleVisibilityChange)
     })
 
     onDestroy(() => {
-        if (unsubscribeAuth) unsubscribeAuth()
         document.removeEventListener('visibilitychange', handleVisibilityChange)
     })
 </script>

@@ -2,15 +2,15 @@
     import { onMount, onDestroy } from 'svelte'
     import { createCalendarBackend } from '../backends/index'
     import { settings } from '../settings-store.svelte'
-    import { authState, hasMeetScope, signIn, refreshScopes } from '../backends/google-auth'
+    import { authStore } from '../stores/auth-store'
+    import type { AuthStatus } from '../stores/auth-store'
+    import { hasMeetScope, signIn, refreshScopes } from '../backends/google-auth'
     import { Panel, Text, Row, Link, Modal, ScrollList, Button } from './ui'
     import { RefreshCw } from 'lucide-svelte'
     import EventItem from './EventItem.svelte'
     import CopyableLink from './CopyableLink.svelte'
     import type GoogleCalendarBackend from '../backends/google-calendar-backend'
     import type { CalendarEvent } from '../types'
-
-    type AuthStatus = 'unknown' | 'authenticated' | 'unauthenticated'
     type VideoProvider = 'meet' | 'teams' | 'zoom' | 'other' | null
 
     function getVideoProvider(url: string): VideoProvider {
@@ -27,8 +27,6 @@
     let error = $state('')
     let eventCount = $derived(events.length)
     let syncInProgress = false
-    let googleAuthStatus = $state<AuthStatus>(authState.status as AuthStatus)
-    let unsubscribeAuth: (() => void) | null = null
 
     // Meet link popup state
     let showMeetPopup = $state(false)
@@ -85,7 +83,7 @@
     }
 
     $effect(() => {
-        const authStatus = googleAuthStatus
+        const authStatus = $authStore.status
         console.log('[Calendar] Effect triggered:', { authStatus })
         initializeAPI(authStatus)
     })
@@ -167,15 +165,10 @@
     }
 
     onMount(() => {
-        unsubscribeAuth = authState.subscribe((state) => {
-            console.log('[Calendar] Auth state update:', state.status)
-            googleAuthStatus = state.status
-        })
         document.addEventListener('visibilitychange', handleVisibilityChange)
     })
 
     onDestroy(() => {
-        if (unsubscribeAuth) unsubscribeAuth()
         document.removeEventListener('visibilitychange', handleVisibilityChange)
     })
 </script>

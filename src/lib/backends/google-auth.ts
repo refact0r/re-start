@@ -3,6 +3,9 @@
  * Handles authentication via backend OAuth flow with refresh tokens
  */
 
+import { authStore } from '../stores/auth-store'
+import { get } from 'svelte/store'
+
 // Storage keys
 const TOKEN_KEY = 'google_oauth_token'
 const TOKEN_EXPIRY_KEY = 'google_oauth_token_expiry'
@@ -34,55 +37,24 @@ function logError(...args: unknown[]): void {
     console.error(LOG_PREFIX, ...args)
 }
 
-// Auth state types
-type AuthStatus = 'unknown' | 'authenticated' | 'unauthenticated'
+// Re-export authStore for backwards compatibility
+export { authStore }
 
-interface AuthStateData {
-    status: AuthStatus
-    email: string | null
+// Helper functions to update auth state
+function setAuthenticated(email: string | null): void {
+    log('Auth state: authenticated', { email })
+    authStore.setAuthenticated(email)
 }
 
-type AuthStateListener = (state: AuthStateData) => void
-
-// Auth status: 'unknown' | 'authenticated' | 'unauthenticated'
-// - unknown: initial state, haven't validated token yet
-// - authenticated: token validated successfully
-// - unauthenticated: no token or token invalid
-let authStateListeners: AuthStateListener[] = []
-
-export const authState = {
-    status: 'unknown' as AuthStatus,
-    email: null as string | null,
-
-    subscribe(listener: AuthStateListener): () => void {
-        authStateListeners.push(listener)
-        listener({ status: this.status, email: this.email })
-        return () => {
-            authStateListeners = authStateListeners.filter(l => l !== listener)
-        }
-    },
-
-    setAuthenticated(email: string | null): void {
-        if (this.status === 'authenticated' && this.email === email) return
-        this.status = 'authenticated'
-        this.email = email
-        log('Auth state: authenticated', { email })
-        authStateListeners.forEach(l => l({ status: this.status, email: this.email }))
-    },
-
-    setUnauthenticated(): void {
-        if (this.status === 'unauthenticated') return
-        this.status = 'unauthenticated'
-        this.email = null
-        log('Auth state: unauthenticated')
-        authStateListeners.forEach(l => l({ status: this.status, email: this.email }))
-    }
+function setUnauthenticated(): void {
+    log('Auth state: unauthenticated')
+    authStore.setUnauthenticated()
 }
 
 // Initialize - status stays 'unknown' until tryRestoreSession runs
 function initAuthState(): void {
     const email = localStorage.getItem(USER_EMAIL_KEY)
-    authState.email = email
+    authStore.setEmail(email)
     log('Initial auth state: unknown', { email })
 }
 
@@ -232,10 +204,10 @@ export async function refreshScopes(): Promise<boolean> {
 }
 
 /**
- * Check if authenticated (based on authState status)
+ * Check if authenticated (based on authStore status)
  */
 export function isSignedIn(): boolean {
-    return authState.status === 'authenticated'
+    return get(authStore).status === 'authenticated'
 }
 
 /**
@@ -259,7 +231,7 @@ function storeTokens(accessToken: string, expiresIn: string | null, email: strin
         expiryTime: new Date(expiryTime).toISOString()
     })
 
-    authState.setAuthenticated(email)
+    setAuthenticated(email)
 }
 
 /**
@@ -272,7 +244,7 @@ function clearTokens(): void {
     localStorage.removeItem(USER_EMAIL_KEY)
     localStorage.removeItem(SCOPES_KEY)
 
-    authState.setUnauthenticated()
+    setUnauthenticated()
 }
 
 interface AuthCallbackResult {
@@ -455,7 +427,7 @@ export async function tryRestoreSession(): Promise<boolean> {
     const userId = localStorage.getItem(USER_ID_KEY)
     if (!userId) {
         log('No stored user ID')
-        authState.setUnauthenticated()
+        setUnauthenticated()
         return false
     }
 
@@ -472,13 +444,13 @@ export async function tryRestoreSession(): Promise<boolean> {
             await refreshToken()
         } catch (error) {
             logError('Session restore failed:', (error as Error).message)
-            authState.setUnauthenticated()
+            setUnauthenticated()
             return false
         }
     }
 
     log('Session restored successfully')
-    authState.setAuthenticated(localStorage.getItem(USER_EMAIL_KEY))
+    setAuthenticated(localStorage.getItem(USER_EMAIL_KEY))
     return true
 }
 
