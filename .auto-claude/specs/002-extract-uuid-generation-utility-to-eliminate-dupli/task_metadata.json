@@ -1,9 +1,0 @@
-{
-  "sourceType": "ideation",
-  "ideationType": "code_quality",
-  "ideaId": "cq-004",
-  "rationale": "Duplicated utility code should be centralized. The fallback pattern in calendar backend is more robust and should be the canonical implementation. Having one tested utility prevents subtle bugs from divergent implementations.",
-  "category": "refactoring",
-  "codeQualitySeverity": "suggestion",
-  "priority": "medium"
-}
