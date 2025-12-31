@@ -1,4 +1,5 @@
 import * as googleAuth from './google-auth'
+import { generateUUID } from '../uuid'
 import type { CalendarBackendConfig, CalendarEvent, GoogleCalendar } from '../types'
 
 interface GoogleCalendarItem {
@@ -272,12 +273,7 @@ class GoogleCalendarBackend {
         }
 
         // Generate a unique request ID for idempotency
-        const requestId = crypto.randomUUID ? crypto.randomUUID() :
-            'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-                const r = (Math.random() * 16) | 0
-                const v = c === 'x' ? r : (r & 0x3) | 0x8
-                return v.toString(16)
-            })
+        const requestId = generateUUID()
 
         // Create a minimal event with conference data
         const now = new Date()
