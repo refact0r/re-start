@@ -1,0 +1,46 @@
+# Build Progress: Extract UUID generation utility
+
+## Status: Planning Complete
+
+## Summary
+Extracting duplicated UUID generation logic into a centralized utility module.
+
+## Current State
+- Implementation plan created with 3 phases and 8 subtasks
+- Ready to begin implementation
+
+## Phases Overview
+1. **Create UUID Utility Module** (2 subtasks)
+   - Create src/lib/uuid.ts with crypto.randomUUID + fallback
+   - Add unit tests for UUID utility
+
+2. **Replace Duplicate Implementations** (4 subtasks)
+   - Update google-auth.ts (remove local generateUUID)
+   - Update google-calendar-backend.ts (remove inline generation)
+   - Update localstorage-backend.ts (replace crypto.randomUUID)
+   - Update todoist-backend.ts (replace 5 crypto.randomUUID calls)
+
+3. **Verification** (2 subtasks)
+   - Run all tests
+   - Verify no duplicates remain
+
+## Files to Modify
+- NEW: src/lib/uuid.ts
+- NEW: src/lib/tests/uuid.test.ts
+- MODIFY: src/lib/backends/google-auth.ts
+- MODIFY: src/lib/backends/google-calendar-backend.ts
+- MODIFY: src/lib/backends/localstorage-backend.ts
+- MODIFY: src/lib/backends/todoist-backend.ts
+
+## Progress Log
+- [2025-12-31] Implementation plan created
+- [2025-12-31] ✅ Subtask 1.1: Created src/lib/uuid.ts with generateUUID() function
+  - Implemented crypto.randomUUID with fallback to Math.random()
+  - Proper TypeScript typing and JSDoc comments
+  - Follows existing code patterns from other utilities
+- [2025-12-31] ✅ Subtask 1.2: Created test file for UUID utility
+  - Tests verify UUID v4 format with regex validation
+  - Tests verify uniqueness across 1000 generations
+  - Tests verify format details (length, hyphen positions, version, variant bits)
+  - Tests verify fallback implementation when crypto.randomUUID is unavailable
+  - All 8 tests passing
