@@ -328,6 +328,23 @@
             {/if}
 
             <div class="group">
+                <div class="setting-label">weather forecast</div>
+                <div class="radio-group">
+                    <RadioButton
+                        bind:group={settings.forecastMode}
+                        value="hourly"
+                    >
+                        hourly
+                    </RadioButton>
+                    <RadioButton
+                        bind:group={settings.forecastMode}
+                        value="daily"
+                    >
+                        daily
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
                 <div class="setting-label">weather location</div>
                 <div class="radio-group">
                     <RadioButton

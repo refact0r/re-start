@@ -10,6 +10,7 @@
     let loading = $state(false)
     let error = $state(null)
     let initialLoad = $state(true)
+    let prevForecastMode = $state(settings.forecastMode)
 
     const weatherAPI = new WeatherAPI()
 
@@ -26,10 +27,18 @@
         const tempUnit = settings.tempUnit
         const speedUnit = settings.speedUnit
         const timeFormat = settings.timeFormat
+        const forecastMode = settings.forecastMode
 
         if (untrack(() => initialLoad)) {
             initialLoad = false
+            prevForecastMode = forecastMode
             return
+        }
+
+        // Clear cache if forecast mode changed
+        if (untrack(() => prevForecastMode) !== forecastMode) {
+            prevForecastMode = forecastMode
+            weatherAPI.clearCache()
         }
 
         refreshWeather()
@@ -88,7 +97,8 @@
         const cached = weatherAPI.getCachedWeather(
             settings.timeFormat,
             lat,
-            lon
+            lon,
+            settings.forecastMode
         )
         if (cached.data) {
             current = cached.data.current
@@ -109,7 +119,8 @@
                 lon,
                 settings.tempUnit,
                 settings.speedUnit,
-                settings.timeFormat
+                settings.timeFormat,
+                settings.forecastMode
             )
 
             current = data.current
@@ -186,7 +197,13 @@
                 </div>
                 <div class="col">
                     {#each forecast as forecast}
-                        <div class="forecast-temp">{forecast.temperature}°</div>
+                        {#if settings.forecastMode === 'daily'}
+                            <div class="forecast-temp">
+                                {forecast.temperatureMax}° <span class="separator">/</span> {forecast.temperatureMin}°
+                            </div>
+                        {:else}
+                            <div class="forecast-temp">{forecast.temperature}°</div>
+                        {/if}
                     {/each}
                 </div>
                 <div class="col">
@@ -232,6 +249,9 @@
     .forecast-temp {
         text-align: end;
         color: var(--txt-1);
+    }
+    .forecast-temp .separator {
+        color: var(--txt-3);
     }
     .forecast-weather {
         color: var(--txt-3);

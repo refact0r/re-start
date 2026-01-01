@@ -6,7 +6,7 @@ import descriptions from '../assets/descriptions.json'
 class WeatherAPI {
     constructor() {
         this.baseUrl = 'https://api.open-meteo.com/v1/forecast'
-        this.cacheKey = `weather_data`
+        this.cacheKey = 'weather_data'
         this.cacheExpiry = 15 * 60 * 1000
     }
 
@@ -18,43 +18,60 @@ class WeatherAPI {
         longitude,
         tempUnit,
         speedUnit,
-        timeFormat = '12hr'
+        timeFormat = '12hr',
+        forecastMode = 'hourly'
     ) {
         const rawData = await this._fetchWeatherData(
             latitude,
             longitude,
             tempUnit,
-            speedUnit
+            speedUnit,
+            forecastMode
         )
         this._cacheWeather(rawData, latitude, longitude)
 
+        const forecast =
+            forecastMode === 'daily'
+                ? this._processDailyForecast(rawData.daily, timeFormat)
+                : this._processHourlyForecast(
+                      rawData.hourly,
+                      rawData.current.time,
+                      timeFormat
+                  )
+
         return {
             current: this._processCurrentWeather(rawData.current),
-            forecast: this._processHourlyForecast(
-                rawData.hourly,
-                rawData.current.time,
-                timeFormat
-            ),
+            forecast,
         }
     }
 
     /**
      * Get cached weather data with staleness info
      */
-    getCachedWeather(timeFormat = '12hr', latitude = null, longitude = null) {
+    getCachedWeather(
+        timeFormat = '12hr',
+        latitude = null,
+        longitude = null,
+        forecastMode = 'hourly'
+    ) {
         const cached = this._getCachedData(latitude, longitude)
 
         if (!cached.data) {
             return { data: null, isStale: false }
         }
 
+        const forecast =
+            forecastMode === 'daily'
+                ? this._processDailyForecast(cached.data.daily, timeFormat)
+                : this._processHourlyForecast(
+                      cached.data.hourly,
+                      cached.data.current.time,
+                      timeFormat
+                  )
+
         const processedData = {
             current: this._processCurrentWeather(cached.data.current),
-            forecast: this._processHourlyForecast(
-                cached.data.hourly,
-                cached.data.current.time,
-                timeFormat
-            ),
+            forecast,
         }
 
         return {
@@ -125,18 +142,32 @@ class WeatherAPI {
     /**
      * Private method to fetch raw weather data from API
      */
-    async _fetchWeatherData(latitude, longitude, tempUnit, speedUnit) {
-        const params = new URLSearchParams({
+    async _fetchWeatherData(
+        latitude,
+        longitude,
+        tempUnit,
+        speedUnit,
+        forecastMode = 'hourly'
+    ) {
+        const baseParams = {
             latitude: latitude.toString(),
             longitude: longitude.toString(),
-            hourly: 'temperature_2m,weather_code,is_day',
             current:
                 'temperature_2m,weather_code,relative_humidity_2m,precipitation_probability,wind_speed_10m,apparent_temperature,is_day',
             timezone: 'auto',
-            forecast_hours: '24',
             temperature_unit: tempUnit,
             wind_speed_unit: speedUnit,
-        })
+        }
+
+        if (forecastMode === 'daily') {
+            baseParams.daily = 'weather_code,temperature_2m_max,temperature_2m_min'
+            baseParams.forecast_days = '7'
+        } else {
+            baseParams.hourly = 'temperature_2m,weather_code,is_day'
+            baseParams.forecast_hours = '24'
+        }
+
+        const params = new URLSearchParams(baseParams)
 
         const response = await fetch(`${this.baseUrl}?${params}`)
         if (!response.ok) {
@@ -205,6 +236,30 @@ class WeatherAPI {
     }
 
     /**
+     * Process daily forecast to get next 5 days
+     */
+    _processDailyForecast(dailyData, timeFormat = '12hr') {
+        const forecasts = []
+
+        // Get forecasts for the next 5 days (skip today, get days 1-5)
+        for (let i = 1; i <= 5 && i < dailyData.time.length; i++) {
+            forecasts.push({
+                time: dailyData.time[i],
+                temperatureMax: dailyData.temperature_2m_max[i].toFixed(0),
+                temperatureMin: dailyData.temperature_2m_min[i].toFixed(0),
+                weatherCode: dailyData.weather_code[i],
+                description: this._getWeatherDescription(
+                    dailyData.weather_code[i],
+                    true
+                ),
+                formattedTime: this._formatDate(dailyData.time[i]),
+            })
+        }
+
+        return forecasts
+    }
+
+    /**
      * Get weather description from code
      */
     _getWeatherDescription(weatherCode, isDay = true) {
@@ -236,6 +291,14 @@ class WeatherAPI {
                 hour12: false,
             })
         }
+    }
+
+    /**
+     * Format date to display day name (e.g., "Mon", "Tue")
+     */
+    _formatDate(dateString) {
+        const date = new Date(dateString + 'T00:00:00')
+        return date.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase()
     }
 
     /**

@@ -12,6 +12,7 @@ let defaultSettings = {
     dateFormat: 'mdy',
     tempUnit: 'fahrenheit',
     speedUnit: 'mph',
+    forecastMode: 'hourly',
     linksPerColumn: 4,
     linkTarget: '_self',
     links: [
