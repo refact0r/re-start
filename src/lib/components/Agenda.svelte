@@ -8,7 +8,7 @@
         hasMeetScope,
         signIn,
         refreshScopes,
-    } from '../backends/google-auth'
+    } from '../backends/google-auth/'
     import { Panel, Text, Row, Link, Modal, ScrollList, Button } from './ui'
     import { RefreshCw } from 'lucide-svelte'
     import EventItem from './EventItem.svelte'

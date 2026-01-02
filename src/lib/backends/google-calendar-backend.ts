@@ -1,4 +1,4 @@
-import * as googleAuth from './google-auth'
+import * as googleAuth from './google-auth/'
 import { generateUUID } from '../uuid'
 import type {
     CalendarBackendConfig,

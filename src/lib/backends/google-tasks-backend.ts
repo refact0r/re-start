@@ -1,5 +1,5 @@
 import TaskBackend from './task-backend'
-import * as googleAuth from './google-auth'
+import * as googleAuth from './google-auth/'
 import type { TaskBackendConfig, EnrichedTask } from '../types'
 
 interface GoogleTask {
