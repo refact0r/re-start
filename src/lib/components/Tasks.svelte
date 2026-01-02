@@ -8,6 +8,7 @@
         parseSmartDate,
         stripDateMatch,
         formatTaskDue,
+        formatRelativeDate,
     } from '../date-matcher'
     import { Panel, Text, Row, Link, ScrollList, Button } from './ui'
     import { RefreshCw } from 'lucide-svelte'
@@ -209,62 +210,6 @@
         return task.due_date.getTime() < now.getTime()
     }
 
-    function formatDueDate(date: Date | null, hasTime: boolean): string {
-        if (!date) return ''
-
-        const now = new Date()
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        const dueDate = new Date(date)
-        const dueDateOnly = new Date(
-            dueDate.getFullYear(),
-            dueDate.getMonth(),
-            dueDate.getDate()
-        )
-
-        const diffTime = dueDateOnly.getTime() - today.getTime()
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-        let dateString = ''
-
-        if (diffDays === -1) {
-            dateString = 'yesterday'
-        } else if (diffDays === 0) {
-            dateString = 'today'
-        } else if (diffDays === 1) {
-            dateString = 'tmrw'
-        } else if (diffDays > 1 && diffDays < 7) {
-            dateString = dueDate
-                .toLocaleDateString('en-US', { weekday: 'short' })
-                .toLowerCase()
-        } else {
-            dateString = dueDate
-                .toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-                .toLowerCase()
-        }
-
-        if (hasTime) {
-            let timeString
-            if (settings.timeFormat === '12hr') {
-                timeString = dueDate
-                    .toLocaleTimeString('en-US', {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        hour12: true,
-                    })
-                    .toLowerCase()
-            } else {
-                timeString = dueDate.toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: false,
-                })
-            }
-            dateString += ` ${timeString}`
-        }
-
-        return dateString
-    }
-
     function getTaskLink(): string {
         if (settings.taskBackend === 'todoist') return 'https://todoist.com/app'
         if (settings.taskBackend === 'google-tasks')
@@ -329,7 +274,9 @@
                     project={task.project_name}
                     content={task.content}
                     due={task.due_date
-                        ? formatDueDate(task.due_date, task.has_time)
+                        ? formatRelativeDate(task.due_date, task.has_time, {
+                              timeFormat: settings.timeFormat,
+                          })
                         : null}
                     overdue={isTaskOverdue(task)}
                     onToggle={() => toggleTask(task.id, !task.checked)}

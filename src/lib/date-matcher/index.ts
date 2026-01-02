@@ -1,5 +1,5 @@
 // Natural date matcher - Main entry point
-// Public API: parseSmartDate, stripDateMatch, formatTaskDue
+// Public API: parseSmartDate, stripDateMatch, formatTaskDue, formatRelativeDate
 
 import type { DateMatchPosition, ParsedDate, DateFormat, DateCandidate } from '../types'
 import { startOfDay, applyTime } from './date-utils'
@@ -17,6 +17,7 @@ import {
     combineDateAndTime,
 } from './time-finders'
 import { selectBest } from './scorer'
+import { formatRelativeDate } from './date-formatter'
 
 interface ParseOptions {
     dateFormat?: DateFormat
@@ -161,3 +162,6 @@ export function formatTaskDue(date: Date | null, hasTime: boolean): string | nul
     const s = pad(date.getSeconds())
     return `${y}-${m}-${d}T${h}:${min}:${s}`
 }
+
+// Re-export formatRelativeDate from date-formatter
+export { formatRelativeDate }

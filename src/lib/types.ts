@@ -244,6 +244,10 @@ export interface ParsedDate {
     hasTime: boolean
 }
 
+export interface FormatOptions {
+    timeFormat: TimeFormat
+}
+
 // Backend config types
 export interface TaskBackendConfig {
     apiToken?: string
