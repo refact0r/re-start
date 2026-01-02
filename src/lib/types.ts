@@ -1,3 +1,14 @@
+// Error types (re-exported from errors.ts for convenience)
+export {
+    BackendErrorCode,
+    BackendError,
+    NetworkError,
+    AuthError,
+    RateLimitError,
+    ValidationError,
+    SyncError,
+} from './errors'
+
 // Theme types
 export interface ThemeColors {
     '--bg-1': string

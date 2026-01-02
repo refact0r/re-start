@@ -242,6 +242,164 @@ mcp__serena__replace_symbol_body(name_path="signIn", relative_path="...", body="
 - Semantic awareness: understands code structure
 - Safe refactoring: rename across entire codebase
 
+## Error Handling Patterns
+
+### Error Types
+All backends use typed error classes from `src/lib/errors.ts` for consistent error handling:
+
+**Error Hierarchy:**
+```typescript
+BackendError (base class)
+├── NetworkError      // Network failures, timeouts, offline
+├── AuthError         // Authentication/authorization failures
+├── RateLimitError    // API rate limiting
+├── ValidationError   // Invalid input/response data
+└── SyncError         // Synchronization failures
+```
+
+**Error Properties:**
+- `code: BackendErrorCode` - Enum for programmatic error handling
+- `originalError?: Error` - Wrapped original error for debugging
+- `isRetryable: boolean` - Whether operation should be retried
+- `userMessage: string` - User-friendly error message
+
+**Factory Methods:**
+Error classes provide static factory methods for common scenarios:
+```typescript
+NetworkError.fromResponse(response)  // From fetch Response
+NetworkError.timeout()               // Timeout error
+AuthError.invalidToken()             // Invalid token
+AuthError.sessionExpired()           // Session expired
+RateLimitError.fromHeader(header)    // From Retry-After header
+ValidationError.parseError(err)      // JSON parse failure
+SyncError.failed(err)                // Generic sync failure
+```
+
+### Logging Utility
+Use the shared logger from `src/lib/logger.ts` for consistent logging:
+
+```typescript
+import { createLogger } from '../logger'
+
+const logger = createLogger('BackendName')
+
+logger.log('Info message:', { data })
+logger.warn('Warning message')
+logger.error('Error message:', error)
+```
+
+Output format: `[BackendName] message data`
+
+### Error Handling in Backends
+
+**Base Class Helpers:**
+`TaskBackend` provides helper methods for consistent error handling:
+- `wrapError(error, context, defaultType)` - Wraps unknown errors into typed BackendErrors
+- `isRetryableError(error)` - Determines if error should be retried
+
+**Best Practices:**
+1. **Import error types and logger:**
+   ```typescript
+   import { createLogger } from '../logger'
+   import { NetworkError, AuthError, SyncError } from '../errors'
+
+   const logger = createLogger('MyBackend')
+   ```
+
+2. **Use specific error types when throwing:**
+   ```typescript
+   if (!response.ok) {
+     if (response.status === 401) {
+       throw AuthError.invalidToken()
+     }
+     if (response.status === 429) {
+       throw RateLimitError.fromHeader(response.headers.get('Retry-After'))
+     }
+     throw NetworkError.fromResponse(response)
+   }
+   ```
+
+3. **Wrap unknown errors in catch blocks:**
+   ```typescript
+   try {
+     await this.apiCall()
+   } catch (error) {
+     logger.error('Sync failed:', error)
+     throw this.wrapError(error, 'sync', SyncError)
+   }
+   ```
+
+4. **Don't re-wrap BackendErrors:**
+   ```typescript
+   protected wrapError(error: unknown, context: string): BackendError {
+     // If already a BackendError, return as-is
+     if (error instanceof BackendError) {
+       return error
+     }
+     // ... wrap other errors
+   }
+   ```
+
+5. **Use isRetryableError for retry logic:**
+   ```typescript
+   catch (error) {
+     if (this.isRetryableError(error) && !isRetry) {
+       logger.log('Retrying after error:', error)
+       return this.sync(resourceTypes, true)
+     }
+     throw this.wrapError(error, 'sync', SyncError)
+   }
+   ```
+
+6. **Log before throwing:**
+   ```typescript
+   logger.error('Operation failed:', error)
+   throw this.wrapError(error, 'operation', SyncError)
+   ```
+
+### Error Handling Examples
+
+**TodoistBackend** - Retry logic with typed errors:
+```typescript
+catch (error) {
+  if (this.isRetryableError(error) && !isRetry) {
+    logger.warn('Sync failed, resetting token and retrying')
+    this.syncToken = '*'
+    return this.sync(resourceTypes, true)
+  }
+  logger.error('Sync failed:', error)
+  throw this.wrapError(error, 'Todoist sync', SyncError)
+}
+```
+
+**GoogleAuth** - Specific error types for auth flows:
+```typescript
+if (response.status === 401) {
+  throw AuthError.invalidToken('API request unauthorized')
+}
+if (!response.ok) {
+  throw NetworkError.fromResponse(response)
+}
+```
+
+**WeatherAPI** - Validation errors for parsing:
+```typescript
+try {
+  return JSON.parse(cached)
+} catch (error) {
+  logger.warn('Failed to parse cached data:', error)
+  throw ValidationError.parseError('Invalid cached weather data', error)
+}
+```
+
+**Error Codes:**
+Use `BackendErrorCode` enum for programmatic error handling:
+- Network: `NETWORK_ERROR`, `NETWORK_TIMEOUT`, `NETWORK_OFFLINE`
+- Auth: `AUTH_INVALID_TOKEN`, `AUTH_TOKEN_EXPIRED`, `AUTH_UNAUTHORIZED`, `AUTH_REFRESH_FAILED`
+- Rate limit: `RATE_LIMIT_EXCEEDED`
+- Validation: `VALIDATION_INVALID_INPUT`, `VALIDATION_PARSE_ERROR`, `VALIDATION_INVALID_RESPONSE`
+- Sync: `SYNC_FAILED`, `SYNC_CONFLICT`, `SYNC_PARTIAL_FAILURE`
+
 ## Key Patterns
 
 - Components use document visibility API to pause updates when tab is hidden (Clock, Stats, Weather, Tasks)

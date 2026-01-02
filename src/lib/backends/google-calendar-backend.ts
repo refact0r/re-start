@@ -5,6 +5,8 @@ import type {
     CalendarEvent,
     GoogleCalendar,
 } from '../types'
+import { createLogger } from '../logger'
+import { AuthError, SyncError, ValidationError } from '../errors'
 
 interface GoogleCalendarItem {
     id: string
@@ -53,6 +55,9 @@ interface CreateEventResponse {
     id: string
     hangoutLink?: string
 }
+
+// Logger instance for Google Calendar operations
+const logger = createLogger('GoogleCalendar')
 
 /**
  * Google Calendar API client for Web Applications
@@ -144,10 +149,14 @@ class GoogleCalendarBackend {
         selectedCalendarIds: string[] = []
     ): Promise<GoogleCalendarData> {
         if (!this.getIsSignedIn()) {
-            throw new Error('Not signed in to Google account')
+            logger.error('Sync attempted while not signed in')
+            throw AuthError.unauthorized('Not signed in to Google account')
         }
 
         try {
+            logger.log('Syncing with Google Calendar:', {
+                selectedCalendarIds,
+            })
             // First get list of calendars
             const calendarsData = await this.apiRequest<CalendarListResponse>(
                 '/users/me/calendarList?maxResults=50'
@@ -186,10 +195,11 @@ class GoogleCalendarBackend {
                         calendarColor: calendar.backgroundColor,
                     }))
                 } catch (err) {
-                    console.warn(
-                        `Failed to fetch events from calendar "${calendar.summary}":`,
-                        err
-                    )
+                    logger.warn('Failed to fetch events from calendar:', {
+                        calendarId: calendar.id,
+                        calendarName: calendar.summary,
+                        error: err,
+                    })
                     return []
                 }
             })
@@ -199,10 +209,25 @@ class GoogleCalendarBackend {
             this.data.timestamp = Date.now()
 
             localStorage.setItem(this.dataKey, JSON.stringify(this.data))
+
+            logger.log('Google Calendar sync successful:', {
+                calendars: this.data.calendars?.length || 0,
+                events: this.data.events?.length || 0,
+            })
+
             return this.data
         } catch (error) {
-            console.error('Google Calendar sync error:', error)
-            throw error
+            // Re-throw BackendError instances as-is (from google-auth)
+            if (error instanceof AuthError || error instanceof SyncError) {
+                throw error
+            }
+
+            // Wrap unknown errors
+            logger.error('Google Calendar sync failed:', error)
+            throw SyncError.failed(
+                'Google Calendar sync failed',
+                error instanceof Error ? error : undefined
+            )
         }
     }
 
@@ -272,22 +297,43 @@ class GoogleCalendarBackend {
      */
     async fetchCalendarList(): Promise<GoogleCalendar[]> {
         if (!this.getIsSignedIn()) {
-            throw new Error('Not signed in to Google account')
+            logger.error('fetchCalendarList attempted while not signed in')
+            throw AuthError.unauthorized('Not signed in to Google account')
         }
 
-        const calendarsData = await this.apiRequest<CalendarListResponse>(
-            '/users/me/calendarList?maxResults=50'
-        )
-        const calendars: GoogleCalendar[] = (calendarsData.items || []).map(
-            (cal) => ({
-                id: cal.id,
-                name: cal.summary,
-                color: cal.backgroundColor || '',
-                primary: cal.primary || false,
-            })
-        )
+        try {
+            logger.log('Fetching calendar list')
 
-        return calendars
+            const calendarsData = await this.apiRequest<CalendarListResponse>(
+                '/users/me/calendarList?maxResults=50'
+            )
+            const calendars: GoogleCalendar[] = (calendarsData.items || []).map(
+                (cal) => ({
+                    id: cal.id,
+                    name: cal.summary,
+                    color: cal.backgroundColor || '',
+                    primary: cal.primary || false,
+                })
+            )
+
+            logger.log('Calendar list fetched successfully:', {
+                count: calendars.length,
+            })
+
+            return calendars
+        } catch (error) {
+            // Re-throw BackendError instances as-is (from google-auth)
+            if (error instanceof AuthError) {
+                throw error
+            }
+
+            // Wrap unknown errors
+            logger.error('Failed to fetch calendar list:', error)
+            throw SyncError.failed(
+                'Failed to fetch calendar list',
+                error instanceof Error ? error : undefined
+            )
+        }
     }
 
     /**
@@ -304,7 +350,8 @@ class GoogleCalendarBackend {
      */
     async createMeetLink(): Promise<string> {
         if (!this.getIsSignedIn()) {
-            throw new Error('Not signed in to Google account')
+            logger.error('createMeetLink attempted while not signed in')
+            throw AuthError.unauthorized('Not signed in to Google account')
         }
 
         // Generate a unique request ID for idempotency
@@ -335,6 +382,8 @@ class GoogleCalendarBackend {
         }
 
         try {
+            logger.log('Creating instant Meet link')
+
             const response = await this.apiRequest<CreateEventResponse>(
                 '/calendars/primary/events?conferenceDataVersion=1',
                 {
@@ -344,7 +393,10 @@ class GoogleCalendarBackend {
             )
 
             if (!response.hangoutLink) {
-                throw new Error('No Meet link returned from Google')
+                logger.error('No Meet link in response')
+                throw ValidationError.invalidResponse(
+                    'No Meet link returned from Google'
+                )
             }
 
             // Delete the temporary event (Meet link will still work)
@@ -356,14 +408,27 @@ class GoogleCalendarBackend {
                     }
                 )
             } catch (deleteError) {
-                console.warn('Failed to delete temporary event:', deleteError)
+                logger.warn('Failed to delete temporary event:', deleteError)
                 // Non-critical, Meet link still works
             }
 
+            logger.log('Meet link created successfully')
             return response.hangoutLink
         } catch (error) {
-            console.error('Failed to create Meet link:', error)
-            throw error
+            // Re-throw BackendError instances as-is
+            if (
+                error instanceof AuthError ||
+                error instanceof ValidationError
+            ) {
+                throw error
+            }
+
+            // Wrap unknown errors
+            logger.error('Failed to create Meet link:', error)
+            throw SyncError.failed(
+                'Failed to create Meet link',
+                error instanceof Error ? error : undefined
+            )
         }
     }
 }

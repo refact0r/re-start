@@ -1,6 +1,8 @@
 import TaskBackend from './task-backend'
 import type { TaskBackendConfig, EnrichedTask, TaskDue } from '../types'
 import { generateUUID } from '../uuid'
+import { createLogger } from '../logger'
+import { NetworkError, AuthError, RateLimitError, SyncError } from '../errors'
 
 interface TodoistItem {
     id: string
@@ -46,6 +48,9 @@ interface TodoistCommand {
     args: Record<string, unknown>
 }
 
+// Logger instance for Todoist operations
+const logger = createLogger('Todoist')
+
 /**
  * Todoist API client using the Sync endpoint for efficient data retrieval
  */
@@ -87,6 +92,12 @@ class TodoistBackend extends TaskBackend {
         formData.append('resource_types', JSON.stringify(resourceTypes))
 
         try {
+            logger.log('Syncing with Todoist:', {
+                resourceTypes,
+                syncToken: this.syncToken === '*' ? 'full' : 'incremental',
+                isRetry,
+            })
+
             const response = await fetch(`${this.baseUrl}/sync`, {
                 method: 'POST',
                 headers: {
@@ -96,7 +107,29 @@ class TodoistBackend extends TaskBackend {
             })
 
             if (!response.ok) {
-                throw new Error(`todoist fetch failed: ${response.status}`)
+                // Classify HTTP errors properly
+                if (response.status === 401 || response.status === 403) {
+                    logger.error('Todoist authentication failed:', response.status)
+                    throw AuthError.unauthorized(
+                        `Todoist API authentication failed: ${response.status}`
+                    )
+                }
+
+                if (response.status === 429) {
+                    logger.warn('Todoist rate limit exceeded')
+                    const retryAfter = response.headers.get('Retry-After')
+                    throw RateLimitError.fromHeader(
+                        retryAfter,
+                        'Todoist rate limit exceeded'
+                    )
+                }
+
+                // Network/server errors
+                logger.error('Todoist sync failed:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                })
+                throw NetworkError.fromResponse(response)
             }
 
             const data = (await response.json()) as TodoistSyncResponse
@@ -106,14 +139,34 @@ class TodoistBackend extends TaskBackend {
             this.syncToken = data.sync_token
             localStorage.setItem(this.syncTokenKey, this.syncToken)
 
+            logger.log('Todoist sync successful:', {
+                fullSync: data.full_sync,
+                items: data.items?.length || 0,
+                labels: data.labels?.length || 0,
+                projects: data.projects?.length || 0,
+            })
+
             return data
         } catch (error) {
-            if (!isRetry && this.syncToken !== '*') {
+            // Retry logic: if sync token might be invalid, reset and retry once
+            if (!isRetry && this.syncToken !== '*' && this.isRetryableError(error)) {
+                logger.warn('Sync failed, resetting sync token and retrying')
                 this.syncToken = '*'
                 localStorage.setItem(this.syncTokenKey, this.syncToken)
                 return this.sync(resourceTypes, true)
             }
-            throw error
+
+            // Wrap and throw as SyncError if not already a BackendError
+            if (
+                error instanceof AuthError ||
+                error instanceof RateLimitError ||
+                error instanceof NetworkError
+            ) {
+                throw error
+            }
+
+            logger.error('Todoist sync failed:', error)
+            throw this.wrapError(error, 'Todoist sync', SyncError)
         }
     }
 
@@ -317,19 +370,63 @@ class TodoistBackend extends TaskBackend {
         const formData = new FormData()
         formData.append('commands', JSON.stringify(commands))
 
-        const response = await fetch(`${this.baseUrl}/sync`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${this.token}`,
-            },
-            body: formData,
-        })
+        try {
+            logger.log('Executing Todoist commands:', {
+                count: commands.length,
+                types: commands.map((c) => c.type).join(', '),
+            })
 
-        if (!response.ok) {
-            throw new Error(`todoist command fetch failed: ${response.status}`)
+            const response = await fetch(`${this.baseUrl}/sync`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                },
+                body: formData,
+            })
+
+            if (!response.ok) {
+                // Classify HTTP errors properly
+                if (response.status === 401 || response.status === 403) {
+                    logger.error('Todoist command authentication failed:', response.status)
+                    throw AuthError.unauthorized(
+                        `Todoist API authentication failed: ${response.status}`
+                    )
+                }
+
+                if (response.status === 429) {
+                    logger.warn('Todoist command rate limit exceeded')
+                    const retryAfter = response.headers.get('Retry-After')
+                    throw RateLimitError.fromHeader(
+                        retryAfter,
+                        'Todoist rate limit exceeded'
+                    )
+                }
+
+                // Network/server errors
+                logger.error('Todoist command failed:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                })
+                throw NetworkError.fromResponse(response)
+            }
+
+            const result = await response.json()
+            logger.log('Todoist commands executed successfully')
+            return result
+        } catch (error) {
+            // Re-throw BackendError instances as-is
+            if (
+                error instanceof AuthError ||
+                error instanceof RateLimitError ||
+                error instanceof NetworkError
+            ) {
+                throw error
+            }
+
+            // Wrap unknown errors
+            logger.error('Todoist command execution failed:', error)
+            throw this.wrapError(error, 'Todoist command execution', NetworkError)
         }
-
-        return response.json()
     }
 
     /**

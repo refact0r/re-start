@@ -11,6 +11,8 @@ import type {
     CurrentWeatherRaw,
     HourlyWeatherRaw,
 } from './types'
+import { createLogger } from './logger'
+import { NetworkError, ValidationError, SyncError } from './errors'
 
 interface WeatherDescription {
     day?: { description?: string }
@@ -18,6 +20,9 @@ interface WeatherDescription {
 }
 
 const weatherDescriptions = descriptions as Record<string, WeatherDescription>
+
+// Logger instance for Weather operations
+const logger = createLogger('Weather')
 
 /**
  * OpenMeteo Weather API client with caching
@@ -45,7 +50,7 @@ class WeatherAPI {
             const stored = localStorage.getItem(this.dataKey)
             return stored ? (JSON.parse(stored) as WeatherCacheData) : {}
         } catch (error) {
-            console.error('Failed to load weather cache:', error)
+            logger.warn('Failed to load weather cache:', error)
             return {}
         }
     }
@@ -124,22 +129,45 @@ class WeatherAPI {
         tempUnit: TempUnit,
         speedUnit: SpeedUnit
     ): Promise<WeatherCacheData> {
-        const rawData = await this._fetchWeatherData(
-            latitude,
-            longitude,
-            tempUnit,
-            speedUnit
-        )
+        try {
+            logger.log('Syncing weather data:', {
+                latitude,
+                longitude,
+                tempUnit,
+                speedUnit,
+            })
 
-        this.data = {
-            raw: rawData,
-            timestamp: Date.now(),
-            latitude,
-            longitude,
+            const rawData = await this._fetchWeatherData(
+                latitude,
+                longitude,
+                tempUnit,
+                speedUnit
+            )
+
+            this.data = {
+                raw: rawData,
+                timestamp: Date.now(),
+                latitude,
+                longitude,
+            }
+            this._saveToStorage()
+
+            logger.log('Weather sync successful')
+
+            return this.data
+        } catch (error) {
+            // Re-throw NetworkError instances as-is
+            if (error instanceof NetworkError) {
+                throw error
+            }
+
+            // Wrap unknown errors
+            logger.error('Weather sync failed:', error)
+            throw SyncError.failed(
+                'Weather sync failed',
+                error instanceof Error ? error : undefined
+            )
         }
-        this._saveToStorage()
-
-        return this.data
     }
 
     /**
@@ -180,11 +208,24 @@ class WeatherAPI {
             wind_speed_unit: speedUnit,
         })
 
-        const response = await fetch(`${this.baseUrl}?${params}`)
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status} ${response.statusText}`)
+        try {
+            const response = await fetch(`${this.baseUrl}?${params}`)
+            if (!response.ok) {
+                throw NetworkError.fromResponse(response)
+            }
+            return response.json() as Promise<WeatherApiResponse>
+        } catch (error) {
+            // Re-throw NetworkError instances as-is
+            if (error instanceof NetworkError) {
+                throw error
+            }
+
+            // Wrap unknown errors (e.g., network failures, JSON parse errors)
+            logger.error('Failed to fetch weather data:', error)
+            throw new NetworkError('Failed to fetch weather data', {
+                originalError: error instanceof Error ? error : undefined,
+            })
         }
-        return response.json() as Promise<WeatherApiResponse>
     }
 
     /**

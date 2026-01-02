@@ -6,10 +6,15 @@ import type {
     TaskDue,
 } from '../types'
 import { generateUUID } from '../uuid'
+import { createLogger } from '../logger'
+import { ValidationError } from '../errors'
 
 interface LocalTaskData {
     items: RawTask[]
 }
+
+// Logger instance for LocalStorage operations
+const logger = createLogger('LocalStorage')
 
 /**
  * LocalStorage-based task backend for offline task management
@@ -26,6 +31,7 @@ class LocalStorageBackend extends TaskBackend {
 
     /**
      * Load tasks from localStorage
+     * Returns empty data if parsing fails (graceful degradation)
      */
     private loadData(): LocalTaskData {
         const stored = localStorage.getItem(this.dataKey)
@@ -35,7 +41,21 @@ class LocalStorageBackend extends TaskBackend {
         try {
             return JSON.parse(stored) as LocalTaskData
         } catch (error) {
-            console.error('Failed to parse local tasks:', error)
+            // Log the parse error with structured warning
+            // Use ValidationError for structured error information, but return empty for graceful recovery
+            const parseError = ValidationError.parseError(
+                'Failed to parse local tasks from localStorage',
+                error instanceof Error ? error : undefined
+            )
+            logger.error('Parse error loading local tasks:', {
+                error: parseError.message,
+                code: parseError.code,
+                userMessage: parseError.userMessage,
+                originalError: error,
+            })
+            // Return empty data to allow the app to continue functioning
+            // This is preferable to throwing since localStorage is the source of truth
+            // and corrupted data should not break the entire app
             return { items: [] }
         }
     }

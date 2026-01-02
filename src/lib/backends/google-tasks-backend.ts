@@ -1,6 +1,8 @@
 import TaskBackend from './task-backend'
 import * as googleAuth from './google-auth/'
 import type { TaskBackendConfig, EnrichedTask } from '../types'
+import { createLogger } from '../logger'
+import { AuthError, SyncError } from '../errors'
 
 interface GoogleTask {
     id: string
@@ -34,6 +36,9 @@ interface GoogleTasksListResponse {
 interface GoogleTasklistsResponse {
     items?: GoogleTasklist[]
 }
+
+// Logger instance for Google Tasks operations
+const logger = createLogger('GoogleTasks')
 
 /**
  * Google Tasks API client for Web Applications
@@ -127,10 +132,13 @@ class GoogleTasksBackend extends TaskBackend {
         resourceTypes: string[] = ['tasklists', 'tasks']
     ): Promise<GoogleTasksData> {
         if (!this.getIsSignedIn()) {
-            throw new Error('Not signed in to Google account')
+            logger.error('Sync attempted while not signed in')
+            throw AuthError.unauthorized('Not signed in to Google account')
         }
 
         try {
+            logger.log('Syncing with Google Tasks:', { resourceTypes })
+
             if (resourceTypes.includes('tasklists')) {
                 const data = await this.apiRequest<GoogleTasklistsResponse>(
                     '/users/@me/lists?maxResults=20'
@@ -176,10 +184,21 @@ class GoogleTasksBackend extends TaskBackend {
             this.data.timestamp = Date.now()
             localStorage.setItem(this.dataKey, JSON.stringify(this.data))
 
+            logger.log('Google Tasks sync successful:', {
+                tasklists: this.data.tasklists.length,
+                tasks: this.data.tasks.length,
+            })
+
             return this.data
         } catch (error) {
-            console.error('Google Tasks sync error:', error)
-            throw error
+            // Re-throw BackendError instances as-is (from google-auth)
+            if (error instanceof AuthError || error instanceof SyncError) {
+                throw error
+            }
+
+            // Wrap unknown errors
+            logger.error('Google Tasks sync failed:', error)
+            throw this.wrapError(error, 'Google Tasks sync', SyncError)
         }
     }
 
@@ -241,69 +260,129 @@ class GoogleTasksBackend extends TaskBackend {
      * Add a new task
      */
     async addTask(content: string, due: string | null): Promise<void> {
-        const taskData: { title: string; due?: string } = { title: content }
-        if (due) {
-            const dateOnly = due.split('T')[0]
-            taskData.due = dateOnly + 'T00:00:00.000Z'
-        }
-
-        await this.apiRequest<GoogleTask>(
-            `/lists/${this.defaultTasklistId}/tasks`,
-            {
-                method: 'POST',
-                body: JSON.stringify(taskData),
+        try {
+            const taskData: { title: string; due?: string } = { title: content }
+            if (due) {
+                const dateOnly = due.split('T')[0]
+                taskData.due = dateOnly + 'T00:00:00.000Z'
             }
-        )
+
+            logger.log('Adding task:', { content, due })
+
+            await this.apiRequest<GoogleTask>(
+                `/lists/${this.defaultTasklistId}/tasks`,
+                {
+                    method: 'POST',
+                    body: JSON.stringify(taskData),
+                }
+            )
+
+            logger.log('Task added successfully')
+        } catch (error) {
+            // Re-throw BackendError instances as-is (from google-auth)
+            if (error instanceof AuthError) {
+                throw error
+            }
+
+            // Wrap unknown errors
+            logger.error('Failed to add task:', error)
+            throw this.wrapError(error, 'Add task', SyncError)
+        }
     }
 
     /**
      * Complete a task
      */
     async completeTask(taskId: string): Promise<void> {
-        const task = this.data.tasks?.find((t) => t.id === taskId)
-        const tasklistId = task?.tasklistId ?? this.defaultTasklistId
+        try {
+            const task = this.data.tasks?.find((t) => t.id === taskId)
+            const tasklistId = task?.tasklistId ?? this.defaultTasklistId
 
-        await this.apiRequest<GoogleTask>(
-            `/lists/${tasklistId}/tasks/${taskId}`,
-            {
-                method: 'PATCH',
-                body: JSON.stringify({
-                    status: 'completed',
-                    completed: new Date().toISOString(),
-                }),
+            logger.log('Completing task:', { taskId })
+
+            await this.apiRequest<GoogleTask>(
+                `/lists/${tasklistId}/tasks/${taskId}`,
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        status: 'completed',
+                        completed: new Date().toISOString(),
+                    }),
+                }
+            )
+
+            logger.log('Task completed successfully')
+        } catch (error) {
+            // Re-throw BackendError instances as-is (from google-auth)
+            if (error instanceof AuthError) {
+                throw error
             }
-        )
+
+            // Wrap unknown errors
+            logger.error('Failed to complete task:', error)
+            throw this.wrapError(error, 'Complete task', SyncError)
+        }
     }
 
     /**
      * Uncomplete a task
      */
     async uncompleteTask(taskId: string): Promise<void> {
-        const task = this.data.tasks?.find((t) => t.id === taskId)
-        const tasklistId = task?.tasklistId ?? this.defaultTasklistId
+        try {
+            const task = this.data.tasks?.find((t) => t.id === taskId)
+            const tasklistId = task?.tasklistId ?? this.defaultTasklistId
 
-        await this.apiRequest<GoogleTask>(
-            `/lists/${tasklistId}/tasks/${taskId}`,
-            {
-                method: 'PATCH',
-                body: JSON.stringify({
-                    status: 'needsAction',
-                    completed: null,
-                }),
+            logger.log('Uncompleting task:', { taskId })
+
+            await this.apiRequest<GoogleTask>(
+                `/lists/${tasklistId}/tasks/${taskId}`,
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        status: 'needsAction',
+                        completed: null,
+                    }),
+                }
+            )
+
+            logger.log('Task uncompleted successfully')
+        } catch (error) {
+            // Re-throw BackendError instances as-is (from google-auth)
+            if (error instanceof AuthError) {
+                throw error
             }
-        )
+
+            // Wrap unknown errors
+            logger.error('Failed to uncomplete task:', error)
+            throw this.wrapError(error, 'Uncomplete task', SyncError)
+        }
     }
 
     /**
      * Delete a task
      */
     async deleteTask(taskId: string): Promise<void> {
-        const task = this.data.tasks?.find((t) => t.id === taskId)
-        const tasklistId = task?.tasklistId ?? this.defaultTasklistId
+        try {
+            const task = this.data.tasks?.find((t) => t.id === taskId)
+            const tasklistId = task?.tasklistId ?? this.defaultTasklistId
 
-        await this.apiRequest<void>(`/lists/${tasklistId}/tasks/${taskId}`, {
-            method: 'DELETE',
-        })
+            logger.log('Deleting task:', { taskId })
+
+            await this.apiRequest<void>(`/lists/${tasklistId}/tasks/${taskId}`, {
+                method: 'DELETE',
+            })
+
+            logger.log('Task deleted successfully')
+        } catch (error) {
+            // Re-throw BackendError instances as-is (from google-auth)
+            if (error instanceof AuthError) {
+                throw error
+            }
+
+            // Wrap unknown errors
+            logger.error('Failed to delete task:', error)
+            throw this.wrapError(error, 'Delete task', SyncError)
+        }
     }
 
     /**
