@@ -4,6 +4,7 @@
  */
 
 import { ensureValidToken } from './token'
+import { AuthError, NetworkError } from '../../errors'
 
 /**
  * Generic API request helper for Google APIs
@@ -27,11 +28,11 @@ export async function apiRequest<T>(
     })
 
     if (response.status === 401) {
-        throw new Error('Unauthorized: Access token is invalid or expired')
+        throw AuthError.invalidToken('Unauthorized: Access token is invalid or expired')
     }
 
     if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        throw NetworkError.fromResponse(response)
     }
 
     return (await response.json()) as T

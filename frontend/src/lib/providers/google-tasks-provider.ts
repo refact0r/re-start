@@ -69,15 +69,29 @@ class GoogleTasksProvider extends TaskProvider {
         // Migrate old storage keys if needed
         googleAuth.migrateStorageKeys()
 
-        const storedData = localStorage.getItem(this.dataKey)
-        this.data = storedData
-            ? (JSON.parse(storedData) as GoogleTasksData)
-            : { tasklists: [], tasks: [] }
+        this.data = this.loadStoredData()
         this.defaultTasklistId =
             localStorage.getItem(this.tasklistIdKey) ?? '@default'
 
         // Create API client with base URL
         this.apiRequest = createApiClient(this.baseUrl)
+    }
+
+    private loadStoredData(): GoogleTasksData {
+        const stored = localStorage.getItem(this.dataKey)
+        if (!stored) return { tasklists: [], tasks: [] }
+
+        try {
+            const parsed = JSON.parse(stored) as GoogleTasksData
+            return {
+                tasklists: parsed.tasklists || [],
+                tasks: parsed.tasks || [],
+                timestamp: parsed.timestamp,
+            }
+        } catch {
+            logger.warn('Failed to parse stored Google Tasks data, using empty state')
+            return { tasklists: [], tasks: [] }
+        }
     }
 
     /**
@@ -197,16 +211,10 @@ class GoogleTasksProvider extends TaskProvider {
     getTasks(): EnrichedTask[] {
         if (!this.data.tasks) return []
 
-        const recentThreshold = new Date(new Date().getTime() - 5 * 60 * 1000)
-
         const mappedTasks = this.data.tasks
             .filter((task) => {
                 if (task.status === 'needsAction') return true
-                if (task.status === 'completed' && task.completed) {
-                    const completedAt = new Date(task.completed)
-                    return completedAt > recentThreshold
-                }
-                return false
+                return TaskProvider.isRecentlyCompleted(task.completed)
             })
             .map((task): EnrichedTask => {
                 let dueDate: Date | null = null

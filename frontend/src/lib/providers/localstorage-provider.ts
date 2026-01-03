@@ -94,22 +94,11 @@ class LocalStorageProvider extends TaskProvider {
     getTasks(): EnrichedTask[] {
         if (!this.data.items) return []
 
-        const recentThreshold = new Date(new Date().getTime() - 5 * 60 * 1000) // 5 minutes ago
-
         const mappedTasks = this.data.items
             .filter((item) => {
                 if (item.is_deleted) return false
-
-                // Include unchecked tasks
                 if (!item.checked) return true
-
-                // Include recently completed tasks (within last 5 minutes)
-                if (item.checked && item.completed_at) {
-                    const completedAt = new Date(item.completed_at)
-                    return completedAt > recentThreshold
-                }
-
-                return false
+                return TaskProvider.isRecentlyCompleted(item.completed_at)
             })
             .map((item): EnrichedTask => {
                 let dueDate: Date | null = null

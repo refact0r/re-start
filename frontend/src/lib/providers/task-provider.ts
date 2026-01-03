@@ -63,6 +63,15 @@ abstract class TaskProvider {
      */
     abstract clearLocalData(): void
 
+    static readonly RECENT_COMPLETION_THRESHOLD_MS = 5 * 60 * 1000
+
+    static isRecentlyCompleted(completedAt: string | Date | null | undefined): boolean {
+        if (!completedAt) return false
+        const completedDate = typeof completedAt === 'string' ? new Date(completedAt) : completedAt
+        const threshold = Date.now() - TaskProvider.RECENT_COMPLETION_THRESHOLD_MS
+        return completedDate.getTime() > threshold
+    }
+
     /**
      * Sort tasks: unchecked first, then by completion time, due date, project
      */

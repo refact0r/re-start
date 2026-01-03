@@ -73,12 +73,25 @@ class TodoistProvider extends TaskProvider {
         this.cacheExpiry = 5 * 60 * 1000 // 5 minutes
 
         this.syncToken = localStorage.getItem(this.syncTokenKey) || '*'
-        this.data = JSON.parse(
-            localStorage.getItem(this.dataKey) || '{}'
-        ) as TodoistData
-        if (!this.data.items) this.data.items = []
-        if (!this.data.labels) this.data.labels = []
-        if (!this.data.projects) this.data.projects = []
+        this.data = this.loadStoredData()
+    }
+
+    private loadStoredData(): TodoistData {
+        const stored = localStorage.getItem(this.dataKey)
+        if (!stored) return { items: [], labels: [], projects: [] }
+
+        try {
+            const parsed = JSON.parse(stored) as TodoistData
+            return {
+                items: parsed.items || [],
+                labels: parsed.labels || [],
+                projects: parsed.projects || [],
+                timestamp: parsed.timestamp,
+            }
+        } catch {
+            logger.warn('Failed to parse stored Todoist data, using empty state')
+            return { items: [], labels: [], projects: [] }
+        }
     }
 
     /**
@@ -227,22 +240,11 @@ class TodoistProvider extends TaskProvider {
     getTasks(): EnrichedTask[] {
         if (!this.data.items) return []
 
-        const recentThreshold = new Date(new Date().getTime() - 5 * 60 * 1000) // 5 minutes ago
-
         const mappedTasks = this.data.items
             .filter((item) => {
                 if (item.is_deleted) return false
-
-                // Include unchecked tasks
                 if (!item.checked) return true
-
-                // Include recently completed tasks (within last 5 minutes)
-                if (item.checked && item.completed_at) {
-                    const completedAt = new Date(item.completed_at)
-                    return completedAt > recentThreshold
-                }
-
-                return false
+                return TaskProvider.isRecentlyCompleted(item.completed_at)
             })
             .map((item): EnrichedTask => {
                 let dueDate: Date | null = null
