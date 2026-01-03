@@ -1,5 +1,5 @@
-// Base class for task backend implementations
-// Defines the interface that all backends must implement
+// Base class for task provider implementations
+// Defines the interface that all providers must implement
 //
 // Error Handling Guidelines for Subclasses:
 // - All public methods should catch errors and wrap them using wrapError()
@@ -8,7 +8,7 @@
 // - Propagate BackendError instances without wrapping them again
 // - Log errors using the logger utility before throwing them
 
-import type { TaskBackendConfig, EnrichedTask } from '../types'
+import type { TaskProviderConfig, EnrichedTask } from '../types'
 import { BackendError, NetworkError, SyncError, AuthError, ValidationError } from '../errors'
 
 export interface TaskData {
@@ -16,14 +16,14 @@ export interface TaskData {
     [key: string]: unknown
 }
 
-abstract class TaskBackend {
-    protected config: TaskBackendConfig
+abstract class TaskProvider {
+    protected config: TaskProviderConfig
     protected data: TaskData = {}
     protected cacheExpiry = 0
 
-    constructor(config: TaskBackendConfig) {
-        if (new.target === TaskBackend) {
-            throw new Error('TaskBackend is an abstract class')
+    constructor(config: TaskProviderConfig) {
+        if (new.target === TaskProvider) {
+            throw new Error('TaskProvider is an abstract class')
         }
         this.config = config
     }
@@ -287,4 +287,4 @@ abstract class TaskBackend {
     }
 }
 
-export default TaskBackend
+export default TaskProvider

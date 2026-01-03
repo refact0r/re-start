@@ -39,7 +39,7 @@ export type TimeFormat = '12hr' | '24hr'
 export type DateFormat = 'mdy' | 'dmy'
 export type TempUnit = 'celsius' | 'fahrenheit'
 export type SpeedUnit = 'kmh' | 'mph'
-export type TaskBackendType = 'local' | 'todoist' | 'google-tasks'
+export type TaskProviderType = 'local' | 'todoist' | 'google-tasks'
 export type LinkTarget = '_self' | '_blank'
 export type LocationMode = 'auto' | 'manual'
 
@@ -64,7 +64,7 @@ export interface Settings {
     speedUnit: SpeedUnit
     // Tasks
     showTasks: boolean
-    taskBackend: TaskBackendType
+    taskBackend: TaskProviderType
     // Calendar
     showCalendar: boolean
     selectedCalendars: string[]
@@ -238,11 +238,11 @@ export interface FormatOptions {
     timeFormat: TimeFormat
 }
 
-// Backend config types
-export interface TaskBackendConfig {
+// Provider config types
+export interface TaskProviderConfig {
     apiToken?: string
 }
 
-export interface CalendarBackendConfig {
+export interface CalendarProviderConfig {
     // Empty config for now, can be extended in the future
 }

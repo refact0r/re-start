@@ -1,7 +1,7 @@
-import TaskBackend from './task-backend'
+import TaskProvider from './task-provider'
 import * as googleAuth from './google-auth'
 import { createApiClient } from './google-auth'
-import type { TaskBackendConfig, EnrichedTask } from '../types'
+import type { TaskProviderConfig, EnrichedTask } from '../types'
 import { createLogger } from '../logger'
 import { AuthError, SyncError } from '../errors'
 
@@ -46,7 +46,7 @@ const logger = createLogger('GoogleTasks')
  * Google Tasks API client for Web Applications
  * Uses shared Google OAuth module for authentication
  */
-class GoogleTasksBackend extends TaskBackend {
+class GoogleTasksProvider extends TaskProvider {
     private baseUrl: string
     private dataKey: string
     private tasklistIdKey: string
@@ -58,7 +58,7 @@ class GoogleTasksBackend extends TaskBackend {
         options?: RequestInit
     ) => Promise<T>
 
-    constructor(config: TaskBackendConfig = {}) {
+    constructor(config: TaskProviderConfig = {}) {
         super(config)
         this.baseUrl = 'https://tasks.googleapis.com/tasks/v1'
 
@@ -233,7 +233,7 @@ class GoogleTasksBackend extends TaskBackend {
                 }
             })
 
-        return TaskBackend.sortTasks(mappedTasks)
+        return TaskProvider.sortTasks(mappedTasks)
     }
 
     /**
@@ -388,4 +388,4 @@ class GoogleTasksBackend extends TaskBackend {
     }
 }
 
-export default GoogleTasksBackend
+export default GoogleTasksProvider

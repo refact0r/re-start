@@ -3,16 +3,16 @@
 ## Issues Found and Fixed
 
 ### 1. Console.log statements in production ✅ FIXED
-- `todoist-backend.js`: Removed from `sync()` and `executeCommands()`
-- `google-calendar-backend.js`: Removed from `sync()`
+- `todoist-provider.ts`: Removed from `sync()` and `executeCommands()`
+- `google-calendar-provider.ts`: Removed from `sync()`
 
 ### 2. Unused exports in google-auth.js ✅ FIXED
 - `getIsSignedIn()`: Removed (was just an alias for `isSignedIn()`)
 - `checkAuthStatus()`: Removed (never called anywhere)
 
 ### 3. Duplicate sortTasks() method ✅ FIXED
-- Extracted to `TaskBackend.sortTasks()` in base class
-- Removed from `LocalStorageBackend`, `TodoistBackend`, `GoogleTasksBackend`
+- Extracted to `TaskProvider.sortTasks()` in base class
+- Removed from `LocalStorageProvider`, `TodoistProvider`, `GoogleTasksProvider`
 - ~110 lines of duplicate code removed
 
 ## Issues Found - Not Yet Fixed
@@ -24,10 +24,10 @@
 ### 5. Magic number `5 * 60 * 1000` (5 minutes)
 - Used in multiple places for cache expiry and recent task threshold
 - Consider extracting to a constant `FIVE_MINUTES_MS`
-- Files: google-tasks-backend.js, google-calendar-backend.js, todoist-backend.js, localstorage-backend.js
+- Files: google-tasks-provider.ts, google-calendar-provider.ts, todoist-provider.ts, localstorage-provider.ts
 
 ### 6. Promise.resolve() returns ✅ FIXED
-- `localstorage-backend.js`: Removed unnecessary `return Promise.resolve()` from 5 async methods
+- `localstorage-provider.ts`: Removed unnecessary `return Promise.resolve()` from 5 async methods
 - async functions already return promises implicitly
 
 ## Notes

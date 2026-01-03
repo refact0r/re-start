@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import GoogleCalendarBackend from '../backends/google-calendar-backend'
-import * as googleAuth from '../backends/google-auth'
+import GoogleCalendarProvider from '../providers/google-calendar-provider'
+import * as googleAuth from '../providers/google-auth'
 import * as uuid from '../uuid'
 
 // Mock the google-auth module
-vi.mock('../backends/google-auth', () => ({
+vi.mock('../providers/google-auth', () => ({
     isSignedIn: vi.fn(() => true),
     migrateStorageKeys: vi.fn(),
     apiRequest: vi.fn(),
@@ -41,7 +41,7 @@ function createMockLocalStorage() {
     }
 }
 
-describe('GoogleCalendarBackend', () => {
+describe('GoogleCalendarProvider', () => {
     let mockLocalStorage: ReturnType<typeof createMockLocalStorage>
     let mockApiRequest: ReturnType<typeof vi.fn>
 
@@ -64,7 +64,7 @@ describe('GoogleCalendarBackend', () => {
 
     describe('constructor', () => {
         it('initializes with empty data when localStorage is empty', () => {
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             expect(googleAuth.migrateStorageKeys).toHaveBeenCalled()
             expect(mockLocalStorage.getItem).toHaveBeenCalledWith(
@@ -97,7 +97,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(existingData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             const events = backend.getEvents()
             expect(events).toHaveLength(1)
@@ -107,13 +107,13 @@ describe('GoogleCalendarBackend', () => {
         it('handles corrupted JSON in localStorage', () => {
             mockLocalStorage._store['google_calendar_data'] = 'invalid-json'
 
-            expect(() => new GoogleCalendarBackend()).toThrow()
+            expect(() => new GoogleCalendarProvider()).toThrow()
         })
     })
 
     describe('isCacheStale', () => {
         it('returns true when no timestamp exists', () => {
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             expect(backend.isCacheStale()).toBe(true)
         })
 
@@ -127,7 +127,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             expect(backend.isCacheStale()).toBe(false)
         })
 
@@ -143,7 +143,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             expect(backend.isCacheStale()).toBe(true)
         })
 
@@ -159,7 +159,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             expect(backend.isCacheStale()).toBe(false)
         })
     })
@@ -168,7 +168,7 @@ describe('GoogleCalendarBackend', () => {
         it('delegates to google-auth module', () => {
             vi.mocked(googleAuth.isSignedIn).mockReturnValue(true)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const result = backend.getIsSignedIn()
 
             expect(googleAuth.isSignedIn).toHaveBeenCalled()
@@ -178,7 +178,7 @@ describe('GoogleCalendarBackend', () => {
         it('returns false when not signed in', () => {
             vi.mocked(googleAuth.isSignedIn).mockReturnValue(false)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const result = backend.getIsSignedIn()
 
             expect(result).toBe(false)
@@ -189,7 +189,7 @@ describe('GoogleCalendarBackend', () => {
         it('throws error when not signed in', async () => {
             vi.mocked(googleAuth.isSignedIn).mockReturnValue(false)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             await expect(backend.sync()).rejects.toThrow(
                 'Not signed in to Google account'
@@ -240,7 +240,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockEventsResponse1)
                 .mockResolvedValueOnce(mockEventsResponse2)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const result = await backend.sync()
 
             expect(mockApiRequest).toHaveBeenCalledWith(
@@ -261,7 +261,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const result = await backend.sync()
 
             expect(result.calendars).toHaveLength(1)
@@ -300,7 +300,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockCalendarsResponse)
                 .mockResolvedValueOnce(mockEventsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             await backend.sync()
 
             const events = backend.getEvents()
@@ -314,7 +314,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             await backend.sync()
 
             expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
@@ -344,7 +344,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockCalendarsResponse)
                 .mockResolvedValueOnce(mockEventsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             await backend.sync(['cal1'])
 
             // Should only fetch events for cal1
@@ -365,7 +365,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockCalendarsResponse)
                 .mockResolvedValueOnce(mockEventsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             await backend.sync()
 
             // Verify API call includes timeMin and timeMax parameters
@@ -384,7 +384,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const result = await backend.sync()
 
             expect(result.calendars).toEqual([])
@@ -396,7 +396,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const result = await backend.sync()
 
             expect(result.calendars).toEqual([])
@@ -421,7 +421,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockRejectedValueOnce(new Error('Calendar fetch failed'))
                 .mockResolvedValueOnce(mockEventsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const result = await backend.sync()
 
             // Should still return data from successful calendar
@@ -445,7 +445,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockRejectedValueOnce(new Error('API request failed'))
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             await expect(backend.sync()).rejects.toThrow('Google Calendar sync failed')
             expect(consoleErrorSpy).toHaveBeenCalledWith(
@@ -464,7 +464,7 @@ describe('GoogleCalendarBackend', () => {
             const testDate = new Date('2025-12-25T15:30:00.000Z')
             vi.setSystemTime(testDate)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             // Access private method via type assertion for testing
             const getTodayBounds = (backend as any).getTodayBounds.bind(backend)
@@ -496,7 +496,7 @@ describe('GoogleCalendarBackend', () => {
 
     describe('getEvents', () => {
         it('returns empty array when no events exist', () => {
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             expect(backend.getEvents()).toEqual([])
         })
 
@@ -532,7 +532,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events).toHaveLength(1)
@@ -555,7 +555,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events).toHaveLength(1)
@@ -583,7 +583,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events).toHaveLength(1)
@@ -611,7 +611,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events[0].isPast).toBe(true)
@@ -637,7 +637,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events[0].isOngoing).toBe(true)
@@ -663,7 +663,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events[0].isPast).toBe(false)
@@ -695,7 +695,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events).toHaveLength(2)
@@ -730,7 +730,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events).toHaveLength(2)
@@ -757,7 +757,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events[0].title).toBe('(No title)')
@@ -789,7 +789,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events[0].title).toBe('Meeting')
@@ -825,7 +825,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const events = backend.getEvents()
 
             expect(events[0].description).toBe('')
@@ -839,7 +839,7 @@ describe('GoogleCalendarBackend', () => {
 
     describe('getCalendars', () => {
         it('returns empty array when no calendars exist', () => {
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             expect(backend.getCalendars()).toEqual([])
         })
 
@@ -855,7 +855,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const calendars = backend.getCalendars()
 
             expect(calendars).toHaveLength(2)
@@ -868,7 +868,7 @@ describe('GoogleCalendarBackend', () => {
         it('throws error when not signed in', async () => {
             vi.mocked(googleAuth.isSignedIn).mockReturnValue(false)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             await expect(backend.fetchCalendarList()).rejects.toThrow(
                 'Not signed in to Google account'
@@ -895,7 +895,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const calendars = await backend.fetchCalendarList()
 
             expect(mockApiRequest).toHaveBeenCalledWith(
@@ -922,7 +922,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const calendars = await backend.fetchCalendarList()
 
             expect(calendars[0].color).toBe('')
@@ -941,7 +941,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const calendars = await backend.fetchCalendarList()
 
             expect(calendars[0].primary).toBe(false)
@@ -952,7 +952,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const calendars = await backend.fetchCalendarList()
 
             expect(calendars).toEqual([])
@@ -963,7 +963,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCalendarsResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const calendars = await backend.fetchCalendarList()
 
             expect(calendars).toEqual([])
@@ -974,7 +974,7 @@ describe('GoogleCalendarBackend', () => {
         it('throws error when not signed in', async () => {
             vi.mocked(googleAuth.isSignedIn).mockReturnValue(false)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             await expect(backend.createMeetLink()).rejects.toThrow(
                 'Not signed in to Google account'
@@ -991,7 +991,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockCreateResponse) // Create event
                 .mockResolvedValueOnce(undefined) // Delete event
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const meetLink = await backend.createMeetLink()
 
             expect(meetLink).toBe('https://meet.google.com/abc-defg-hij')
@@ -1024,7 +1024,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockCreateResponse)
                 .mockResolvedValueOnce(undefined)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             await backend.createMeetLink()
 
             expect(uuid.generateUUID).toHaveBeenCalled()
@@ -1046,7 +1046,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockCreateResponse)
                 .mockResolvedValueOnce(undefined)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             await backend.createMeetLink()
 
             const createCall = mockApiRequest.mock.calls[0]
@@ -1069,7 +1069,7 @@ describe('GoogleCalendarBackend', () => {
             const testDate = new Date('2025-12-25T10:00:00.000Z')
             vi.setSystemTime(testDate)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             await backend.createMeetLink()
 
             const createCall = mockApiRequest.mock.calls[0]
@@ -1095,7 +1095,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockCreateResponse)
                 .mockResolvedValueOnce(undefined)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             await backend.createMeetLink()
 
             const createCall = mockApiRequest.mock.calls[0]
@@ -1117,7 +1117,7 @@ describe('GoogleCalendarBackend', () => {
 
             mockApiRequest.mockResolvedValueOnce(mockCreateResponse)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             await expect(backend.createMeetLink()).rejects.toThrow(
                 'No Meet link returned from Google'
@@ -1140,7 +1140,7 @@ describe('GoogleCalendarBackend', () => {
                 .mockResolvedValueOnce(mockCreateResponse)
                 .mockRejectedValueOnce(new Error('Delete failed'))
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             const meetLink = await backend.createMeetLink()
 
             expect(meetLink).toBe('https://meet.google.com/abc-defg-hij')
@@ -1162,7 +1162,7 @@ describe('GoogleCalendarBackend', () => {
                 new Error('HTTP 403: Forbidden')
             )
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
 
             await expect(backend.createMeetLink()).rejects.toThrow(
                 'Failed to create Meet link'
@@ -1184,7 +1184,7 @@ describe('GoogleCalendarBackend', () => {
                 events: [],
             })
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             backend.clearLocalData()
 
             expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
@@ -1212,7 +1212,7 @@ describe('GoogleCalendarBackend', () => {
             mockLocalStorage._store['google_calendar_data'] =
                 JSON.stringify(mockData)
 
-            const backend = new GoogleCalendarBackend()
+            const backend = new GoogleCalendarProvider()
             backend.clearLocalData()
 
             expect(backend.getEvents()).toEqual([])

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { settings } from '../../settings-store.svelte'
-    import { createCalendarBackend } from '../../backends/index'
+    import { createCalendarProvider } from '../../providers/index'
     import type { GoogleCalendar } from '../../types'
     import { Checkbox, FormGroup, Text } from '../ui'
     import CalendarList from './CalendarList.svelte'
@@ -12,7 +12,7 @@
         if (!settings.googleTasksSignedIn) return
 
         loadingCalendars = true
-        const calendarApi = createCalendarBackend()
+        const calendarApi = createCalendarProvider()
         calendarApi
             .fetchCalendarList()
             .then((calendars) => {

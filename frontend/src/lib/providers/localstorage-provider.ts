@@ -1,6 +1,6 @@
-import TaskBackend from './task-backend'
+import TaskProvider from './task-provider'
 import type {
-    TaskBackendConfig,
+    TaskProviderConfig,
     EnrichedTask,
     RawTask,
     TaskDue,
@@ -20,11 +20,11 @@ const logger = createLogger('LocalStorage')
 /**
  * LocalStorage-based task backend for offline task management
  */
-class LocalStorageBackend extends TaskBackend {
+class LocalStorageProvider extends TaskProvider {
     private dataKey: string
     protected override data: LocalTaskData
 
-    constructor(config: TaskBackendConfig) {
+    constructor(config: TaskProviderConfig) {
         super(config)
         this.dataKey = 'local_tasks'
         this.data = this.loadData()
@@ -134,7 +134,7 @@ class LocalStorageBackend extends TaskBackend {
                 }
             })
 
-        return TaskBackend.sortTasks(mappedTasks)
+        return TaskProvider.sortTasks(mappedTasks)
     }
 
     /**
@@ -216,4 +216,4 @@ class LocalStorageBackend extends TaskBackend {
     }
 }
 
-export default LocalStorageBackend
+export default LocalStorageProvider

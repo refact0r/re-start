@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import TodoistBackend from '../backends/todoist-backend'
+import TodoistProvider from '../providers/todoist-provider'
 
 // Mock the UUID module
 vi.mock('../uuid', () => ({
@@ -36,7 +36,7 @@ function createMockFetch() {
     return vi.fn()
 }
 
-describe('TodoistBackend', () => {
+describe('TodoistProvider', () => {
     let mockLocalStorage: ReturnType<typeof createMockLocalStorage>
     let mockFetch: ReturnType<typeof createMockFetch>
 
@@ -56,7 +56,7 @@ describe('TodoistBackend', () => {
 
     describe('constructor', () => {
         it('initializes with empty data when localStorage is empty', () => {
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             expect(mockLocalStorage.getItem).toHaveBeenCalledWith(
                 'todoist_sync_token'
@@ -72,7 +72,7 @@ describe('TodoistBackend', () => {
         it('loads existing sync token from localStorage', () => {
             mockLocalStorage._store['todoist_sync_token'] = 'existing-token-123'
 
-            new TodoistBackend({ apiToken: 'test-token' })
+            new TodoistProvider({ apiToken: 'test-token' })
 
             expect(mockLocalStorage.getItem).toHaveBeenCalledWith(
                 'todoist_sync_token'
@@ -100,7 +100,7 @@ describe('TodoistBackend', () => {
             mockLocalStorage._store['todoist_data'] =
                 JSON.stringify(existingData)
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             const tasks = backend.getTasks()
             expect(tasks).toHaveLength(1)
@@ -108,7 +108,7 @@ describe('TodoistBackend', () => {
         })
 
         it('defaults to "*" sync token when not in localStorage', () => {
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             // Verify by checking that sync will use "*" token
             expect(backend).toBeDefined()
@@ -130,7 +130,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             expect(mockFetch).toHaveBeenCalledWith(
@@ -167,7 +167,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
@@ -201,7 +201,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -257,7 +257,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -311,7 +311,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -376,7 +376,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -410,7 +410,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
@@ -452,7 +452,7 @@ describe('TodoistBackend', () => {
                 .mockResolvedValueOnce(mockErrorResponse)
                 .mockResolvedValueOnce(mockSuccessResponse)
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             // Should have been called twice
@@ -480,7 +480,7 @@ describe('TodoistBackend', () => {
 
             mockFetch.mockResolvedValue(mockErrorResponse)
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             await expect(backend.sync()).rejects.toThrow('HTTP 400: undefined')
         })
@@ -493,7 +493,7 @@ describe('TodoistBackend', () => {
 
             mockFetch.mockResolvedValueOnce(mockErrorResponse)
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             await expect(backend.sync()).rejects.toThrow()
 
@@ -513,7 +513,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync(['items'])
 
             const call = mockFetch.mock.calls[0]
@@ -542,7 +542,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             expect(backend.getProjectName('p1')).toBe('Work')
@@ -563,7 +563,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             expect(backend.getProjectName('non-existent')).toBe('')
@@ -589,7 +589,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             expect(backend.getLabelNames(['l1', 'l2'])).toEqual([
@@ -612,7 +612,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             expect(backend.getLabelNames(['l1', 'non-existent'])).toEqual([
@@ -621,14 +621,14 @@ describe('TodoistBackend', () => {
         })
 
         it('returns empty array for empty input', () => {
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             expect(backend.getLabelNames([])).toEqual([])
         })
     })
 
     describe('isCacheStale', () => {
         it('returns true when no timestamp exists', () => {
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             expect(backend.isCacheStale()).toBe(true)
         })
 
@@ -646,7 +646,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             expect(backend.isCacheStale()).toBe(false)
@@ -664,7 +664,7 @@ describe('TodoistBackend', () => {
             mockLocalStorage._store['todoist_data'] =
                 JSON.stringify(existingData)
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             expect(backend.isCacheStale()).toBe(true)
         })
@@ -682,7 +682,7 @@ describe('TodoistBackend', () => {
             mockLocalStorage._store['todoist_data'] =
                 JSON.stringify(existingData)
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             expect(backend.isCacheStale()).toBe(false)
         })
@@ -695,7 +695,7 @@ describe('TodoistBackend', () => {
                 items: [],
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             backend.clearLocalData()
 
             expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
@@ -709,7 +709,7 @@ describe('TodoistBackend', () => {
                 items: [],
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             backend.clearLocalData()
 
             expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
@@ -720,7 +720,7 @@ describe('TodoistBackend', () => {
         it('resets sync token to "*"', () => {
             mockLocalStorage._store['todoist_sync_token'] = 'existing-token'
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             backend.clearLocalData()
 
             // After clearing, getTasks should work with empty data
@@ -747,7 +747,7 @@ describe('TodoistBackend', () => {
             mockLocalStorage._store['todoist_data'] =
                 JSON.stringify(existingData)
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             backend.clearLocalData()
 
             expect(backend.getTasks()).toEqual([])
@@ -761,7 +761,7 @@ describe('TodoistBackend', () => {
                 json: async () => ({}),
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.addTask('New task', null)
 
             expect(mockFetch).toHaveBeenCalledWith(
@@ -792,7 +792,7 @@ describe('TodoistBackend', () => {
                 json: async () => ({}),
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.addTask('Task with due date', '2025-12-31')
 
             const call = mockFetch.mock.calls[0]
@@ -811,7 +811,7 @@ describe('TodoistBackend', () => {
                 status: 400,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             await expect(backend.addTask('New task', null)).rejects.toThrow('HTTP 400: undefined')
         })
@@ -824,7 +824,7 @@ describe('TodoistBackend', () => {
                 json: async () => ({}),
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.completeTask('task-123')
 
             expect(mockFetch).toHaveBeenCalledWith(
@@ -854,7 +854,7 @@ describe('TodoistBackend', () => {
                 status: 500,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             await expect(backend.completeTask('task-123')).rejects.toThrow('HTTP 500: undefined')
         })
@@ -867,7 +867,7 @@ describe('TodoistBackend', () => {
                 json: async () => ({}),
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.uncompleteTask('task-456')
 
             expect(mockFetch).toHaveBeenCalledWith(
@@ -897,7 +897,7 @@ describe('TodoistBackend', () => {
                 status: 403,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             await expect(backend.uncompleteTask('task-456')).rejects.toThrow('Todoist API authentication failed: 403')
         })
@@ -910,7 +910,7 @@ describe('TodoistBackend', () => {
                 json: async () => ({}),
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.deleteTask('task-789')
 
             expect(mockFetch).toHaveBeenCalledWith(
@@ -940,7 +940,7 @@ describe('TodoistBackend', () => {
                 status: 404,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
 
             await expect(backend.deleteTask('task-789')).rejects.toThrow('HTTP 404: undefined')
         })
@@ -948,7 +948,7 @@ describe('TodoistBackend', () => {
 
     describe('getTasks', () => {
         it('returns empty array when no items exist', () => {
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             expect(backend.getTasks()).toEqual([])
         })
 
@@ -989,7 +989,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -1022,7 +1022,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -1059,7 +1059,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -1096,7 +1096,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -1128,7 +1128,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -1163,7 +1163,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -1195,7 +1195,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -1233,7 +1233,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()
@@ -1241,7 +1241,7 @@ describe('TodoistBackend', () => {
             expect(tasks[0].has_time).toBe(true)
         })
 
-        it('sorts tasks using TaskBackend.sortTasks', async () => {
+        it('sorts tasks using TaskProvider.sortTasks', async () => {
             const mockResponse = {
                 sync_token: 'token',
                 full_sync: true,
@@ -1276,7 +1276,7 @@ describe('TodoistBackend', () => {
                 json: async () => mockResponse,
             })
 
-            const backend = new TodoistBackend({ apiToken: 'test-token' })
+            const backend = new TodoistProvider({ apiToken: 'test-token' })
             await backend.sync()
 
             const tasks = backend.getTasks()

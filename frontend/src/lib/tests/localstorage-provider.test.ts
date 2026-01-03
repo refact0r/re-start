@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import LocalStorageBackend from '../backends/localstorage-backend'
+import LocalStorageProvider from '../providers/localstorage-provider'
 import type { RawTask, EnrichedTask } from '../types'
 
 // Mock the UUID module
@@ -32,7 +32,7 @@ function createMockLocalStorage() {
     }
 }
 
-describe('LocalStorageBackend', () => {
+describe('LocalStorageProvider', () => {
     let mockLocalStorage: ReturnType<typeof createMockLocalStorage>
 
     beforeEach(() => {
@@ -64,7 +64,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             expect(mockLocalStorage.getItem).toHaveBeenCalledWith('local_tasks')
             const tasks = backend.getTasks()
@@ -73,7 +73,7 @@ describe('LocalStorageBackend', () => {
         })
 
         it('returns empty items array when localStorage is empty', () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             expect(mockLocalStorage.getItem).toHaveBeenCalledWith('local_tasks')
             const tasks = backend.getTasks()
@@ -89,7 +89,7 @@ describe('LocalStorageBackend', () => {
             mockLocalStorage._store['local_tasks'] = 'invalid json {'
 
             // Should not throw - gracefully handles corrupted data
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             // Should return empty tasks when data is corrupted
             const tasks = backend.getTasks()
@@ -104,7 +104,7 @@ describe('LocalStorageBackend', () => {
 
     describe('saveData', () => {
         it('saves data to localStorage when tasks are modified', async () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             await backend.addTask('New task', null)
 
@@ -134,7 +134,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.completeTask('task-1')
 
             const savedData = JSON.parse(
@@ -147,7 +147,7 @@ describe('LocalStorageBackend', () => {
 
     describe('getTasks', () => {
         it('returns empty array when no tasks exist', () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
             expect(tasks).toEqual([])
         })
@@ -181,7 +181,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
 
             expect(tasks).toHaveLength(1)
@@ -206,7 +206,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
 
             expect(tasks).toHaveLength(1)
@@ -236,7 +236,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
 
             expect(tasks).toHaveLength(1)
@@ -266,7 +266,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
 
             expect(tasks).toEqual([])
@@ -290,7 +290,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
 
             expect(tasks[0].project_name).toBe('')
@@ -315,7 +315,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
 
             expect(tasks[0].due_date).toBeInstanceOf(Date)
@@ -348,7 +348,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
 
             expect(tasks[0].due_date).toBeInstanceOf(Date)
@@ -359,7 +359,7 @@ describe('LocalStorageBackend', () => {
             expect(dueDate.getTime()).toBe(expectedDate.getTime())
         })
 
-        it('sorts tasks using TaskBackend.sortTasks', () => {
+        it('sorts tasks using TaskProvider.sortTasks', () => {
             const taskData = {
                 items: [
                     {
@@ -388,7 +388,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             const tasks = backend.getTasks()
 
             // Unchecked task should be first (sortTasks behavior)
@@ -401,7 +401,7 @@ describe('LocalStorageBackend', () => {
 
     describe('addTask', () => {
         it('adds a new task with generated UUID', async () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             await backend.addTask('New task', null)
 
@@ -412,7 +412,7 @@ describe('LocalStorageBackend', () => {
         })
 
         it('adds task without due date', async () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             await backend.addTask('Task without due date', null)
 
@@ -422,7 +422,7 @@ describe('LocalStorageBackend', () => {
         })
 
         it('adds task with due date', async () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             await backend.addTask('Task with due date', '2025-12-20')
 
@@ -432,7 +432,7 @@ describe('LocalStorageBackend', () => {
         })
 
         it('sets initial task properties correctly', async () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             await backend.addTask('New task', null)
 
@@ -462,7 +462,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.addTask('Second task', null)
 
             const savedData = JSON.parse(
@@ -472,7 +472,7 @@ describe('LocalStorageBackend', () => {
         })
 
         it('persists the new task to localStorage', async () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             await backend.addTask('Persist me', null)
 
@@ -506,7 +506,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.completeTask('task-1')
 
             const tasks = backend.getTasks()
@@ -531,7 +531,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.completeTask('task-1')
 
             const tasks = backend.getTasks()
@@ -557,7 +557,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.completeTask('task-1')
 
             const savedData = JSON.parse(
@@ -585,7 +585,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.completeTask('non-existent-id')
 
             const tasks = backend.getTasks()
@@ -612,7 +612,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.uncompleteTask('task-1')
 
             const tasks = backend.getTasks()
@@ -637,7 +637,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.uncompleteTask('task-1')
 
             const tasks = backend.getTasks()
@@ -662,7 +662,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.uncompleteTask('task-1')
 
             const savedData = JSON.parse(
@@ -690,7 +690,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.uncompleteTask('non-existent-id')
 
             const tasks = backend.getTasks()
@@ -728,7 +728,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.deleteTask('task-1')
 
             const tasks = backend.getTasks()
@@ -754,7 +754,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.deleteTask('task-1')
 
             const savedData = JSON.parse(
@@ -781,7 +781,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             await backend.deleteTask('non-existent-id')
 
             const tasks = backend.getTasks()
@@ -791,14 +791,14 @@ describe('LocalStorageBackend', () => {
 
     describe('isCacheStale', () => {
         it('always returns false for localStorage backend', () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             expect(backend.isCacheStale()).toBe(false)
         })
     })
 
     describe('sync', () => {
         it('is a no-op for localStorage backend', async () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             // Should not throw and should complete successfully
             await expect(backend.sync()).resolves.toBeUndefined()
@@ -807,7 +807,7 @@ describe('LocalStorageBackend', () => {
 
     describe('clearLocalData', () => {
         it('is a no-op for localStorage backend', () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             // Should not throw
             expect(() => backend.clearLocalData()).not.toThrow()
@@ -831,7 +831,7 @@ describe('LocalStorageBackend', () => {
             }
             mockLocalStorage._store['local_tasks'] = JSON.stringify(taskData)
 
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             backend.clearLocalData()
 
             // Data should still be present
@@ -842,21 +842,21 @@ describe('LocalStorageBackend', () => {
 
     describe('getProjectName', () => {
         it('always returns empty string', () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             expect(backend.getProjectName('any-id')).toBe('')
         })
     })
 
     describe('getLabelNames', () => {
         it('always returns empty array', () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
             expect(backend.getLabelNames(['label1', 'label2'])).toEqual([])
         })
     })
 
     describe('invalidateCache', () => {
         it('is a no-op for localStorage backend', () => {
-            const backend = new LocalStorageBackend({})
+            const backend = new LocalStorageProvider({})
 
             // Should not throw
             expect(() => backend.invalidateCache()).not.toThrow()

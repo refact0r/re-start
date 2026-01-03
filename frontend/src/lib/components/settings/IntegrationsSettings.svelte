@@ -1,11 +1,11 @@
 <script lang="ts">
     import { settings, saveSettings } from '../../settings-store.svelte'
-    import { createTaskBackend } from '../../backends/index'
-    import type GoogleTasksBackend from '../../backends/google-tasks-backend'
+    import { createTaskProvider } from '../../providers/index'
+    import type GoogleTasksProvider from '../../providers/google-tasks-provider'
     import { Button, VerifyButton } from '../ui'
     import IntegrationCard from './IntegrationCard.svelte'
 
-    let googleTasksApi = $state<GoogleTasksBackend | null>(null)
+    let googleTasksApi = $state<GoogleTasksProvider | null>(null)
     let signingIn = $state(false)
     let signInError = $state('')
     let googleUserEmail = $state(
@@ -55,7 +55,7 @@
             signInError = ''
 
             if (!googleTasksApi) {
-                googleTasksApi = createTaskBackend('google-tasks')
+                googleTasksApi = createTaskProvider('google-tasks')
             }
 
             await googleTasksApi.signIn()
@@ -74,7 +74,7 @@
     async function handleGoogleSignOut(): Promise<void> {
         try {
             if (!googleTasksApi) {
-                googleTasksApi = createTaskBackend('google-tasks')
+                googleTasksApi = createTaskProvider('google-tasks')
             }
 
             await googleTasksApi.signOut()

@@ -11,7 +11,7 @@
         handleAuthCallback,
         tryRestoreSession,
         hasStoredUserId,
-    } from './lib/backends/google-auth/'
+    } from './lib/providers/google-auth/'
     import { authStore } from './lib/stores/auth-store'
     import { checkBackendHealth } from './lib/backend-status.svelte'
     import BackendErrorBanner from './lib/components/BackendErrorBanner.svelte'

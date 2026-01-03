@@ -67,7 +67,7 @@ import { onMount } from 'svelte'
 import type { Task, Settings } from '../types'
 
 // 3. Internal modules
-import TaskBackend from './task-backend'
+import TaskProvider from './task-provider'
 import { createLogger } from '../logger'
 import { NetworkError, AuthError } from '../errors'
 
@@ -78,13 +78,13 @@ import { Panel, Text, Button } from './ui'
 ### Naming Conventions
 | Type | Convention | Example |
 |------|------------|---------|
-| Files (TS) | kebab-case | `task-backend.ts` |
+| Files (TS) | kebab-case | `task-provider.ts` |
 | Files (Svelte) | PascalCase | `Settings.svelte` |
-| Classes | PascalCase | `TodoistBackend` |
-| Functions | camelCase | `createTaskBackend()` |
+| Classes | PascalCase | `TodoistProvider` |
+| Functions | camelCase | `createTaskProvider()` |
 | Private methods | `_` prefix | `_loadFromStorage()` |
 | Variables | camelCase | `syncToken` |
-| Types/Interfaces | PascalCase | `TaskBackendConfig` |
+| Types/Interfaces | PascalCase | `TaskProviderConfig` |
 | CSS variables | `--kebab-case` | `--bg-1`, `--txt-err` |
 | localStorage keys | snake_case | `todoist_sync_token` |
 
@@ -217,8 +217,8 @@ describe('ModuleName', () => {
 |------|---------|
 | `frontend/src/App.svelte` | Root component, layout |
 | `frontend/src/lib/settings-store.svelte.ts` | Global settings state |
-| `frontend/src/lib/backends/index.ts` | Task backend factory |
-| `frontend/src/lib/backends/google-auth/` | Google OAuth client |
+| `frontend/src/lib/providers/index.ts` | Task provider factory |
+| `frontend/src/lib/providers/google-auth/` | Google OAuth client |
 | `frontend/src/lib/errors.ts` | Error class hierarchy |
 | `frontend/src/lib/types.ts` | TypeScript types |
 

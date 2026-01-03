@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte'
-    import { createCalendarBackend } from '../backends/index'
+    import { createCalendarProvider } from '../providers/index'
     import { settings } from '../settings-store.svelte'
     import { authStore } from '../stores/auth-store'
     import type { AuthStatus } from '../stores/auth-store'
@@ -8,12 +8,12 @@
         hasMeetScope,
         signIn,
         refreshScopes,
-    } from '../backends/google-auth/'
+    } from '../providers/google-auth/'
     import { Panel, Text, Row, Link, Modal, ScrollList, Button } from './ui'
     import { RefreshCw } from 'lucide-svelte'
     import EventItem from './EventItem.svelte'
     import CopyableLink from './CopyableLink.svelte'
-    import type GoogleCalendarBackend from '../backends/google-calendar-backend'
+    import type GoogleCalendarProvider from '../providers/google-calendar-provider'
     import type { CalendarEvent } from '../types'
     type VideoProvider = 'meet' | 'teams' | 'zoom' | 'other' | null
 
@@ -33,7 +33,7 @@
         return 'other'
     }
 
-    let api: GoogleCalendarBackend | null = null
+    let api: GoogleCalendarProvider | null = null
     let events = $state<CalendarEvent[]>([])
     let syncing = $state(true)
     let error = $state('')
@@ -115,7 +115,7 @@
         error = ''
 
         try {
-            api = createCalendarBackend()
+            api = createCalendarProvider()
 
             // Load cached data immediately (works for 'unknown' and 'authenticated')
             const cachedEvents = api.getEvents()

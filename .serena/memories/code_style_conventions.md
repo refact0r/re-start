@@ -19,12 +19,12 @@
 - Reactive stores: `*.svelte.js` (e.g., `settings-store.svelte.js`)
 - Use document visibility API to pause updates when tab is hidden
 
-## Backend Pattern
-- Abstract base class in `task-backend.js`
+## Provider Pattern
+- Abstract base class in `task-provider.ts`
 - Implementations extend base class
-- Factory functions in `backends/index.js`:
-  - `createTaskBackend(type, config)`
-  - `createCalendarBackend()`
+- Factory functions in `providers/index.ts`:
+  - `createTaskProvider(type, config)`
+  - `createCalendarProvider()`
 
 ## Naming Conventions
 - Files: kebab-case (`date-matcher.js`, `weather-api.js`)

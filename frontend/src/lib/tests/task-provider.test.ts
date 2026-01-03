@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import TaskBackend from '../backends/task-backend'
+import TaskProvider from '../providers/task-provider'
 import type { EnrichedTask } from '../types'
 
 // Helper function to create test tasks with default values
@@ -21,7 +21,7 @@ function createTask(overrides: Partial<EnrichedTask> = {}): EnrichedTask {
     }
 }
 
-describe('TaskBackend.sortTasks', () => {
+describe('TaskProvider.sortTasks', () => {
     describe('unchecked tasks first', () => {
         it('places unchecked tasks before checked tasks', () => {
             const tasks: EnrichedTask[] = [
@@ -33,7 +33,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].id).toBe('2')
             expect(sorted[0].checked).toBe(false)
@@ -49,7 +49,7 @@ describe('TaskBackend.sortTasks', () => {
                 createTask({ id: '4', checked: false }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].checked).toBe(false)
             expect(sorted[1].checked).toBe(false)
@@ -78,7 +78,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             // Most recent (Dec 3) should be first
             expect(sorted[0].id).toBe('2')
@@ -96,7 +96,7 @@ describe('TaskBackend.sortTasks', () => {
                 createTask({ id: '2', checked: true, completed_at: null }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             // Should not throw and maintain some order
             expect(sorted).toHaveLength(2)
@@ -115,7 +115,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].id).toBe('2')
             expect(sorted[0].due_date).not.toBeNull()
@@ -133,7 +133,7 @@ describe('TaskBackend.sortTasks', () => {
                 createTask({ id: '2', checked: false, due_date: null }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             // Unchecked task should come first regardless of due date
             expect(sorted[0].id).toBe('2')
@@ -160,7 +160,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].id).toBe('2') // Dec 10
             expect(sorted[1].id).toBe('1') // Dec 15
@@ -175,7 +175,7 @@ describe('TaskBackend.sortTasks', () => {
                 createTask({ id: '3', due_date: dueDate, child_order: 1 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].id).toBe('2') // child_order 0
             expect(sorted[1].id).toBe('3') // child_order 1
@@ -200,7 +200,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].id).toBe('2')
             expect(sorted[0].project_id).toBeNull()
@@ -224,7 +224,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].id).toBe('2')
             expect(sorted[0].project_name).toBe('Inbox')
@@ -248,7 +248,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             // Should sort by due date, not project
             expect(sorted[0].id).toBe('2') // Earlier due date
@@ -264,7 +264,7 @@ describe('TaskBackend.sortTasks', () => {
                 createTask({ id: '3', child_order: 3 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].id).toBe('2') // child_order 1
             expect(sorted[1].id).toBe('3') // child_order 3
@@ -287,7 +287,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].id).toBe('2')
             expect(sorted[1].id).toBe('1')
@@ -335,7 +335,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             // Expected order:
             // 1. Unchecked with earliest due date
@@ -370,7 +370,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             // Unchecked first
             expect(sorted[0].id).toBe('unchecked')
@@ -382,13 +382,13 @@ describe('TaskBackend.sortTasks', () => {
 
         it('handles empty task array', () => {
             const tasks: EnrichedTask[] = []
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
             expect(sorted).toEqual([])
         })
 
         it('handles single task', () => {
             const tasks: EnrichedTask[] = [createTask({ id: 'only-task' })]
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
             expect(sorted).toHaveLength(1)
             expect(sorted[0].id).toBe('only-task')
         })
@@ -400,7 +400,7 @@ describe('TaskBackend.sortTasks', () => {
             ]
 
             const original = [...tasks]
-            TaskBackend.sortTasks(tasks)
+            TaskProvider.sortTasks(tasks)
 
             // Original array should be mutated (sort mutates in place)
             // But we can verify the sort worked
@@ -436,7 +436,7 @@ describe('TaskBackend.sortTasks', () => {
                 }),
             ]
 
-            const sorted = TaskBackend.sortTasks(tasks)
+            const sorted = TaskProvider.sortTasks(tasks)
 
             expect(sorted[0].child_order).toBe(1)
             expect(sorted[1].child_order).toBe(2)

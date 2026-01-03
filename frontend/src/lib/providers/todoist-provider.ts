@@ -1,5 +1,5 @@
-import TaskBackend from './task-backend'
-import type { TaskBackendConfig, EnrichedTask, TaskDue } from '../types'
+import TaskProvider from './task-provider'
+import type { TaskProviderConfig, EnrichedTask, TaskDue } from '../types'
 import { generateUUID } from '../uuid'
 import { createLogger } from '../logger'
 import { NetworkError, AuthError, RateLimitError } from '../errors'
@@ -55,7 +55,7 @@ const logger = createLogger('Todoist')
 /**
  * Todoist API client using the Sync endpoint for efficient data retrieval
  */
-class TodoistBackend extends TaskBackend {
+class TodoistProvider extends TaskProvider {
     private token: string
     private baseUrl: string
     private syncTokenKey: string
@@ -64,7 +64,7 @@ class TodoistBackend extends TaskBackend {
     protected override data: TodoistData
     protected override cacheExpiry: number
 
-    constructor(config: TaskBackendConfig) {
+    constructor(config: TaskProviderConfig) {
         super(config)
         this.token = config.apiToken || ''
         this.baseUrl = 'https://api.todoist.com/api/v1'
@@ -267,7 +267,7 @@ class TodoistBackend extends TaskBackend {
                 }
             })
 
-        return TaskBackend.sortTasks(mappedTasks)
+        return TaskProvider.sortTasks(mappedTasks)
     }
 
     /**
@@ -439,4 +439,4 @@ class TodoistBackend extends TaskBackend {
     }
 }
 
-export default TodoistBackend
+export default TodoistProvider

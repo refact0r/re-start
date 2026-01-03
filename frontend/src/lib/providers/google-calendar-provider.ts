@@ -2,7 +2,7 @@ import * as googleAuth from './google-auth'
 import { createApiClient } from './google-auth'
 import { generateUUID } from '../uuid'
 import type {
-    CalendarBackendConfig,
+    CalendarProviderConfig,
     CalendarEvent,
     GoogleCalendar,
 } from '../types'
@@ -64,7 +64,7 @@ const logger = createLogger('GoogleCalendar')
  * Google Calendar API client for Web Applications
  * Uses shared Google OAuth module for authentication
  */
-class GoogleCalendarBackend {
+class GoogleCalendarProvider {
     private baseUrl: string
     private dataKey: string
     private cacheExpiry: number
@@ -423,4 +423,4 @@ class GoogleCalendarBackend {
     }
 }
 
-export default GoogleCalendarBackend
+export default GoogleCalendarProvider

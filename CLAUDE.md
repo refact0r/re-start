@@ -34,18 +34,18 @@ frontend/
 │   ├── assets/
 │   │   └── descriptions.json    # Weather code descriptions
 │   └── lib/
-│       ├── backends/            # Task/calendar backend implementations
-│       │   ├── index.ts         # Factory functions (createTaskBackend, createCalendarBackend)
-│       │   ├── task-backend.ts  # Abstract base class
-│       │   ├── localstorage-backend.ts
-│       │   ├── todoist-backend.ts
-│       │   ├── google-tasks-backend.ts
-│       │   ├── google-calendar-backend.ts
-│       │   └── google-auth.ts   # Shared Google OAuth logic
+│       ├── providers/           # Task/calendar provider implementations
+│       │   ├── index.ts         # Factory functions (createTaskProvider, createCalendarProvider)
+│       │   ├── task-provider.ts # Abstract base class
+│       │   ├── localstorage-provider.ts
+│       │   ├── todoist-provider.ts
+│       │   ├── google-tasks-provider.ts
+│       │   ├── google-calendar-provider.ts
+│       │   └── google-auth/     # Shared Google OAuth logic
 │       ├── components/          # Svelte components
 │       │   ├── Clock.svelte     # Time/date display with 12/24hr format
 │       │   ├── Weather.svelte   # Weather with 5-hour forecast
-│       │   ├── Tasks.svelte     # Multi-backend task management
+│       │   ├── Tasks.svelte     # Multi-provider task management
 │       │   ├── AddTask.svelte   # Task input with date highlighting
 │       │   ├── Calendar.svelte  # Google Calendar events
 │       │   ├── Links.svelte     # Quick link grid with drag reorder
@@ -95,22 +95,22 @@ Key settings structure:
 - Background: `showBackground`, `backgroundOpacity`
 - Links: `showLinks`, `linksPerColumn`, `linkTarget`, `links[]`
 
-### Task Backend System
-Abstract backend pattern in `frontend/src/lib/backends/`:
-- `task-backend.ts` - base class defining interface (sync, getTasks, addTask, completeTask, uncompleteTask, deleteTask)
-- `localstorage-backend.ts` - browser-only storage (localStorage is source of truth)
-- `todoist-backend.ts` - Todoist Sync API v1 with incremental sync tokens
-- `google-tasks-backend.ts` - Google Tasks API with shared OAuth
+### Task Provider System
+Abstract provider pattern in `frontend/src/lib/providers/`:
+- `task-provider.ts` - base class defining interface (sync, getTasks, addTask, completeTask, uncompleteTask, deleteTask)
+- `localstorage-provider.ts` - browser-only storage (localStorage is source of truth)
+- `todoist-provider.ts` - Todoist Sync API v1 with incremental sync tokens
+- `google-tasks-provider.ts` - Google Tasks API with shared OAuth
 
-Factory functions in `frontend/src/lib/backends/index.ts`:
-- `createTaskBackend(type, config)` - instantiates task backend
-- `createCalendarBackend()` - instantiates Google Calendar backend
+Factory functions in `frontend/src/lib/providers/index.ts`:
+- `createTaskProvider(type, config)` - instantiates task provider
+- `createCalendarProvider()` - instantiates Google Calendar provider
 
-### Google Calendar Backend
-`google-calendar-backend.ts` fetches today's events using Google Calendar API v3. Shares OAuth with Google Tasks.
+### Google Calendar Provider
+`google-calendar-provider.ts` fetches today's events using Google Calendar API v3. Shares OAuth with Google Tasks.
 
 ### Google OAuth System
-`frontend/src/lib/backends/google-auth.ts` uses Google Identity Services (GIS) library:
+`frontend/src/lib/providers/google-auth/` uses Google Identity Services (GIS) library:
 - `signIn()` - requests access token via GIS popup
 - `ensureValidToken()` - auto-refresh with 5-minute buffer before expiry
 - `getIsSignedIn()` - check if token exists and not expired
@@ -221,7 +221,7 @@ The Node backend serves everything:
 
 **Key Files:**
 - `frontend/vite.config.ts` - Dev proxy: `/api` → `http://localhost:3004`
-- `frontend/src/lib/backends/google-auth.ts` - Uses relative `/api/auth/*` paths (works in both dev/prod)
+- `frontend/src/lib/providers/google-auth/` - Uses relative `/api/auth/*` paths (works in both dev/prod)
 - `backend/server.js` - Express server serving static files + OAuth routes
 - `.github/workflows/deploy.yml` - Copies frontend build to backend before deploy
 
@@ -245,13 +245,13 @@ The Node backend serves everything:
 ### Workflow example:
 ```
 # 1. Understand file structure (NOT Read tool)
-mcp__serena__get_symbols_overview("frontend/src/lib/backends/google-auth.ts")
+mcp__serena__get_symbols_overview("frontend/src/lib/providers/google-auth/index.ts")
 
 # 2. Find specific symbol with body
 mcp__serena__find_symbol(name_path_pattern="signIn", include_body=True)
 
 # 3. Find all usages
-mcp__serena__find_referencing_symbols(name_path="signIn", relative_path="frontend/src/lib/backends/google-auth.ts")
+mcp__serena__find_referencing_symbols(name_path="signIn", relative_path="frontend/src/lib/providers/google-auth/index.ts")
 
 # 4. Edit a symbol
 mcp__serena__replace_symbol_body(name_path="signIn", relative_path="...", body="new code")
@@ -265,7 +265,7 @@ mcp__serena__replace_symbol_body(name_path="signIn", relative_path="...", body="
 ## Error Handling Patterns
 
 ### Error Types
-All backends use typed error classes from `frontend/src/lib/errors.ts` for consistent error handling:
+All providers use typed error classes from `frontend/src/lib/errors.ts` for consistent error handling:
 
 **Error Hierarchy:**
 ```typescript
@@ -313,7 +313,7 @@ Output format: `[BackendName] message data`
 ### Error Handling in Backends
 
 **Base Class Helpers:**
-`TaskBackend` provides helper methods for consistent error handling:
+`TaskProvider` provides helper methods for consistent error handling:
 - `wrapError(error, context, defaultType)` - Wraps unknown errors into typed BackendErrors
 - `isRetryableError(error)` - Determines if error should be retried
 
@@ -379,7 +379,7 @@ Output format: `[BackendName] message data`
 
 ### Error Handling Examples
 
-**TodoistBackend** - Retry logic with typed errors:
+**TodoistProvider** - Retry logic with typed errors:
 ```typescript
 catch (error) {
   if (this.isRetryableError(error) && !isRetry) {

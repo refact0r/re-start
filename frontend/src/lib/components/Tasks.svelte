@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy, untrack } from 'svelte'
-    import { createTaskBackend } from '../backends/index'
+    import { createTaskProvider } from '../providers/index'
     import { settings } from '../settings-store.svelte'
     import { authStore } from '../stores/auth-store'
     import type { AuthStatus } from '../stores/auth-store'
@@ -14,10 +14,10 @@
     import { RefreshCw } from 'lucide-svelte'
     import TaskItem from './TaskItem.svelte'
     import AddTask from './AddTask.svelte'
-    import type TaskBackend from '../backends/task-backend'
-    import type { EnrichedTask, TaskBackendType } from '../types'
+    import type TaskProvider from '../providers/task-provider'
+    import type { EnrichedTask, TaskProviderType } from '../types'
 
-    let api: TaskBackend | null = null
+    let api: TaskProvider | null = null
     let tasks = $state<EnrichedTask[]>([])
     let syncing = $state(true)
     let error = $state('')
@@ -59,7 +59,7 @@
     })
 
     async function initializeAPI(
-        backend: TaskBackendType,
+        backend: TaskProviderType,
         token: string,
         authStatus: AuthStatus,
         clearLocalData = false
@@ -84,9 +84,9 @@
 
         try {
             if (backend === 'google-tasks') {
-                api = createTaskBackend(backend)
+                api = createTaskProvider(backend)
             } else {
-                api = createTaskBackend(backend, { token })
+                api = createTaskProvider(backend, { token })
             }
 
             if (clearLocalData) {

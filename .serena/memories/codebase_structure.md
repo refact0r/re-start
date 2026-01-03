@@ -9,14 +9,14 @@ re-start/
 │   ├── assets/
 │   │   └── descriptions.json        # Weather code descriptions
 │   └── lib/
-│       ├── backends/                # Task/calendar backend implementations
-│       │   ├── index.js             # Factory functions
-│       │   ├── task-backend.js      # Abstract base class
-│       │   ├── localstorage-backend.js
-│       │   ├── todoist-backend.js
-│       │   ├── google-tasks-backend.js
-│       │   ├── google-calendar-backend.js
-│       │   └── google-auth.js       # Shared Google OAuth
+│       ├── providers/               # Task/calendar provider implementations
+│       │   ├── index.ts             # Factory functions
+│       │   ├── task-provider.ts     # Abstract base class
+│       │   ├── localstorage-provider.ts
+│       │   ├── todoist-provider.ts
+│       │   ├── google-tasks-provider.ts
+│       │   ├── google-calendar-provider.ts
+│       │   └── google-auth/         # Shared Google OAuth
 │       ├── components/              # Svelte components
 │       │   ├── Clock.svelte
 │       │   ├── Weather.svelte
@@ -54,7 +54,7 @@ re-start/
 ## Key Entry Points
 - **App Entry**: `src/main.js` → `App.svelte`
 - **State Management**: `src/lib/settings-store.svelte.js`
-- **Backend Factory**: `src/lib/backends/index.js`
+- **Provider Factory**: `src/lib/providers/index.ts`
 
 ## Build Flow
 1. Vite builds from `index.html` + `src/main.js`
