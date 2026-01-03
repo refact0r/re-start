@@ -429,9 +429,11 @@ describe('TodoistBackend', () => {
             // Set up backend with existing sync token
             mockLocalStorage._store['todoist_sync_token'] = 'invalid-token'
 
+            // Use 500 error which is retryable
             const mockErrorResponse = {
                 ok: false,
-                status: 400,
+                status: 500,
+                statusText: 'Internal Server Error',
             }
 
             const mockSuccessResponse = {
@@ -480,7 +482,7 @@ describe('TodoistBackend', () => {
 
             const backend = new TodoistBackend({ apiToken: 'test-token' })
 
-            await expect(backend.sync()).rejects.toThrow('todoist fetch failed')
+            await expect(backend.sync()).rejects.toThrow('HTTP 400: undefined')
         })
 
         it('does not retry when sync token is already "*"', async () => {
@@ -811,9 +813,7 @@ describe('TodoistBackend', () => {
 
             const backend = new TodoistBackend({ apiToken: 'test-token' })
 
-            await expect(backend.addTask('New task', null)).rejects.toThrow(
-                'todoist command fetch failed: 400'
-            )
+            await expect(backend.addTask('New task', null)).rejects.toThrow('HTTP 400: undefined')
         })
     })
 
@@ -856,9 +856,7 @@ describe('TodoistBackend', () => {
 
             const backend = new TodoistBackend({ apiToken: 'test-token' })
 
-            await expect(backend.completeTask('task-123')).rejects.toThrow(
-                'todoist command fetch failed: 500'
-            )
+            await expect(backend.completeTask('task-123')).rejects.toThrow('HTTP 500: undefined')
         })
     })
 
@@ -901,9 +899,7 @@ describe('TodoistBackend', () => {
 
             const backend = new TodoistBackend({ apiToken: 'test-token' })
 
-            await expect(backend.uncompleteTask('task-456')).rejects.toThrow(
-                'todoist command fetch failed: 403'
-            )
+            await expect(backend.uncompleteTask('task-456')).rejects.toThrow('Todoist API authentication failed: 403')
         })
     })
 
@@ -946,9 +942,7 @@ describe('TodoistBackend', () => {
 
             const backend = new TodoistBackend({ apiToken: 'test-token' })
 
-            await expect(backend.deleteTask('task-789')).rejects.toThrow(
-                'todoist command fetch failed: 404'
-            )
+            await expect(backend.deleteTask('task-789')).rejects.toThrow('HTTP 404: undefined')
         })
     })
 

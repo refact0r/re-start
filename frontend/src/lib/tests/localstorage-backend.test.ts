@@ -81,21 +81,22 @@ describe('LocalStorageBackend', () => {
         })
 
         it('handles corrupted JSON data gracefully', () => {
-            // Spy on console.error to verify error is logged
+            // Suppress console.error for this test since we expect an error to be logged
             const consoleErrorSpy = vi
                 .spyOn(console, 'error')
                 .mockImplementation(() => {})
 
             mockLocalStorage._store['local_tasks'] = 'invalid json {'
 
+            // Should not throw - gracefully handles corrupted data
             const backend = new LocalStorageBackend({})
 
-            expect(consoleErrorSpy).toHaveBeenCalledWith(
-                'Failed to parse local tasks:',
-                expect.any(Error)
-            )
+            // Should return empty tasks when data is corrupted
             const tasks = backend.getTasks()
             expect(tasks).toEqual([])
+
+            // Error should have been logged (via console.error from logger)
+            expect(consoleErrorSpy).toHaveBeenCalled()
 
             consoleErrorSpy.mockRestore()
         })

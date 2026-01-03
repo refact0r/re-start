@@ -11,6 +11,7 @@ vi.mock('../backends/google-auth', () => ({
     ensureValidToken: vi.fn(() => Promise.resolve('mock-token-123')),
     migrateStorageKeys: vi.fn(),
     apiRequest: vi.fn(),
+    createApiClient: vi.fn(() => vi.fn()),
 }))
 
 // Helper to create a mock localStorage
@@ -48,7 +49,8 @@ describe('GoogleTasksBackend', () => {
 
         // Reset mock implementations
         mockApiRequest = vi.fn()
-        vi.mocked(googleAuth.apiRequest).mockImplementation(mockApiRequest)
+        // createApiClient returns a function that will be used for API requests
+        vi.mocked(googleAuth.createApiClient).mockReturnValue(mockApiRequest)
         vi.mocked(googleAuth.isSignedIn).mockReturnValue(true)
         vi.mocked(googleAuth.ensureValidToken).mockResolvedValue('mock-token-123')
 
@@ -222,22 +224,15 @@ describe('GoogleTasksBackend', () => {
             await backend.sync()
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://tasks.googleapis.com/tasks/v1/users/@me/lists?maxResults=20',
-                expect.objectContaining({
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
+                '/users/@me/lists?maxResults=20'
             )
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://tasks.googleapis.com/tasks/v1/lists/list1/tasks?showCompleted=true&showHidden=true&maxResults=100',
-                expect.any(Object)
+                '/lists/list1/tasks?showCompleted=true&showHidden=true&maxResults=100'
             )
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://tasks.googleapis.com/tasks/v1/lists/list2/tasks?showCompleted=true&showHidden=true&maxResults=100',
-                expect.any(Object)
+                '/lists/list2/tasks?showCompleted=true&showHidden=true&maxResults=100'
             )
         })
 
@@ -408,8 +403,7 @@ describe('GoogleTasksBackend', () => {
             // Should only fetch tasklists, not tasks
             expect(mockApiRequest).toHaveBeenCalledTimes(1)
             expect(mockApiRequest).toHaveBeenCalledWith(
-                expect.stringContaining('/users/@me/lists'),
-                expect.any(Object)
+                expect.stringContaining('/users/@me/lists')
             )
         })
 
@@ -425,7 +419,8 @@ describe('GoogleTasksBackend', () => {
 
             await expect(backend.sync()).rejects.toThrow('API request failed')
             expect(consoleErrorSpy).toHaveBeenCalledWith(
-                'Google Tasks sync error:',
+                '[GoogleTasks]',
+                'Google Tasks sync failed:',
                 expect.any(Error)
             )
 
@@ -708,13 +703,10 @@ describe('GoogleTasksBackend', () => {
             await backend.addTask('New task', null)
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://tasks.googleapis.com/tasks/v1/lists/@default/tasks',
+                '/lists/@default/tasks',
                 {
                     method: 'POST',
                     body: JSON.stringify({ title: 'New task' }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                 }
             )
         })
@@ -726,16 +718,13 @@ describe('GoogleTasksBackend', () => {
             await backend.addTask('Task with due date', '2025-12-25')
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                expect.stringContaining('/tasks'),
+                '/lists/@default/tasks',
                 {
                     method: 'POST',
                     body: JSON.stringify({
                         title: 'Task with due date',
                         due: '2025-12-25T00:00:00.000Z',
                     }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                 }
             )
         })
@@ -798,13 +787,10 @@ describe('GoogleTasksBackend', () => {
             await backend.completeTask('task1')
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://tasks.googleapis.com/tasks/v1/lists/list1/tasks/task1',
+                '/lists/list1/tasks/task1',
                 {
                     method: 'PATCH',
                     body: expect.stringContaining('"status":"completed"'),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                 }
             )
 
@@ -889,16 +875,13 @@ describe('GoogleTasksBackend', () => {
             await backend.uncompleteTask('task1')
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://tasks.googleapis.com/tasks/v1/lists/list1/tasks/task1',
+                '/lists/list1/tasks/task1',
                 {
                     method: 'PATCH',
                     body: JSON.stringify({
                         status: 'needsAction',
                         completed: null,
                     }),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                 }
             )
         })
@@ -976,12 +959,9 @@ describe('GoogleTasksBackend', () => {
             await backend.deleteTask('task1')
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://tasks.googleapis.com/tasks/v1/lists/list1/tasks/task1',
+                '/lists/list1/tasks/task1',
                 {
                     method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                 }
             )
         })

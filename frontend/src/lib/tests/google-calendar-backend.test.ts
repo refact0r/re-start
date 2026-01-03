@@ -8,6 +8,7 @@ vi.mock('../backends/google-auth', () => ({
     isSignedIn: vi.fn(() => true),
     migrateStorageKeys: vi.fn(),
     apiRequest: vi.fn(),
+    createApiClient: vi.fn(() => vi.fn()),
 }))
 
 // Mock the uuid module
@@ -50,7 +51,8 @@ describe('GoogleCalendarBackend', () => {
 
         // Reset mock implementations
         mockApiRequest = vi.fn()
-        vi.mocked(googleAuth.apiRequest).mockImplementation(mockApiRequest)
+        // createApiClient returns a function that will be used for API requests
+        vi.mocked(googleAuth.createApiClient).mockReturnValue(mockApiRequest)
         vi.mocked(googleAuth.isSignedIn).mockReturnValue(true)
 
         vi.clearAllMocks()
@@ -242,12 +244,7 @@ describe('GoogleCalendarBackend', () => {
             const result = await backend.sync()
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://www.googleapis.com/calendar/v3/users/me/calendarList?maxResults=50',
-                expect.objectContaining({
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
+                '/users/me/calendarList?maxResults=50'
             )
 
             expect(result.calendars).toHaveLength(2)
@@ -353,8 +350,7 @@ describe('GoogleCalendarBackend', () => {
             // Should only fetch events for cal1
             expect(mockApiRequest).toHaveBeenCalledTimes(2) // 1 calendar list + 1 events
             expect(mockApiRequest).toHaveBeenCalledWith(
-                expect.stringContaining('/calendars/cal1/events'),
-                expect.any(Object)
+                expect.stringContaining('/calendars/cal1/events')
             )
         })
 
@@ -431,8 +427,12 @@ describe('GoogleCalendarBackend', () => {
             // Should still return data from successful calendar
             expect(result.events).toEqual([])
             expect(consoleWarnSpy).toHaveBeenCalledWith(
-                expect.stringContaining('Failed to fetch events'),
-                expect.any(Error)
+                '[GoogleCalendar]',
+                'Failed to fetch events from calendar:',
+                expect.objectContaining({
+                    calendarId: 'cal1',
+                    error: expect.any(Error),
+                })
             )
 
             consoleWarnSpy.mockRestore()
@@ -447,9 +447,10 @@ describe('GoogleCalendarBackend', () => {
 
             const backend = new GoogleCalendarBackend()
 
-            await expect(backend.sync()).rejects.toThrow('API request failed')
+            await expect(backend.sync()).rejects.toThrow('Google Calendar sync failed')
             expect(consoleErrorSpy).toHaveBeenCalledWith(
-                'Google Calendar sync error:',
+                '[GoogleCalendar]',
+                'Google Calendar sync failed:',
                 expect.any(Error)
             )
 
@@ -898,8 +899,7 @@ describe('GoogleCalendarBackend', () => {
             const calendars = await backend.fetchCalendarList()
 
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://www.googleapis.com/calendar/v3/users/me/calendarList?maxResults=50',
-                expect.any(Object)
+                '/users/me/calendarList?maxResults=50'
             )
 
             expect(calendars).toHaveLength(2)
@@ -998,7 +998,7 @@ describe('GoogleCalendarBackend', () => {
 
             // Verify create event call
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1',
+                '/calendars/primary/events?conferenceDataVersion=1',
                 expect.objectContaining({
                     method: 'POST',
                     body: expect.stringContaining('Instant Meeting'),
@@ -1007,7 +1007,7 @@ describe('GoogleCalendarBackend', () => {
 
             // Verify delete event call
             expect(mockApiRequest).toHaveBeenCalledWith(
-                'https://www.googleapis.com/calendar/v3/calendars/primary/events/temp-event-123',
+                '/calendars/primary/events/temp-event-123',
                 expect.objectContaining({
                     method: 'DELETE',
                 })
@@ -1145,6 +1145,7 @@ describe('GoogleCalendarBackend', () => {
 
             expect(meetLink).toBe('https://meet.google.com/abc-defg-hij')
             expect(consoleWarnSpy).toHaveBeenCalledWith(
+                '[GoogleCalendar]',
                 'Failed to delete temporary event:',
                 expect.any(Error)
             )
@@ -1164,9 +1165,10 @@ describe('GoogleCalendarBackend', () => {
             const backend = new GoogleCalendarBackend()
 
             await expect(backend.createMeetLink()).rejects.toThrow(
-                'HTTP 403: Forbidden'
+                'Failed to create Meet link'
             )
             expect(consoleErrorSpy).toHaveBeenCalledWith(
+                '[GoogleCalendar]',
                 'Failed to create Meet link:',
                 expect.any(Error)
             )

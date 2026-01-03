@@ -255,7 +255,7 @@ describe('WeatherAPI', () => {
 
             await expect(
                 api.sync(40.7128, -74.006, 'celsius', 'kmh')
-            ).rejects.toThrow('HTTP 500 Internal Server Error')
+            ).rejects.toThrow('HTTP 500: Internal Server Error')
         })
 
         it('returns cache data after sync', async () => {
