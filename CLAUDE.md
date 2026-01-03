@@ -9,62 +9,82 @@ re-start is a TUI-style browser startpage extension built with Svelte 5. It feat
 ## Commands
 
 ```bash
+# Frontend (from frontend/)
+cd frontend
 npm run dev            # Run dev server at localhost:5173
 npm run build:firefox  # Build for Firefox → dist/firefox
 npm run build:chrome   # Build for Chrome → dist/chrome
 npm run watch          # Build + watch for Firefox (use with web-ext run)
 npm test               # Run vitest tests
+
+# Backend (from backend/)
+cd backend
+npm install            # Install backend dependencies
+node server.js         # Run backend server at localhost:3004
 ```
 
 ## Project Structure
 
 ```
-src/
-├── main.js                      # Entry point - mounts App.svelte
-├── App.svelte                   # Root component with layout and settings modal
-├── app.css                      # Global styles
-├── assets/
-│   └── descriptions.json        # Weather code descriptions
-└── lib/
-    ├── backends/                # Task/calendar backend implementations
-    │   ├── index.js             # Factory functions (createTaskBackend, createCalendarBackend)
-    │   ├── task-backend.js      # Abstract base class
-    │   ├── localstorage-backend.js
-    │   ├── todoist-backend.js
-    │   ├── google-tasks-backend.js
-    │   ├── google-calendar-backend.js
-    │   └── google-auth.js       # Shared Google OAuth logic
-    ├── components/              # Svelte components
-    │   ├── Clock.svelte         # Time/date display with 12/24hr format
-    │   ├── Weather.svelte       # Weather with 5-hour forecast
-    │   ├── Tasks.svelte         # Multi-backend task management
-    │   ├── AddTask.svelte       # Task input with date highlighting
-    │   ├── Calendar.svelte      # Google Calendar events
-    │   ├── Links.svelte         # Quick link grid with drag reorder
-    │   ├── Settings.svelte      # Settings modal
-    │   ├── Stats.svelte         # FPS/latency/viewport stats
-    │   └── RadioButton.svelte   # Custom radio button
-    ├── settings-store.svelte.js # State management with Svelte 5 runes
-    ├── themes.js                # Theme definitions (10+ themes)
-    ├── date-matcher.js          # Natural language date parser
-    ├── weather-api.js           # OpenMeteo API wrapper
-    ├── unsplash-api.js          # Daily background images from Unsplash
-    └── tests/
-        └── date-matcher.test.js
-public/
-├── manifest.json                # Extension manifest template
-└── icon.svg
-scripts/
-└── build-manifest.js            # Browser-specific manifest generator
+frontend/
+├── src/
+│   ├── main.ts                  # Entry point - mounts App.svelte
+│   ├── App.svelte               # Root component with layout and settings modal
+│   ├── app.css                  # Global styles
+│   ├── assets/
+│   │   └── descriptions.json    # Weather code descriptions
+│   └── lib/
+│       ├── backends/            # Task/calendar backend implementations
+│       │   ├── index.ts         # Factory functions (createTaskBackend, createCalendarBackend)
+│       │   ├── task-backend.ts  # Abstract base class
+│       │   ├── localstorage-backend.ts
+│       │   ├── todoist-backend.ts
+│       │   ├── google-tasks-backend.ts
+│       │   ├── google-calendar-backend.ts
+│       │   └── google-auth.ts   # Shared Google OAuth logic
+│       ├── components/          # Svelte components
+│       │   ├── Clock.svelte     # Time/date display with 12/24hr format
+│       │   ├── Weather.svelte   # Weather with 5-hour forecast
+│       │   ├── Tasks.svelte     # Multi-backend task management
+│       │   ├── AddTask.svelte   # Task input with date highlighting
+│       │   ├── Calendar.svelte  # Google Calendar events
+│       │   ├── Links.svelte     # Quick link grid with drag reorder
+│       │   ├── Settings.svelte  # Settings modal
+│       │   ├── Stats.svelte     # FPS/latency/viewport stats
+│       │   └── RadioButton.svelte # Custom radio button
+│       ├── settings-store.svelte.ts # State management with Svelte 5 runes
+│       ├── themes.ts            # Theme definitions (10+ themes)
+│       ├── date-matcher.ts      # Natural language date parser
+│       ├── weather-api.ts       # OpenMeteo API wrapper
+│       ├── unsplash-api.ts      # Daily background images from Unsplash
+│       └── tests/
+│           └── date-matcher.test.ts
+├── public/
+│   ├── manifest.json            # Extension manifest template
+│   └── icon.svg
+├── scripts/
+│   └── build-manifest.js        # Browser-specific manifest generator
+├── index.html                   # Entry HTML file
+├── package.json                 # Frontend dependencies
+├── vite.config.ts               # Vite configuration
+├── tsconfig.json                # TypeScript configuration
+└── eslint.config.js             # ESLint configuration
+
+backend/
+├── server.js                    # Express server for OAuth and static files
+├── routes/                      # API route handlers
+├── package.json                 # Backend dependencies
+├── Dockerfile                   # Container configuration
+└── docker-compose.yml           # Docker compose configuration
 ```
 
 ## Architecture
 
 ### Entry Point Flow
-`src/main.js` → mounts `App.svelte` → renders widgets (Clock, Weather, Tasks, Calendar, Links, Stats) + Settings modal
+`frontend/src/main.ts` → mounts `App.svelte` → renders widgets (Clock, Weather, Tasks, Calendar, Links, Stats) + Settings modal
 
 ### State Management
-Uses Svelte 5 runes (`$state`, `$effect`, `$derived`) in `src/lib/settings-store.svelte.js`. Settings persist to localStorage and reactive effects in App.svelte handle theme/CSS/font updates.
+Uses Svelte 5 runes (`$state`, `$effect`, `$derived`) in `frontend/src/lib/settings-store.svelte.ts`. Settings persist to localStorage and reactive effects in App.svelte handle theme/CSS/font updates.
 
 Key settings structure:
 - Display: `font`, `currentTheme`, `tabTitle`, `customCSS`
@@ -76,21 +96,21 @@ Key settings structure:
 - Links: `showLinks`, `linksPerColumn`, `linkTarget`, `links[]`
 
 ### Task Backend System
-Abstract backend pattern in `src/lib/backends/`:
-- `task-backend.js` - base class defining interface (sync, getTasks, addTask, completeTask, uncompleteTask, deleteTask)
-- `localstorage-backend.js` - browser-only storage (localStorage is source of truth)
-- `todoist-backend.js` - Todoist Sync API v1 with incremental sync tokens
-- `google-tasks-backend.js` - Google Tasks API with shared OAuth
+Abstract backend pattern in `frontend/src/lib/backends/`:
+- `task-backend.ts` - base class defining interface (sync, getTasks, addTask, completeTask, uncompleteTask, deleteTask)
+- `localstorage-backend.ts` - browser-only storage (localStorage is source of truth)
+- `todoist-backend.ts` - Todoist Sync API v1 with incremental sync tokens
+- `google-tasks-backend.ts` - Google Tasks API with shared OAuth
 
-Factory functions in `src/lib/backends/index.js`:
+Factory functions in `frontend/src/lib/backends/index.ts`:
 - `createTaskBackend(type, config)` - instantiates task backend
 - `createCalendarBackend()` - instantiates Google Calendar backend
 
 ### Google Calendar Backend
-`google-calendar-backend.js` fetches today's events using Google Calendar API v3. Shares OAuth with Google Tasks.
+`google-calendar-backend.ts` fetches today's events using Google Calendar API v3. Shares OAuth with Google Tasks.
 
 ### Google OAuth System
-`src/lib/backends/google-auth.js` uses Google Identity Services (GIS) library:
+`frontend/src/lib/backends/google-auth.ts` uses Google Identity Services (GIS) library:
 - `signIn()` - requests access token via GIS popup
 - `ensureValidToken()` - auto-refresh with 5-minute buffer before expiry
 - `getIsSignedIn()` - check if token exists and not expired
@@ -100,28 +120,28 @@ OAuth scopes: `tasks`, `calendar.readonly`, `userinfo.email`
 GIS library loaded dynamically from `https://accounts.google.com/gsi/client`
 
 ### Unsplash Background
-`src/lib/unsplash-api.js` provides daily background images:
+`frontend/src/lib/unsplash-api.ts` provides daily background images:
 - Fetches random images from topics: abstract, nature, city, architecture, landscape
 - Daily auto-refresh with lazy update (checks date on load)
 - Force refresh via Settings
 - Caches image data and photographer attribution in localStorage
 
 ### Weather API
-`src/lib/weather-api.js` wraps OpenMeteo API (free, no key required):
+`frontend/src/lib/weather-api.ts` wraps OpenMeteo API (free, no key required):
 - 24-hour forecast (5 forecasts, every 3 hours)
 - Current conditions with apparent temperature
 - 15-minute cache TTL with coordinate-based invalidation
-- Weather codes mapped via `src/assets/descriptions.json`
+- Weather codes mapped via `frontend/src/assets/descriptions.json`
 
 ### Theming
-Themes defined in `src/lib/themes.js` as CSS variable maps. Includes: default, rose-pine, catppuccin-mocha, catppuccin-latte, nord, tokyo-night, gruvbox, everforest.
+Themes defined in `frontend/src/lib/themes.ts` as CSS variable maps. Includes: default, rose-pine, catppuccin-mocha, catppuccin-latte, nord, tokyo-night, gruvbox, everforest.
 
-Theme data is injected at build time via `vite.config.js` plugin and applied before render via IIFE in `index.html` (prevents flash). Runtime updates via `document.documentElement.style.setProperty()`.
+Theme data is injected at build time via `frontend/vite.config.ts` plugin and applied before render via IIFE in `index.html` (prevents flash). Runtime updates via `document.documentElement.style.setProperty()`.
 
 CSS variables: `--bg-1/2/3`, `--txt-1/2/3/4`, `--txt-err`, `--font-family`
 
 ### Smart Date Parsing
-`src/lib/date-matcher.js` provides natural language date parsing for task input. Supports:
+`frontend/src/lib/date-matcher.ts` provides natural language date parsing for task input. Supports:
 - Relative: `today`, `tomorrow`, `tmrw`, `yesterday`
 - Weekdays: `monday`, `next friday`, `mon`
 - Month formats: `january 15`, `jan 15th`, `15 january`
@@ -130,9 +150,9 @@ CSS variables: `--bg-1/2/3`, `--txt-1/2/3/4`, `--txt-err`, `--font-family`
 Returns `{ match: {start, end}, due: 'YYYY-MM-DD', hasTime: boolean }`. Used by `AddTask.svelte` to highlight parsed dates in real-time.
 
 ### Build System
-Vite with custom plugins in `vite.config.js`:
+Vite with custom plugins in `frontend/vite.config.ts`:
 - `injectThemeScript()` - extracts theme colors and injects loader into HTML
-- `excludeManifest()` - removes manifest.json (generated per-target by `scripts/build-manifest.js`)
+- `excludeManifest()` - removes manifest.json (generated per-target by `frontend/scripts/build-manifest.js`)
 - Version injected via `__APP_VERSION__` from manifest.json
 
 ### Development & Production Architecture
@@ -180,9 +200,9 @@ The app runs as a web app (not just browser extension) with a Node.js backend fo
 cd backend && node server.js    # Runs on :3004
 
 # Terminal 2 - Frontend (Vite dev server)
-npm run dev                      # Runs on :5173, proxies /api/* to :3004
+cd frontend && npm run dev      # Runs on :5173, proxies /api/* to :3004
 ```
-Open `http://localhost:5173`. Vite proxies `/api/*` requests to the backend (configured in `vite.config.js`).
+Open `http://localhost:5173`. Vite proxies `/api/*` requests to the backend (configured in `frontend/vite.config.ts`).
 
 **Production Setup:**
 The Node backend serves everything:
@@ -193,15 +213,15 @@ The Node backend serves everything:
 **Deployment Flow (GitHub Actions):**
 ```yaml
 # .github/workflows/deploy.yml
-1. npm ci && npm run build          # Build frontend → dist/firefox/
-2. cp -r dist/firefox backend/public # Copy to backend static folder
-3. rsync backend/ → server          # Deploy backend (with frontend inside)
-4. docker compose up -d --build     # Restart container
+1. cd frontend && npm ci && npm run build  # Build frontend → frontend/dist/firefox/
+2. cp -r frontend/dist/firefox backend/public  # Copy to backend static folder
+3. rsync backend/ → server                 # Deploy backend (with frontend inside)
+4. docker compose up -d --build            # Restart container
 ```
 
 **Key Files:**
-- `vite.config.js` - Dev proxy: `/api` → `http://localhost:3004`
-- `src/lib/backends/google-auth.js` - Uses relative `/api/auth/*` paths (works in both dev/prod)
+- `frontend/vite.config.ts` - Dev proxy: `/api` → `http://localhost:3004`
+- `frontend/src/lib/backends/google-auth.ts` - Uses relative `/api/auth/*` paths (works in both dev/prod)
 - `backend/server.js` - Express server serving static files + OAuth routes
 - `.github/workflows/deploy.yml` - Copies frontend build to backend before deploy
 
@@ -225,13 +245,13 @@ The Node backend serves everything:
 ### Workflow example:
 ```
 # 1. Understand file structure (NOT Read tool)
-mcp__serena__get_symbols_overview("src/lib/backends/google-auth.js")
+mcp__serena__get_symbols_overview("frontend/src/lib/backends/google-auth.ts")
 
 # 2. Find specific symbol with body
 mcp__serena__find_symbol(name_path_pattern="signIn", include_body=True)
 
 # 3. Find all usages
-mcp__serena__find_referencing_symbols(name_path="signIn", relative_path="src/lib/backends/google-auth.js")
+mcp__serena__find_referencing_symbols(name_path="signIn", relative_path="frontend/src/lib/backends/google-auth.ts")
 
 # 4. Edit a symbol
 mcp__serena__replace_symbol_body(name_path="signIn", relative_path="...", body="new code")
@@ -245,7 +265,7 @@ mcp__serena__replace_symbol_body(name_path="signIn", relative_path="...", body="
 ## Error Handling Patterns
 
 ### Error Types
-All backends use typed error classes from `src/lib/errors.ts` for consistent error handling:
+All backends use typed error classes from `frontend/src/lib/errors.ts` for consistent error handling:
 
 **Error Hierarchy:**
 ```typescript
@@ -276,7 +296,7 @@ SyncError.failed(err)                // Generic sync failure
 ```
 
 ### Logging Utility
-Use the shared logger from `src/lib/logger.ts` for consistent logging:
+Use the shared logger from `frontend/src/lib/logger.ts` for consistent logging:
 
 ```typescript
 import { createLogger } from '../logger'

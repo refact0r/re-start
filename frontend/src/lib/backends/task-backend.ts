@@ -160,8 +160,7 @@ abstract class TaskBackend {
      */
     protected wrapError(
         error: unknown,
-        context: string,
-        defaultErrorType: typeof BackendError = SyncError
+        context: string
     ): BackendError {
         // If already a BackendError, return as-is
         if (error instanceof BackendError) {
@@ -213,18 +212,11 @@ abstract class TaskBackend {
             })
         }
 
-        // Default to the specified error type (typically SyncError)
-        if (defaultErrorType === SyncError) {
-            return new SyncError(message, {
-                originalError,
-                userMessage: 'Operation failed. Please try again.',
-            })
-        }
-
-        return new defaultErrorType(message, {
+        // Default to SyncError
+        return new SyncError(message, {
             originalError,
-            userMessage: 'An error occurred. Please try again.',
-        } as any) // Type assertion needed due to constructor variance
+            userMessage: 'Operation failed. Please try again.',
+        })
     }
 
     /**

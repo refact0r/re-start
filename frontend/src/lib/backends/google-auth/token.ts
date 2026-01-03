@@ -10,15 +10,6 @@ import { getUserId } from './storage'
 import { setAuthenticated, setUnauthenticated } from './auth-state'
 
 /**
- * Internal version that doesn't update state (to avoid circular calls)
- */
-function isTokenExpiredInternal(): boolean {
-    const expiry = localStorage.getItem(TOKEN_EXPIRY_KEY)
-    if (!expiry) return true
-    return Date.now() > parseInt(expiry, 10)
-}
-
-/**
  * Check if the current token is expired
  */
 export function isTokenExpired(): boolean {

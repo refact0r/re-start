@@ -264,6 +264,10 @@ export interface TaskBackendConfig {
     apiToken?: string
 }
 
+export interface CalendarBackendConfig {
+    // Empty config for now, can be extended in the future
+}
+
 export interface GoogleCalendarData {
     calendars?: CalendarEventRaw[]
     events?: CalendarEventRaw[]

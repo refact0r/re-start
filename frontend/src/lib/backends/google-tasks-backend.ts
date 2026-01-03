@@ -28,6 +28,7 @@ interface GoogleTasksData {
     tasklists: GoogleTasklist[]
     tasks: GoogleTask[]
     timestamp?: number
+    [key: string]: unknown
 }
 
 interface GoogleTasksListResponse {
@@ -52,7 +53,10 @@ class GoogleTasksBackend extends TaskBackend {
     protected override data: GoogleTasksData
     protected override cacheExpiry: number
     private defaultTasklistId: string
-    private apiRequest: <T>(endpoint: string, options?: RequestInit) => Promise<T>
+    private apiRequest: <T>(
+        endpoint: string,
+        options?: RequestInit
+    ) => Promise<T>
 
     constructor(config: TaskBackendConfig = {}) {
         super(config)
@@ -117,7 +121,7 @@ class GoogleTasksBackend extends TaskBackend {
      */
     async sync(
         resourceTypes: string[] = ['tasklists', 'tasks']
-    ): Promise<GoogleTasksData> {
+    ): Promise<void> {
         if (!this.getIsSignedIn()) {
             logger.error('Sync attempted while not signed in')
             throw AuthError.unauthorized('Not signed in to Google account')
@@ -175,8 +179,6 @@ class GoogleTasksBackend extends TaskBackend {
                 tasklists: this.data.tasklists.length,
                 tasks: this.data.tasks.length,
             })
-
-            return this.data
         } catch (error) {
             // Re-throw BackendError instances as-is (from google-auth)
             if (error instanceof AuthError || error instanceof SyncError) {
@@ -185,7 +187,7 @@ class GoogleTasksBackend extends TaskBackend {
 
             // Wrap unknown errors
             logger.error('Google Tasks sync failed:', error)
-            throw this.wrapError(error, 'Google Tasks sync', SyncError)
+            throw this.wrapError(error, 'Google Tasks sync')
         }
     }
 
@@ -273,7 +275,7 @@ class GoogleTasksBackend extends TaskBackend {
 
             // Wrap unknown errors
             logger.error('Failed to add task:', error)
-            throw this.wrapError(error, 'Add task', SyncError)
+            throw this.wrapError(error, 'Add task')
         }
     }
 
@@ -307,7 +309,7 @@ class GoogleTasksBackend extends TaskBackend {
 
             // Wrap unknown errors
             logger.error('Failed to complete task:', error)
-            throw this.wrapError(error, 'Complete task', SyncError)
+            throw this.wrapError(error, 'Complete task')
         }
     }
 
@@ -341,7 +343,7 @@ class GoogleTasksBackend extends TaskBackend {
 
             // Wrap unknown errors
             logger.error('Failed to uncomplete task:', error)
-            throw this.wrapError(error, 'Uncomplete task', SyncError)
+            throw this.wrapError(error, 'Uncomplete task')
         }
     }
 
@@ -355,9 +357,12 @@ class GoogleTasksBackend extends TaskBackend {
 
             logger.log('Deleting task:', { taskId })
 
-            await this.apiRequest<void>(`/lists/${tasklistId}/tasks/${taskId}`, {
-                method: 'DELETE',
-            })
+            await this.apiRequest<void>(
+                `/lists/${tasklistId}/tasks/${taskId}`,
+                {
+                    method: 'DELETE',
+                }
+            )
 
             logger.log('Task deleted successfully')
         } catch (error) {
@@ -368,7 +373,7 @@ class GoogleTasksBackend extends TaskBackend {
 
             // Wrap unknown errors
             logger.error('Failed to delete task:', error)
-            throw this.wrapError(error, 'Delete task', SyncError)
+            throw this.wrapError(error, 'Delete task')
         }
     }
 

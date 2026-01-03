@@ -11,6 +11,7 @@ import { ValidationError } from '../errors'
 
 interface LocalTaskData {
     items: RawTask[]
+    [key: string]: unknown
 }
 
 // Logger instance for LocalStorage operations

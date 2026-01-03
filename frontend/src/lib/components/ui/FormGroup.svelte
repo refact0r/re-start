@@ -14,7 +14,7 @@
 
 <div class="group" class:auto-width={autoWidth}>
     {#if label}
-        <label class="label">{label}</label>
+        <div class="label">{label}</div>
     {/if}
     {@render children()}
 </div>

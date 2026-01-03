@@ -36,3 +36,18 @@ export async function apiRequest<T>(
 
     return (await response.json()) as T
 }
+
+/**
+ * Create an API client with a base URL
+ * Returns a function that prepends the base URL to endpoint paths
+ * @param baseUrl - Base URL for the API (e.g., 'https://tasks.googleapis.com/tasks/v1')
+ * @returns Function that makes requests to baseUrl + endpoint
+ */
+export function createApiClient(baseUrl: string) {
+    return async function <T>(
+        endpoint: string,
+        options?: RequestInit
+    ): Promise<T> {
+        return apiRequest<T>(`${baseUrl}${endpoint}`, options)
+    }
+}

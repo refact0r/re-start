@@ -23,10 +23,10 @@ function injectThemeScript(): Plugin {
             const themesModule = fs.readFileSync(themesPath, 'utf-8')
 
             const themesMatch = themesModule.match(
-                /export const themes = ({[\s\S]*?})\s*export const themeNames/
+                /export const themes(?::\s*\w+)?\s*=\s*({[\s\S]*?^})/m
             )
             const defaultThemeMatch = themesModule.match(
-                /export const defaultTheme = ['"](.+?)['"]/
+                /export const defaultTheme(?::\s*\w+)?\s*=\s*['"](.+?)['"]/
             )
 
             if (!themesMatch?.[1] || !defaultThemeMatch?.[1]) {

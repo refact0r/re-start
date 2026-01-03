@@ -69,7 +69,10 @@ class GoogleCalendarBackend {
     private dataKey: string
     private cacheExpiry: number
     private data: GoogleCalendarData
-    private apiRequest: <T>(endpoint: string, options?: RequestInit) => Promise<T>
+    private apiRequest: <T>(
+        endpoint: string,
+        options?: RequestInit
+    ) => Promise<T>
 
     constructor(_config: CalendarBackendConfig = {}) {
         this.baseUrl = 'https://www.googleapis.com/calendar/v3'

@@ -19,13 +19,29 @@
     function handleContentClick(e: MouseEvent) {
         e.stopPropagation()
     }
+
+    function handleKeyDown(e: KeyboardEvent) {
+        if (e.key === 'Escape') {
+            onClose?.()
+        }
+    }
 </script>
 
 {#if open}
-    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-    <div class="overlay" onclick={handleOverlayClick}>
-        <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-        <div class="modal" onclick={handleContentClick}>
+    <div
+        class="overlay"
+        onclick={handleOverlayClick}
+        onkeydown={handleKeyDown}
+        role="presentation"
+    >
+        <div
+            class="modal"
+            onclick={handleContentClick}
+            onkeydown={handleKeyDown}
+            role="dialog"
+            aria-modal="true"
+            tabindex="-1"
+        >
             <button class="close-btn" onclick={onClose}>
                 <X size={16} />
             </button>

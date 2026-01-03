@@ -32,4 +32,4 @@ export { isSignedIn } from './auth-state'
 export { handleAuthCallback, signIn, signOut, tryRestoreSession } from './oauth'
 
 // API requests
-export { apiRequest } from './api'
+export { apiRequest, createApiClient } from './api'

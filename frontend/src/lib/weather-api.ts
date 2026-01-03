@@ -12,7 +12,7 @@ import type {
     HourlyWeatherRaw,
 } from './types'
 import { createLogger } from './logger'
-import { NetworkError, ValidationError, SyncError } from './errors'
+import { NetworkError, SyncError } from './errors'
 
 interface WeatherDescription {
     day?: { description?: string }

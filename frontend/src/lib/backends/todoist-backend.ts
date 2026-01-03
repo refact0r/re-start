@@ -2,7 +2,7 @@ import TaskBackend from './task-backend'
 import type { TaskBackendConfig, EnrichedTask, TaskDue } from '../types'
 import { generateUUID } from '../uuid'
 import { createLogger } from '../logger'
-import { NetworkError, AuthError, RateLimitError, SyncError } from '../errors'
+import { NetworkError, AuthError, RateLimitError } from '../errors'
 
 interface TodoistItem {
     id: string
@@ -31,6 +31,7 @@ interface TodoistData {
     labels: TodoistLabel[]
     projects: TodoistProject[]
     timestamp?: number
+    [key: string]: unknown
 }
 
 interface TodoistSyncResponse {
@@ -86,7 +87,7 @@ class TodoistBackend extends TaskBackend {
     async sync(
         resourceTypes: string[] = ['items', 'labels', 'projects'],
         isRetry = false
-    ): Promise<TodoistSyncResponse> {
+    ): Promise<void> {
         const formData = new FormData()
         formData.append('sync_token', this.syncToken)
         formData.append('resource_types', JSON.stringify(resourceTypes))
@@ -145,8 +146,6 @@ class TodoistBackend extends TaskBackend {
                 labels: data.labels?.length || 0,
                 projects: data.projects?.length || 0,
             })
-
-            return data
         } catch (error) {
             // Retry logic: if sync token might be invalid, reset and retry once
             if (!isRetry && this.syncToken !== '*' && this.isRetryableError(error)) {
@@ -166,7 +165,7 @@ class TodoistBackend extends TaskBackend {
             }
 
             logger.error('Todoist sync failed:', error)
-            throw this.wrapError(error, 'Todoist sync', SyncError)
+            throw this.wrapError(error, 'Todoist sync')
         }
     }
 
@@ -425,7 +424,7 @@ class TodoistBackend extends TaskBackend {
 
             // Wrap unknown errors
             logger.error('Todoist command execution failed:', error)
-            throw this.wrapError(error, 'Todoist command execution', NetworkError)
+            throw this.wrapError(error, 'Todoist command execution')
         }
     }
 
