@@ -1,6 +1,10 @@
 import { writable } from 'svelte/store'
 
-export type AuthStatus = 'unknown' | 'authenticated' | 'unauthenticated'
+export enum AuthStatus {
+    Unknown = 'unknown',
+    Authenticated = 'authenticated',
+    Unauthenticated = 'unauthenticated',
+}
 
 export interface AuthState {
     status: AuthStatus
@@ -8,7 +12,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-    status: 'unknown',
+    status: AuthStatus.Unknown,
     email: null,
 }
 
@@ -19,18 +23,21 @@ function createAuthStore() {
         subscribe,
         setAuthenticated: (email: string | null) => {
             update((state) => {
-                if (state.status === 'authenticated' && state.email === email) {
+                if (
+                    state.status === AuthStatus.Authenticated &&
+                    state.email === email
+                ) {
                     return state
                 }
-                return { status: 'authenticated', email }
+                return { status: AuthStatus.Authenticated, email }
             })
         },
         setUnauthenticated: () => {
             update((state) => {
-                if (state.status === 'unauthenticated') {
+                if (state.status === AuthStatus.Unauthenticated) {
                     return state
                 }
-                return { status: 'unauthenticated', email: null }
+                return { status: AuthStatus.Unauthenticated, email: null }
             })
         },
         setEmail: (email: string | null) => {
