@@ -1,152 +1,88 @@
 <script lang="ts">
-    import { onMount, untrack } from 'svelte'
-    import { createTaskProvider } from '../providers/index'
+    import TodoistProvider from '../providers/todoist-provider'
+    import LocalStorageProvider from '../providers/localstorage-provider'
+    import GoogleTasksProvider from '../providers/google-tasks-provider'
     import { settings } from '../settings-store.svelte'
-    import { authStore } from '../stores/auth-store'
-    import type { AuthStatus } from '../stores/auth-store'
-    import {
-        parseSmartDate,
-        stripDateMatch,
-        formatRelativeDate,
-    } from '../date-matcher'
+    import { authStore, AuthStatus } from '../stores/auth-store'
+    import { parseSmartDate, stripDateMatch, formatRelativeDate } from '../date-matcher'
     import { Panel, Text, Row, Link, ScrollList, Button } from './ui'
     import { RefreshCw } from 'lucide-svelte'
     import TaskItem from './TaskItem.svelte'
     import AddTask from './AddTask.svelte'
     import type TaskProvider from '../providers/task-provider'
-    import type { EnrichedTask, TaskProviderType } from '../types'
+    import type { EnrichedTask } from '../types'
 
-    let api: TaskProvider | null = null
-    let tasks = $state<EnrichedTask[]>([])
-    let syncing = $state(true)
-    let error = $state('')
-    let initialLoad = $state(true)
-    let previousToken = $state<string | null>(null)
-    let taskCount = $derived(tasks.filter((task) => !task.checked).length)
-    let newTaskContent = $state('')
-    let addingTask = $state(false)
-    let parsedDate = $derived(
-        parseSmartDate(newTaskContent, {
-            dateFormat: settings.dateFormat,
-        })
+    // Derived config
+    let isRemote = $derived(settings.taskBackend !== 'local')
+    let taskLink = $derived(
+        settings.taskBackend === 'todoist'
+            ? 'https://todoist.com/app'
+            : settings.taskBackend === 'google-tasks'
+              ? 'https://tasks.google.com'
+              : ''
     )
-    let togglingTasks = $state(new Set<string>())
-    let syncInProgress = false
+    let configError = $derived(
+        settings.taskBackend === 'todoist' && !settings.todoistApiToken
+            ? 'no todoist api token'
+            : settings.taskBackend === 'google-tasks' &&
+                $authStore.status === AuthStatus.Unauthenticated
+              ? 'not signed in to google'
+              : null
+    )
 
-    function handleVisibilityChange() {
-        if (document.visibilityState === 'visible' && api) {
-            loadTasks()
-        }
+    // State
+    let provider: TaskProvider = createProvider(settings.taskBackend, settings.todoistApiToken)
+    let tasks = $state<EnrichedTask[]>(provider.getTasks())
+    let syncing = $state(false)
+    let addingTask = $state(false)
+    let newTaskContent = $state('')
+
+    // Derived from state
+    let taskCount = $derived(tasks.filter((t) => !t.checked).length)
+    let parsedDate = $derived(parseSmartDate(newTaskContent, { dateFormat: settings.dateFormat }))
+
+    function createProvider(backend: string, token: string): TaskProvider {
+        if (backend === 'google-tasks') return new GoogleTasksProvider({})
+        if (backend === 'todoist') return new TodoistProvider({ apiToken: token })
+        return new LocalStorageProvider({})
     }
 
     $effect(() => {
-        const backend = settings.taskBackend
-        const token = settings.todoistApiToken
-        const authStatus = $authStore.status
+        provider = createProvider(settings.taskBackend, settings.todoistApiToken)
+        tasks = provider.getTasks()
 
-        if (untrack(() => initialLoad)) {
-            initialLoad = false
-            previousToken = token
-            return
+        if ($authStore.status === AuthStatus.Authenticated && provider.isCacheStale()) {
+            syncTasks()
         }
-
-        const tokenChanged = backend === 'todoist' && previousToken !== token
-        previousToken = token
-        initializeAPI(backend, token, authStatus, tokenChanged)
     })
 
-    async function initializeAPI(
-        backend: TaskProviderType,
-        token: string,
-        authStatus: AuthStatus,
-        clearLocalData = false
-    ): Promise<void> {
-        if (backend === 'todoist' && !token) {
-            api = null
-            tasks = []
-            syncing = false
-            error = 'no todoist api token'
-            return
-        }
-
-        if (backend === 'google-tasks' && authStatus === 'unauthenticated') {
-            api = null
-            tasks = []
-            syncing = false
-            error = 'not signed in to google'
-            return
-        }
-
-        error = ''
-
+    async function syncTasks(): Promise<void> {
+        if (syncing) return
+        syncing = true
         try {
-            if (backend === 'google-tasks') {
-                api = createTaskProvider(backend, {})
-            } else {
-                api = createTaskProvider(backend, { apiToken: token })
-            }
-
-            if (clearLocalData) {
-                api.clearLocalData()
-                tasks = []
-            }
-
-            const cachedTasks = api.getTasks()
-            if (cachedTasks.length > 0) {
-                tasks = cachedTasks
-                syncing = false
-            }
-
-            if (
-                authStatus === 'authenticated' &&
-                (api.isCacheStale() || cachedTasks.length === 0)
-            ) {
-                loadTasks(cachedTasks.length === 0)
-            } else if (authStatus === 'unknown') {
-                syncing = false
-            }
+            await provider.sync()
+            tasks = provider.getTasks()
         } catch (err) {
-            error = `failed to initialize ${backend} backend`
-            console.error(err)
-            syncing = false
-        }
-    }
-
-    async function loadTasks(showSyncing = false): Promise<void> {
-        if (syncInProgress || !api) return
-        syncInProgress = true
-        try {
-            if (showSyncing) syncing = true
-            error = ''
-            await api.sync()
-            tasks = api.getTasks()
-        } catch (err) {
-            error = `failed to sync tasks`
-            console.error(err)
+            console.error('Failed to sync tasks:', err)
         } finally {
-            if (showSyncing) syncing = false
-            syncInProgress = false
+            syncing = false
         }
     }
 
     async function addTask(event: SubmitEvent): Promise<void> {
         event.preventDefault()
         const raw = newTaskContent.trim()
-        if (!raw || !api || addingTask) return
+        if (!raw || addingTask) return
 
-        let content = raw
-        let due = null
-        if (parsedDate?.match) {
-            const cleaned = stripDateMatch(raw, parsedDate.match)
-            content = cleaned || raw
-            due = parsedDate.date
-        }
+        const content = parsedDate?.match ? stripDateMatch(raw, parsedDate.match) || raw : raw
+        const due = parsedDate?.date ?? null
+
+        addingTask = true
         try {
-            addingTask = true
-            await api.addTask(content, due)
+            await provider.addTask(content, due)
             newTaskContent = ''
-            api.invalidateCache()
-            await loadTasks()
+            provider.invalidateCache()
+            await syncTasks()
         } catch (err) {
             console.error('Failed to add task:', err)
         } finally {
@@ -155,101 +91,53 @@
     }
 
     async function toggleTask(taskId: string, checked: boolean): Promise<void> {
-        if (togglingTasks.has(taskId)) return
+        // Optimistic update
+        tasks = tasks.map((t) =>
+            t.id === taskId
+                ? { ...t, checked, completed_at: checked ? new Date().toISOString() : null }
+                : t
+        )
 
         try {
-            togglingTasks.add(taskId)
-
-            tasks = tasks.map((task) =>
-                task.id === taskId
-                    ? {
-                          ...task,
-                          checked,
-                          completed_at: checked
-                              ? new Date().toISOString()
-                              : null,
-                      }
-                    : task
-            )
-
-            if (!api) return
-            if (checked) {
-                await api.completeTask(taskId)
-            } else {
-                await api.uncompleteTask(taskId)
-            }
-            api.invalidateCache()
-            await loadTasks()
+            await (checked ? provider.completeTask(taskId) : provider.uncompleteTask(taskId))
+            provider.invalidateCache()
+            await syncTasks()
         } catch (err) {
-            console.error(err)
-            await loadTasks()
-        } finally {
-            togglingTasks.delete(taskId)
+            console.error('Failed to toggle task:', err)
+            await syncTasks()
         }
     }
 
     async function deleteTask(taskId: string): Promise<void> {
-        if (!api) return
+        tasks = tasks.filter((t) => t.id !== taskId)
         try {
-            tasks = tasks.filter((task) => task.id !== taskId)
-            await api.deleteTask(taskId)
-            api.invalidateCache()
-            await loadTasks()
+            await provider.deleteTask(taskId)
+            provider.invalidateCache()
         } catch (err) {
             console.error('Failed to delete task:', err)
-            api.invalidateCache()
-            await loadTasks()
+            provider.invalidateCache()
+            await syncTasks()
         }
     }
 
-    function isTaskOverdue(task: EnrichedTask): boolean {
-        if (!task.due || task.checked || !task.due_date) return false
-        const now = new Date()
-        return task.due_date.getTime() < now.getTime()
+    function isOverdue(task: EnrichedTask): boolean {
+        return !!task.due_date && !task.checked && task.due_date.getTime() < Date.now()
     }
-
-    function getTaskLink(): string {
-        if (settings.taskBackend === 'todoist') return 'https://todoist.com/app'
-        if (settings.taskBackend === 'google-tasks')
-            return 'https://tasks.google.com'
-        return ''
-    }
-
-    onMount(() => {
-        initializeAPI(
-            settings.taskBackend,
-            settings.todoistApiToken,
-            $authStore.status
-        )
-    })
 </script>
 
-<svelte:document onvisibilitychange={handleVisibilityChange} />
+<svelte:document onvisibilitychange={syncTasks} />
 
-<Panel
-    label={syncing ? 'syncing...' : 'tasks'}
-    clickableLabel
-    onLabelClick={() => loadTasks(true)}
-    flex={1}
->
-    {#if error}
-        <Text color="error">{error}</Text>
+<Panel label={syncing ? 'syncing...' : 'tasks'} clickableLabel onLabelClick={syncTasks} flex={1}>
+    {#if configError}
+        <Text color="error">{configError}</Text>
     {:else}
         <Row gap="sm">
-            {#if settings.taskBackend !== 'local'}
-                <Link href={getTaskLink()} target="_blank">
-                    <Text color="primary">{taskCount}</Text> task{taskCount ===
-                    1
-                        ? ''
-                        : 's'}
+            {#if isRemote}
+                <Link href={taskLink} target="_blank">
+                    <Text color="primary">{taskCount}</Text> task{taskCount === 1 ? '' : 's'}
                 </Link>
             {:else}
-                <Text
-                    ><Text color="primary">{taskCount}</Text> task{taskCount ===
-                    1
-                        ? ''
-                        : 's'}</Text
-                >
+                <Text><Text color="primary">{taskCount}</Text> task{taskCount === 1 ? '' : 's'}</Text>
             {/if}
             <AddTask
                 bind:value={newTaskContent}
@@ -273,20 +161,14 @@
                               timeFormat: settings.timeFormat,
                           })
                         : null}
-                    overdue={isTaskOverdue(task)}
+                    overdue={isOverdue(task)}
                     onToggle={() => toggleTask(task.id, !task.checked)}
                     onDelete={() => deleteTask(task.id)}
                 />
             {/each}
         </ScrollList>
-        {#if settings.taskBackend !== 'local'}
-            <Button
-                variant="sync"
-                onclick={() => loadTasks(true)}
-                disabled={syncing}
-                spinning={syncing}
-                title="sync"
-            >
+        {#if isRemote}
+            <Button variant="sync" onclick={syncTasks} disabled={syncing} spinning={syncing} title="sync">
                 <RefreshCw size={14} />
             </Button>
         {/if}

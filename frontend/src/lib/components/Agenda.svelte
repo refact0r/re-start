@@ -1,19 +1,11 @@
 <script lang="ts">
-
-    import { createCalendarProvider } from '../providers/index'
+    import GoogleCalendarProvider from '../providers/google-calendar-provider'
     import { settings } from '../settings-store.svelte'
-    import { authStore } from '../stores/auth-store'
-    import type { AuthStatus } from '../stores/auth-store'
-    import {
-        hasMeetScope,
-        signIn,
-        refreshScopes,
-    } from '../providers/google-auth/'
-    import { Panel, Text, Row, Link, Modal, ScrollList, Button } from './ui'
+    import { authStore, AuthStatus } from '../stores/auth-store'
+    import { Panel, Text, Row, Link, ScrollList, Button } from './ui'
     import { RefreshCw } from 'lucide-svelte'
     import EventItem from './EventItem.svelte'
-    import CopyableLink from './CopyableLink.svelte'
-    import type GoogleCalendarProvider from '../providers/google-calendar-provider'
+    import InstantMeetModal, { createInstantMeet } from './InstantMeetModal.svelte'
     import type { CalendarEvent } from '../types'
     type VideoProvider = 'meet' | 'teams' | 'zoom' | 'other' | null
 
@@ -33,125 +25,32 @@
         return 'other'
     }
 
-    let api: GoogleCalendarProvider | null = null
-    let events = $state<CalendarEvent[]>([])
-    let syncing = $state(true)
-    let error = $state('')
+    const provider = new GoogleCalendarProvider()
+    let events = $state<CalendarEvent[]>(provider.getEvents())
+    let syncing = $state(false)
     let eventCount = $derived(events.length)
-    let syncInProgress = false
 
-    // Meet link popup state
-    let showMeetPopup = $state(false)
-    let meetLink = $state('')
-    let meetError = $state('')
-    let creatingMeet = $state(false)
-    let needsReauth = $state(false)
-
-    async function createInstantMeet(): Promise<void> {
-        // First check if we have the required scope
-        await refreshScopes()
-        if (!hasMeetScope()) {
-            needsReauth = true
-            showMeetPopup = true
-            return
-        }
-
-        creatingMeet = true
-        meetError = ''
-        meetLink = ''
-        needsReauth = false
-        showMeetPopup = true
-
-        try {
-            if (!api) throw new Error('Calendar API not initialized')
-            const link = await api.createMeetLink()
-            meetLink = link
-        } catch (err) {
-            console.error('Failed to create Meet link:', err)
-            const message = err instanceof Error ? err.message : ''
-            if (message.includes('403') || message.includes('insufficient')) {
-                needsReauth = true
-            } else {
-                meetError = 'Failed to create meeting'
-            }
-        } finally {
-            creatingMeet = false
-        }
-    }
-
-    async function handleReauth(): Promise<void> {
-        await signIn()
-    }
-
-    function closeMeetPopup(): void {
-        showMeetPopup = false
-        meetLink = ''
-        meetError = ''
-        needsReauth = false
-    }
-
-    function handleVisibilityChange(): void {
-        if (document.visibilityState === 'visible' && api) {
-            loadEvents()
-        }
-    }
-
+    // Sync when authenticated and cache is stale
     $effect(() => {
-        initializeAPI($authStore.status)
+        if (
+            $authStore.status === AuthStatus.Authenticated &&
+            provider.isCacheStale()
+        ) {
+            syncEvents()
+        }
     })
 
-    async function initializeAPI(authStatus: AuthStatus): Promise<void> {
-        if (authStatus === 'unauthenticated') {
-            api = null
-            events = []
-            syncing = false
-            error = 'not signed in to google'
-            return
-        }
-
-        error = ''
+    async function syncEvents(): Promise<void> {
+        if (syncing) return
+        syncing = true
 
         try {
-            api = createCalendarProvider()
-
-            // Load cached data immediately (works for 'unknown' and 'authenticated')
-            const cachedEvents = api.getEvents()
-            if (cachedEvents.length > 0) {
-                events = cachedEvents
-                syncing = false
-            }
-
-            // Sync in background if authenticated and cache is stale
-            if (
-                authStatus === 'authenticated' &&
-                (api.isCacheStale() || cachedEvents.length === 0)
-            ) {
-                loadEvents(cachedEvents.length === 0)
-            } else if (authStatus === 'unknown') {
-                syncing = false
-            }
+            await provider.sync(settings.selectedCalendars)
+            events = provider.getEvents()
         } catch (err) {
-            error = 'failed to initialize calendar'
-            console.error(err)
-            syncing = false
-        }
-    }
-
-    async function loadEvents(showSyncing = false): Promise<void> {
-        if (syncInProgress || !api) return
-        syncInProgress = true
-        try {
-            if (showSyncing) syncing = true
-            error = ''
-            const calendars = settings.selectedCalendars
-            await api.sync(calendars)
-            events = api.getEvents()
-        } catch (err) {
-            error = 'failed to sync calendar'
-            console.error(err)
+            console.error('Failed to sync calendar:', err)
         } finally {
             syncing = false
-            syncInProgress = false
         }
     }
 
@@ -183,25 +82,25 @@
 
 </script>
 
-<svelte:document onvisibilitychange={handleVisibilityChange} />
+<svelte:document onvisibilitychange={syncEvents} />
 
 <Panel
     label={syncing ? 'syncing...' : 'agenda'}
     clickableLabel
-    onLabelClick={() => loadEvents(true)}
+    onLabelClick={syncEvents}
     flex={1}
 >
     <Button
         variant="sync"
-        onclick={() => loadEvents(true)}
+        onclick={syncEvents}
         disabled={syncing}
         spinning={syncing}
         title="sync"
     >
         <RefreshCw size={14} />
     </Button>
-    {#if error}
-        <Text color="error">{error}</Text>
+    {#if $authStore.status === AuthStatus.Unauthenticated}
+        <Text color="error">not signed in to google</Text>
     {:else}
         <Row justify="between" align="center" gap="sm">
             <Link href="https://calendar.google.com" target="_blank">
@@ -209,11 +108,7 @@
                     ? ''
                     : 's'} today
             </Link>
-            <Button
-                variant="text"
-                onclick={createInstantMeet}
-                disabled={creatingMeet}
-            >
+            <Button variant="text" onclick={() => createInstantMeet(provider)}>
                 + instant conf
             </Button>
         </Row>
@@ -239,22 +134,4 @@
     {/if}
 </Panel>
 
-<Modal open={showMeetPopup} onClose={closeMeetPopup}>
-    {#if needsReauth}
-        <Text color="secondary"
-            >Additional permissions required to create Meet links.</Text
-        >
-        <br /><br />
-        <Button variant="primary" onclick={handleReauth}>
-            Grant permissions
-        </Button>
-    {:else if creatingMeet}
-        <Text color="secondary">Creating meeting...</Text>
-    {:else if meetError}
-        <Text color="error">{meetError}</Text>
-    {:else if meetLink}
-        <Text size="sm" color="muted">Your meeting link:</Text>
-        <br /><br />
-        <CopyableLink href={meetLink} />
-    {/if}
-</Modal>
+<InstantMeetModal />

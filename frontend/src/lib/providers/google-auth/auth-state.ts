@@ -4,7 +4,7 @@
  */
 
 import { get } from 'svelte/store'
-import { authStore } from '../../stores/auth-store'
+import { authStore, AuthStatus } from '../../stores/auth-store'
 import { USER_EMAIL_KEY } from './constants'
 import { log } from './logger'
 
@@ -38,7 +38,7 @@ export function initAuthState(): void {
  * Check if authenticated (based on authStore status)
  */
 export function isSignedIn(): boolean {
-    return get(authStore).status === 'authenticated'
+    return get(authStore).status === AuthStatus.Authenticated
 }
 
 // Initialize auth state on module load
