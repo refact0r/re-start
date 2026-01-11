@@ -181,9 +181,13 @@
             tasks = api.getTasks()
 
             // Initialize edit buffer for inline editing
-            editBuffer = Object.fromEntries(
-                tasks.map((t) => [t.id, t.content || ''])
-            )
+            // Preserve existing entries to avoid losing user edits during background syncs
+            const newEditBuffer = {}
+            tasks.forEach((t) => {
+                // Keep existing value if present, otherwise use task content
+                newEditBuffer[t.id] = editBuffer[t.id] ?? t.content ?? ''
+            })
+            editBuffer = newEditBuffer
 
             // Update available projects/lists
             if (settings.taskBackend === 'todoist') {
@@ -218,7 +222,7 @@
         if (!api) return
         const newContent = (editBuffer[taskId] ?? '').trim()
         const original = tasks.find((t) => t.id === taskId)?.content ?? ''
-        if (newContent === original) return
+        if (!newContent || newContent === original) return
 
         try {
             await api.editTaskName(taskId, newContent)
