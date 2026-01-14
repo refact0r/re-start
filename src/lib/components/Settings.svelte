@@ -89,7 +89,7 @@
 
     // Drag and drop state
     let draggedIndex = $state(null)
-    let dragOverIndex = $state(null)
+    let dropSlotIndex = $state(null) // Which slot (between items) to drop into
 
     function handleDragStart(event, index) {
         draggedIndex = index
@@ -97,44 +97,52 @@
         event.dataTransfer.setData('text/html', event.currentTarget)
     }
 
-    function handleDragOver(event, index) {
+    function handleDropZoneDragOver(event, slotIndex) {
         event.preventDefault()
         event.dataTransfer.dropEffect = 'move'
-        dragOverIndex = index
+        dropSlotIndex = slotIndex
     }
 
-    function handleDragLeave() {
-        dragOverIndex = null
+    function handleDropZoneDragLeave() {
+        dropSlotIndex = null
     }
 
-    function handleDrop(event, dropIndex) {
+    function handleDropZoneDrop(event, slotIndex) {
         event.preventDefault()
 
-        if (draggedIndex !== null && draggedIndex !== dropIndex) {
-            const newLinks = [...settings.links]
-            const draggedItem = newLinks[draggedIndex]
-
-            // Remove the dragged item
-            newLinks.splice(draggedIndex, 1)
-
-            // Insert at the new position
-            if (draggedIndex < dropIndex) {
-                newLinks.splice(dropIndex, 0, draggedItem)
-            } else {
-                // Dragging backward: place before target
-                newLinks.splice(dropIndex, 0, draggedItem)
-            }
-
-            settings.links = newLinks
+        if (draggedIndex === null) {
+            dropSlotIndex = null
+            return
         }
 
+        // Don't do anything if dropping in the same position
+        if (slotIndex === draggedIndex || slotIndex === draggedIndex + 1) {
+            draggedIndex = null
+            dropSlotIndex = null
+            return
+        }
+
+        const newLinks = [...settings.links]
+        const draggedItem = newLinks[draggedIndex]
+
+        // Remove the dragged item
+        newLinks.splice(draggedIndex, 1)
+
+        // Adjust slot index if we removed an item before it
+        const adjustedSlotIndex =
+            draggedIndex < slotIndex ? slotIndex - 1 : slotIndex
+
+        // Insert at the slot position
+        newLinks.splice(adjustedSlotIndex, 0, draggedItem)
+
+        settings.links = newLinks
         draggedIndex = null
-        dragOverIndex = null
+        dropSlotIndex = null
     }
 
     function handleDragEnd() {
         draggedIndex = null
-        dragOverIndex = null
+        dropSlotIndex = null
     }
 
     let locationLoading = $state(false)
@@ -475,13 +483,19 @@
                 </div>
                 <div class="links-list">
                     {#each settings.links as link, index}
+                        <!-- Drop zone before this item -->
+                        <div
+                            class="drop-zone"
+                            class:active={dropSlotIndex === index}
+                            ondragover={(e) => handleDropZoneDragOver(e, index)}
+                            ondragleave={handleDropZoneDragLeave}
+                            ondrop={(e) => handleDropZoneDrop(e, index)}
+                            role="none"
+                        ></div>
+
                         <div
                             class="link"
                             class:dragging={draggedIndex === index}
-                            class:drag-over={dragOverIndex === index}
-                            ondragover={(e) => handleDragOver(e, index)}
-                            ondragleave={handleDragLeave}
-                            ondrop={(e) => handleDrop(e, index)}
                             role="listitem"
                         >
                             <span
@@ -515,6 +529,18 @@
                             </button>
                         </div>
                     {/each}
+
+                    <!-- Drop zone after the last item -->
+                    <div
+                        class="drop-zone"
+                        class:active={dropSlotIndex === settings.links.length}
+                        ondragover={(e) =>
+                            handleDropZoneDragOver(e, settings.links.length)}
+                        ondragleave={handleDropZoneDragLeave}
+                        ondrop={(e) =>
+                            handleDropZoneDrop(e, settings.links.length)}
+                        role="none"
+                    ></div>
                 </div>
             </div>
             <div class="group">
@@ -639,18 +665,29 @@
     .add-btn {
         height: 1.5rem;
     }
+    .drop-zone {
+        height: 0.25rem;
+        margin: 0;
+        position: relative;
+    }
+    .drop-zone.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 2px;
+        background-color: var(--txt-2);
+    }
     .link {
         display: flex;
         align-items: center;
-        margin-bottom: calc(0.5rem - 2px);
+        margin-bottom: 0;
         border: 2px solid transparent;
     }
     .link.dragging {
         opacity: 0.5;
-        border: 2px dashed var(--txt-3);
-    }
-    .link.drag-over {
-        border: 2px solid var(--txt-2);
     }
     .drag-handle {
         cursor: grab;
