@@ -405,7 +405,7 @@
     >
         {syncing ? 'syncing...' : 'tasks'}
     </button>
-    <div class="panel">
+    <div class="panel privacy-blur">
         {#if error}
             <div class="error">{error}</div>
         {:else}
@@ -564,5 +564,13 @@
     }
     .checkbox-x {
         color: var(--txt-2);
+    }
+    .privacy-blur {
+        filter: blur(8px);
+        transition: filter 0.2s ease;
+    }
+    .panel-wrapper:hover .privacy-blur,
+    .panel-wrapper:focus-within .privacy-blur {
+        filter: blur(0);
     }
 </style>

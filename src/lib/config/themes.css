@@ -99,3 +99,25 @@
     --txt-4: #957FB8;
     --txt-err: #E46876;
 }
+
+.theme-solarized-dark {
+    --bg-1: #002b36;
+    --bg-2: #073642;
+    --bg-3: #094552;
+    --txt-1: #93a1a1;
+    --txt-2: #839496;
+    --txt-3: #586e75;
+    --txt-4: #2aa198;
+    --txt-err: #dc322f;
+}
+
+.theme-solarized-light {
+    --bg-1: #fdf6e3;
+    --bg-2: #eee8d5;
+    --bg-3: #ddd6c7;
+    --txt-1: #073642;
+    --txt-2: #657b83;
+    --txt-3: #93a1a1;
+    --txt-4: #268bd2;
+    --txt-err: #dc322f;
+}

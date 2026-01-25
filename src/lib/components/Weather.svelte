@@ -9,6 +9,7 @@
     let forecast = $state([])
     let loading = $state(false)
     let error = $state(null)
+    let offline = $state(false)
     let initialLoad = $state(true)
     let prevForecastMode = $state(settings.forecastMode)
 
@@ -125,8 +126,13 @@
 
             current = data.current
             forecast = data.forecast
+            offline = data.offline || false
         } catch (err) {
-            error = 'failed to load weather'
+            if (!navigator.onLine) {
+                error = 'offline'
+            } else {
+                error = 'failed to load weather'
+            }
             console.error('weather load failed:', err)
         } finally {
             loading = false
@@ -150,14 +156,14 @@
 
 <div class="panel-wrapper {className}">
     <button class="widget-label" onclick={refreshWeather} disabled={loading}>
-        {loading ? 'loading...' : 'weather'}
+        {loading ? 'loading...' : offline ? 'weather (cached)' : 'weather'}
     </button>
 
     <div class="panel">
         {#if error}
             <div class="error">{error}</div>
         {:else if current}
-            <div class="temp">{current.temperature_2m}°</div>
+            <div class="temp">{current.icon} {current.temperature_2m}°{settings.tempUnit[0].toUpperCase()}</div>
             <div class="description">{current.description}</div>
             <br />
             <div class="stats">
@@ -168,7 +174,7 @@
                         >
                     </div>
                     <div>
-                        prec <span class="bright"
+                        rain <span class="bright"
                             >{current.precipitation_probability}%</span
                         >
                     </div>
@@ -181,7 +187,7 @@
                     </div>
                     <div>
                         feel <span class="bright"
-                            >{current.apparent_temperature}°</span
+                            >{current.apparent_temperature}°{settings.tempUnit[0].toUpperCase()}</span
                         >
                     </div>
                 </div>
@@ -199,17 +205,17 @@
                     {#each forecast as forecast}
                         {#if settings.forecastMode === 'daily'}
                             <div class="forecast-temp">
-                                {forecast.temperatureMax}° <span class="separator">/</span> {forecast.temperatureMin}°
+                                {forecast.temperatureMax}° <span class="separator">/</span> {forecast.temperatureMin}°{settings.tempUnit[0].toUpperCase()}
                             </div>
                         {:else}
-                            <div class="forecast-temp">{forecast.temperature}°</div>
+                            <div class="forecast-temp">{forecast.temperature}°{settings.tempUnit[0].toUpperCase()}</div>
                         {/if}
                     {/each}
                 </div>
                 <div class="col">
                     {#each forecast as forecast}
                         <div class="forecast-weather">
-                            {forecast.description}
+                            {forecast.icon}
                         </div>
                     {/each}
                 </div>

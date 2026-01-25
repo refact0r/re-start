@@ -75,6 +75,22 @@ export const themes = {
             text: '#C8C093',
         },
     },
+    'solarized-dark': {
+        displayName: 'solarized dark',
+        preview: {
+            bg: '#002b36',
+            accent: '#2aa198',
+            text: '#839496',
+        },
+    },
+    'solarized-light': {
+        displayName: 'solarized light',
+        preview: {
+            bg: '#fdf6e3',
+            accent: '#268bd2',
+            text: '#657b83',
+        },
+    },
 }
 
 export const themeNames = Object.keys(themes)
