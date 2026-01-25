@@ -476,20 +476,21 @@
                                     >
                                 {/if}
                                 <span class="task-title">
-                                    {#if isRevealed}
-                                        <input
-                                            class="task-title-input"
-                                            aria-label="edit task name"
-                                            bind:value={editBuffer[task.id]}
-                                            onblur={() => commitEdit(task.id)}
-                                            onkeydown={(e) => {
-                                                if (e.key === 'Enter') {
-                                                    e.preventDefault()
-                                                    e.target.blur()
-                                                }
-                                            }}
-                                        />
-                                    {:else}
+                                    <input
+                                        class="task-title-input"
+                                        class:hidden={!isRevealed}
+                                        aria-label="edit task name"
+                                        bind:value={editBuffer[task.id]}
+                                        onblur={() => commitEdit(task.id)}
+                                        onkeydown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault()
+                                                e.target.blur()
+                                            }
+                                        }}
+                                        tabindex={isRevealed ? 0 : -1}
+                                    />
+                                    {#if !isRevealed}
                                         <span class="task-title-masked">•••</span>
                                     {/if}
                                 </span>
@@ -525,6 +526,7 @@
 <style>
     .panel-wrapper {
         flex: 1;
+        max-width: 40rem;
     }
     .widget-header {
         display: flex;
@@ -545,6 +547,8 @@
         scroll-snap-align: start;
     }
     .task-title {
+        position: relative;
+        display: block;
         flex: 1 1 auto;
         min-width: 0;
         overflow: hidden;
@@ -552,12 +556,15 @@
     }
     .task-title-input {
         all: unset;
-        display: inline-block;
+        display: block;
         width: 100%;
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+    .task-title-input.hidden {
+        visibility: hidden;
     }
     .task-due {
         color: var(--txt-3);
@@ -588,6 +595,9 @@
         color: var(--txt-2);
     }
     .task-title-masked {
+        position: absolute;
+        top: 0;
+        left: 0;
         color: var(--txt-3);
         filter: blur(4px);
     }
