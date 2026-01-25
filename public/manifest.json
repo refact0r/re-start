@@ -3,6 +3,11 @@
     "version": "1.4.8",
     "manifest_version": 3,
     "description": "a tui-style startpage/new tab page.",
+    "icons": {
+        "16": "icon-16.png",
+        "48": "icon-48.png",
+        "128": "icon-128.png"
+    },
     "chrome_url_overrides": {
         "newtab": "index.html"
     },
