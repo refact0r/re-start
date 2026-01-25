@@ -33,8 +33,34 @@
         document.documentElement.className = 'theme-' + (themeName || defaultTheme)
     }
 
+    // Google Fonts that can be loaded dynamically
+    const googleFonts = {
+        'JetBrains Mono': 'JetBrains+Mono',
+        'Fira Code': 'Fira+Code',
+        'Source Code Pro': 'Source+Code+Pro',
+        'IBM Plex Mono': 'IBM+Plex+Mono',
+        'Roboto Mono': 'Roboto+Mono',
+        'Inconsolata': 'Inconsolata',
+        'Ubuntu Mono': 'Ubuntu+Mono',
+        'Space Mono': 'Space+Mono',
+    }
+
     $effect(() => {
         const fontName = settings.font?.trim() || 'Geist Mono Variable'
+
+        // Load from Google Fonts if available
+        if (googleFonts[fontName]) {
+            const linkId = 'google-font-link'
+            let link = document.getElementById(linkId)
+            if (!link) {
+                link = document.createElement('link')
+                link.id = linkId
+                link.rel = 'stylesheet'
+                document.head.appendChild(link)
+            }
+            link.href = `https://fonts.googleapis.com/css2?family=${googleFonts[fontName]}:wght@400;500;700&display=swap`
+        }
+
         document.documentElement.style.setProperty(
             '--font-family',
             `'${fontName}', monospace`

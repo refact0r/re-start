@@ -67,6 +67,14 @@ export const themes = {
             text: 'hsl(41, 20%, 65%)',
         },
     },
+    kanagawa: {
+        displayName: 'kanagawa',
+        preview: {
+            bg: '#1F1F28',
+            accent: '#957FB8',
+            text: '#C8C093',
+        },
+    },
 }
 
 export const themeNames = Object.keys(themes)

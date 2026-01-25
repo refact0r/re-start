@@ -88,3 +88,14 @@
     --txt-4: #a7c080;
     --txt-err: #e67e80;
 }
+
+.theme-kanagawa {
+    --bg-1: #1F1F28;
+    --bg-2: #2A2A37;
+    --bg-3: #363646;
+    --txt-1: #DCD7BA;
+    --txt-2: #C8C093;
+    --txt-3: #727169;
+    --txt-4: #957FB8;
+    --txt-err: #E46876;
+}

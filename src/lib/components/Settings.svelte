@@ -310,12 +310,24 @@
             </div>
             <div class="group">
                 <label for="font">font</label>
-                <input
-                    id="font"
-                    type="text"
-                    bind:value={settings.font}
-                    placeholder="Geist Mono Variable"
-                />
+                <select id="font" bind:value={settings.font}>
+                    <option value="">Geist Mono Variable (default)</option>
+                    <optgroup label="Google Fonts">
+                        <option value="JetBrains Mono">JetBrains Mono</option>
+                        <option value="Fira Code">Fira Code</option>
+                        <option value="Source Code Pro">Source Code Pro</option>
+                        <option value="IBM Plex Mono">IBM Plex Mono</option>
+                        <option value="Roboto Mono">Roboto Mono</option>
+                        <option value="Inconsolata">Inconsolata</option>
+                        <option value="Ubuntu Mono">Ubuntu Mono</option>
+                        <option value="Space Mono">Space Mono</option>
+                    </optgroup>
+                    <optgroup label="System Fonts">
+                        <option value="monospace">System Default</option>
+                        <option value="SF Mono, Menlo, Monaco, monospace">SF Mono (macOS)</option>
+                        <option value="Consolas, monospace">Consolas (Windows)</option>
+                    </optgroup>
+                </select>
             </div>
 
             <div class="group">
@@ -715,11 +727,13 @@
     .group input[type='text'],
     .group input[type='password'],
     .group input[type='number'],
-    .group input[type='url'] {
+    .group input[type='url'],
+    .group select {
         width: 100%;
         padding: 0.5rem;
         background: var(--bg-2);
         border: 2px solid var(--bg-3);
+        color: var(--txt-1);
     }
     .group textarea {
         width: 100%;
