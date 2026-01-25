@@ -3,6 +3,7 @@
 
     let { class: className = '' } = $props()
 
+    let isRevealed = $state(false)
     let debounceTimer = null
 
     function handleInput(event) {
@@ -23,18 +24,37 @@
         }
         saveSettings(settings)
     }
+
+    function reveal() {
+        isRevealed = true
+    }
+
+    function hide() {
+        isRevealed = false
+    }
 </script>
 
-<div class="panel-wrapper {className}">
+<div
+    class="panel-wrapper {className}"
+    onmouseenter={reveal}
+    onmouseleave={hide}
+    onfocusin={reveal}
+    onfocusout={hide}
+    role="group"
+>
     <div class="panel-label">notes</div>
-    <div class="panel privacy-blur">
-        <textarea
-            class="notes-textarea"
-            value={settings.notesContent}
-            oninput={handleInput}
-            onblur={handleBlur}
-            placeholder="jot something down..."
-        ></textarea>
+    <div class="panel">
+        {#if isRevealed}
+            <textarea
+                class="notes-textarea"
+                value={settings.notesContent}
+                oninput={handleInput}
+                onblur={handleBlur}
+                placeholder="jot something down..."
+            ></textarea>
+        {:else}
+            <div class="notes-masked">•••</div>
+        {/if}
     </div>
 </div>
 
@@ -43,6 +63,7 @@
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
+        width: 12rem;
     }
     .panel-wrapper.expand {
         flex-grow: 1;
@@ -68,12 +89,14 @@
     .notes-textarea::placeholder {
         color: var(--txt-3);
     }
-    .privacy-blur {
-        filter: blur(8px);
-        transition: filter 0.2s ease;
-    }
-    .panel-wrapper:hover .privacy-blur,
-    .panel-wrapper:focus-within .privacy-blur {
-        filter: blur(0);
+    .notes-masked {
+        width: 100%;
+        flex: 1;
+        min-height: 8rem;
+        color: var(--txt-3);
+        font-family: var(--font-family);
+        font-size: 0.875rem;
+        line-height: 1.5;
+        filter: blur(4px);
     }
 </style>

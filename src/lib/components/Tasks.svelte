@@ -22,8 +22,17 @@
     let initialLoad = $state(true)
     let previousToken = $state(null)
     let previousBackend = $state(null)
+    let isRevealed = $state(false)
     let taskCount = $derived(tasks.filter((task) => !task.checked).length)
     let taskLabel = $derived(taskCount === 1 ? 'task' : 'tasks')
+
+    function reveal() {
+        isRevealed = true
+    }
+
+    function hide() {
+        isRevealed = false
+    }
     let backendUrl = $derived.by(() => {
         if (settings.taskBackend === 'todoist')
             return 'https://app.todoist.com/app'
@@ -397,7 +406,14 @@
     })
 </script>
 
-<div class="panel-wrapper">
+<div
+    class="panel-wrapper"
+    onmouseenter={reveal}
+    onmouseleave={hide}
+    onfocusin={reveal}
+    onfocusout={hide}
+    role="group"
+>
     <button
         class="widget-label"
         onclick={() => loadTasks(true)}
@@ -405,98 +421,104 @@
     >
         {syncing ? 'syncing...' : 'tasks'}
     </button>
-    <div class="panel privacy-blur">
-        {#if error}
-            <div class="error">{error}</div>
-        {:else}
-            <div class="widget-header">
-                {#if backendUrl}
-                    <a
-                        href={backendUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <span class="bright">{taskCount}</span>
-                        {taskLabel}
-                    </a>
-                {:else}
-                    <span>
-                        <span class="bright">{taskCount}</span>
-                        {taskLabel}
-                    </span>
-                {/if}
-                <AddTask
-                    bind:this={addTaskComponent}
-                    bind:value={newTaskContent}
-                    bind:parsed={parsedDate}
-                    {parsedProject}
-                    disabled={addingTask}
-                    loading={addingTask}
-                    show={tasks.length === 0}
-                    onsubmit={addTask}
-                />
-            </div>
-
-            <br />
-            <div class="tasks">
-                <div class="tasks-list">
-                    {#each tasks as task}
-                        <div class="task" class:completed={task.checked}>
-                            <button
-                                onclick={() =>
-                                    toggleTask(task.id, !task.checked)}
-                                class="checkbox"
-                            >
-                                {#if task.checked}
-                                    [<span class="checkbox-x">x</span>]
-                                {:else}
-                                    [ ]
-                                {/if}
-                            </button>
-                            {#if task.project_name && task.project_name !== 'Inbox'}
-                                <span class="task-project"
-                                    >#{task.project_name}</span
-                                >
-                            {/if}
-                            <span class="task-title">
-                                <input
-                                    class="task-title-input"
-                                    aria-label="edit task name"
-                                    bind:value={editBuffer[task.id]}
-                                    onblur={() => commitEdit(task.id)}
-                                    onkeydown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            e.preventDefault()
-                                            e.target.blur()
-                                        }
-                                    }}
-                                />
-                            </span>
-                            {#if task.due_date}
-                                <span
-                                    class="task-due"
-                                    class:overdue={isTaskOverdue(task)}
-                                >
-                                    {formatDueDate(
-                                        task.due_date,
-                                        task.has_time
-                                    )}
-                                </span>
-                            {/if}
-                            <button
-                                type="button"
-                                class="task-delete"
-                                onclick={() => deleteTask(task.id)}
-                                aria-label="delete task"
-                                title="delete"
-                            >
-                                x
-                            </button>
-                        </div>
-                    {/each}
+    <div class="panel">
+        <div class="panel-content">
+            {#if error}
+                <div class="error">{error}</div>
+            {:else}
+                <div class="widget-header">
+                    {#if backendUrl}
+                        <a
+                            href={backendUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <span class="bright">{taskCount}</span>
+                            {taskLabel}
+                        </a>
+                    {:else}
+                        <span>
+                            <span class="bright">{taskCount}</span>
+                            {taskLabel}
+                        </span>
+                    {/if}
+                    <AddTask
+                        bind:this={addTaskComponent}
+                        bind:value={newTaskContent}
+                        bind:parsed={parsedDate}
+                        {parsedProject}
+                        disabled={addingTask}
+                        loading={addingTask}
+                        show={tasks.length === 0}
+                        onsubmit={addTask}
+                    />
                 </div>
-            </div>
-        {/if}
+
+                <br />
+                <div class="tasks">
+                    <div class="tasks-list">
+                        {#each tasks as task}
+                            <div class="task" class:completed={task.checked}>
+                                <button
+                                    onclick={() =>
+                                        toggleTask(task.id, !task.checked)}
+                                    class="checkbox"
+                                >
+                                    {#if task.checked}
+                                        [<span class="checkbox-x">x</span>]
+                                    {:else}
+                                        [ ]
+                                    {/if}
+                                </button>
+                                {#if task.project_name && task.project_name !== 'Inbox'}
+                                    <span class="task-project"
+                                        >#{task.project_name}</span
+                                    >
+                                {/if}
+                                <span class="task-title">
+                                    {#if isRevealed}
+                                        <input
+                                            class="task-title-input"
+                                            aria-label="edit task name"
+                                            bind:value={editBuffer[task.id]}
+                                            onblur={() => commitEdit(task.id)}
+                                            onkeydown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault()
+                                                    e.target.blur()
+                                                }
+                                            }}
+                                        />
+                                    {:else}
+                                        <span class="task-title-masked">•••</span>
+                                    {/if}
+                                </span>
+                                {#if task.due_date}
+                                    <span
+                                        class="task-due"
+                                        class:overdue={isTaskOverdue(task)}
+                                    >
+                                        {formatDueDate(
+                                            task.due_date,
+                                            task.has_time
+                                        )}
+                                    </span>
+                                {/if}
+                                <button
+                                    type="button"
+                                    class="task-delete"
+                                    onclick={() => deleteTask(task.id)}
+                                    aria-label="delete task"
+                                    title="delete"
+                                >
+                                    x
+                                </button>
+                            </div>
+                        {/each}
+                    </div>
+                </div>
+            {/if}
+        </div>
     </div>
 </div>
 
@@ -565,12 +587,8 @@
     .checkbox-x {
         color: var(--txt-2);
     }
-    .privacy-blur {
-        filter: blur(8px);
-        transition: filter 0.2s ease;
-    }
-    .panel-wrapper:hover .privacy-blur,
-    .panel-wrapper:focus-within .privacy-blur {
-        filter: blur(0);
+    .task-title-masked {
+        color: var(--txt-3);
+        filter: blur(4px);
     }
 </style>

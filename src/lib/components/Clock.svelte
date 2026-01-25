@@ -7,12 +7,25 @@
     let currentSec = $state('')
     let currentAmPm = $state('')
     let currentDate = $state('')
+    let greeting = $state('')
     let clockInterval = null
+
+    function getGreeting(hour) {
+        if (hour >= 5 && hour < 12) return 'Good morning'
+        if (hour >= 12 && hour < 17) return 'Good afternoon'
+        return 'Good evening'
+    }
 
     function updateTime() {
         const now = new Date()
 
         let hours = now.getHours()
+
+        // Update greeting
+        const greetingText = getGreeting(hours)
+        greeting = settings.userName
+            ? `${greetingText}, ${settings.userName}`
+            : greetingText
 
         if (settings.timeFormat === '12hr') {
             currentAmPm = hours >= 12 ? 'pm' : 'am'
@@ -75,10 +88,9 @@
 <div class="panel-wrapper">
     <div class="panel-label">datetime</div>
     <div class="panel">
+        <div class="greeting">{greeting}</div>
         <div class="clock">
-            {currentHrs}<span class="colon">:</span>{currentMin}<span
-                class="colon">:</span
-            >{currentSec}
+            {currentHrs}<span class="colon">:</span>{currentMin}
             {#if settings.timeFormat === '12hr'}
                 <span class="ampm">{currentAmPm}</span>
             {/if}
@@ -91,16 +103,21 @@
     .panel-wrapper {
         flex-grow: 1;
     }
+    .greeting {
+        font-size: 1.25rem;
+        color: var(--txt-2);
+        margin-bottom: 0.25rem;
+    }
     .clock {
         font-size: 3.125rem;
         font-weight: 300;
-        color: var(--txt-1);
+        color: var(--txt-num);
         line-height: 3.5rem;
         margin: 0 0 0.5rem 0;
     }
     .colon,
     .ampm {
-        color: var(--txt-2);
+        color: var(--txt-num);
     }
     .date {
         font-size: 1.5rem;

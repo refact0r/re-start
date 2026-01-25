@@ -109,6 +109,13 @@
     --txt-3: #586e75;
     --txt-4: #2aa198;
     --txt-err: #dc322f;
+    /* Solarized accent colors */
+    --txt-num: #b58900;
+    --txt-link: #268bd2;
+    --txt-green: #859900;
+    --txt-violet: #6c71c4;
+    --txt-orange: #cb4b16;
+    --txt-magenta: #d33682;
 }
 
 .theme-solarized-light {
@@ -120,4 +127,11 @@
     --txt-3: #93a1a1;
     --txt-4: #268bd2;
     --txt-err: #dc322f;
+    /* Solarized accent colors */
+    --txt-num: #b58900;
+    --txt-link: #268bd2;
+    --txt-green: #859900;
+    --txt-violet: #6c71c4;
+    --txt-orange: #cb4b16;
+    --txt-magenta: #d33682;
 }

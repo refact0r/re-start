@@ -14,10 +14,30 @@
     let prevForecastMode = $state(settings.forecastMode)
 
     const weatherAPI = new WeatherAPI()
+    const AUTO_REFRESH_KEY = 'weather_auto_refresh_time'
+    const AUTO_REFRESH_INTERVAL = 60 * 60 * 1000 // 1 hour
+
+    function canAutoRefresh() {
+        const lastRefresh = localStorage.getItem(AUTO_REFRESH_KEY)
+        if (!lastRefresh) return true
+        return Date.now() - parseInt(lastRefresh, 10) >= AUTO_REFRESH_INTERVAL
+    }
+
+    function markAutoRefresh() {
+        localStorage.setItem(AUTO_REFRESH_KEY, Date.now().toString())
+    }
 
     function handleVisibilityChange() {
-        if (document.visibilityState === 'visible') {
-            loadWeather()
+        if (document.visibilityState === 'visible' && canAutoRefresh()) {
+            markAutoRefresh()
+            refreshWeather()
+        }
+    }
+
+    function handleOnline() {
+        if (document.visibilityState === 'visible' && canAutoRefresh()) {
+            markAutoRefresh()
+            refreshWeather()
         }
     }
 
@@ -147,10 +167,12 @@
     onMount(() => {
         loadWeather()
         document.addEventListener('visibilitychange', handleVisibilityChange)
+        window.addEventListener('online', handleOnline)
     })
 
     onDestroy(() => {
         document.removeEventListener('visibilitychange', handleVisibilityChange)
+        window.removeEventListener('online', handleOnline)
     })
 </script>
 
@@ -164,7 +186,9 @@
             <div class="error">{error}</div>
         {:else if current}
             <div class="temp">{current.icon} {current.temperature_2m}°{settings.tempUnit[0].toUpperCase()}</div>
-            <div class="description">{current.description}</div>
+            <div class="description">
+                {current.description}{#if current.snow_inches && parseFloat(current.snow_inches) > 0}, {current.snow_inches}" snow{:else if current.rain_inches && parseFloat(current.rain_inches) > 0}, {current.rain_inches}" rain{/if}
+            </div>
             <br />
             <div class="stats">
                 <div class="col">
@@ -234,7 +258,7 @@
     .temp {
         font-size: 2rem;
         font-weight: 300;
-        color: var(--txt-1);
+        color: var(--txt-num);
         line-height: 2.625rem;
     }
     .description {
@@ -254,7 +278,7 @@
     }
     .forecast-temp {
         text-align: end;
-        color: var(--txt-1);
+        color: var(--txt-num);
     }
     .forecast-temp .separator {
         color: var(--txt-3);

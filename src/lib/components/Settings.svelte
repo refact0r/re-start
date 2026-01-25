@@ -267,10 +267,13 @@
                 <div class="checkbox-group">
                     <Checkbox bind:checked={settings.showClock}>clock</Checkbox>
                     <Checkbox bind:checked={settings.showStats}>stats</Checkbox>
-                    <Checkbox bind:checked={settings.showWeather}>
-                        weather
-                    </Checkbox>
+                    <Checkbox bind:checked={settings.showWeather}>weather</Checkbox>
                     <Checkbox bind:checked={settings.showTasks}>tasks</Checkbox>
+                    <Checkbox bind:checked={settings.showPomodoro}>pomodoro</Checkbox>
+                </div>
+                <div class="checkbox-group" style="margin-top: 0.5rem;">
+                    <Checkbox bind:checked={settings.showQuote}>quote</Checkbox>
+                    <Checkbox bind:checked={settings.showNotes}>notes</Checkbox>
                     <Checkbox bind:checked={settings.showLinks}>links</Checkbox>
                 </div>
             </div>
@@ -337,6 +340,16 @@
                     type="text"
                     bind:value={settings.tabTitle}
                     placeholder="~"
+                />
+            </div>
+
+            <div class="group">
+                <label for="user-name">your name</label>
+                <input
+                    id="user-name"
+                    type="text"
+                    bind:value={settings.userName}
+                    placeholder="(optional)"
                 />
             </div>
 

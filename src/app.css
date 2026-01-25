@@ -7,6 +7,13 @@
     --txt-2: oklch(75% 0 0);
     --txt-1: oklch(90% 0 0);
     --txt-err: oklch(70% 0.11 0);
+    /* Accent color fallbacks (used by Solarized and other colorful themes) */
+    --txt-num: var(--txt-1);
+    --txt-link: var(--txt-2);
+    --txt-green: var(--txt-2);
+    --txt-violet: var(--txt-3);
+    --txt-orange: var(--txt-1);
+    --txt-magenta: var(--txt-3);
     --font-family: 'Geist Mono Variable', monospace;
 }
 
@@ -40,10 +47,10 @@ button {
     font: inherit;
     cursor: pointer;
     padding: 0;
-    color: var(--txt-3);
+    color: var(--txt-link);
 
     &:hover {
-        color: var(--txt-2);
+        color: var(--txt-4);
     }
     &:disabled {
         cursor: default;
@@ -71,18 +78,18 @@ button {
     top: -12px;
     left: 10px;
     background-color: var(--bg-1);
-    color: var(--txt-4);
+    color: var(--txt-violet);
     padding: 0 4px;
     z-index: 10;
 }
 
 .widget-label:hover:not(:disabled) {
-    color: var(--txt-3);
+    color: var(--txt-link);
 }
 
 .widget-label:disabled {
     cursor: default;
-    color: var(--txt-4);
+    color: var(--txt-violet);
 }
 
 a {

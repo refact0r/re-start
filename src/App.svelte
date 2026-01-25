@@ -4,6 +4,9 @@
     import { defaultTheme } from './lib/config/themes.js'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
+    import Notes from './lib/components/Notes.svelte'
+    import Pomodoro from './lib/components/Pomodoro.svelte'
+    import Quote from './lib/components/Quote.svelte'
     import Settings from './lib/components/Settings.svelte'
     import Stats from './lib/components/Stats.svelte'
     import Tasks from './lib/components/Tasks.svelte'
@@ -92,28 +95,37 @@
 
 <main>
     <div class="container">
-        {#if settings.showClock || settings.showStats}
+        {#if settings.showLinks}
+            <Links />
+        {/if}
+        {#if settings.showClock || settings.showPomodoro || settings.showStats}
             <div class="top">
                 {#if settings.showClock}
                     <Clock />
                 {/if}
+                {#if settings.showPomodoro}
+                    <Pomodoro />
+                {/if}
                 {#if settings.showStats}
-                    <Stats class={!settings.showClock ? 'expand' : ''} />
+                    <Stats />
                 {/if}
             </div>
         {/if}
-        {#if settings.showWeather || settings.showTasks}
+        {#if settings.showWeather || settings.showTasks || settings.showNotes}
             <div class="widgets">
                 {#if settings.showWeather}
-                    <Weather class={!settings.showTasks ? 'expand' : ''} />
+                    <Weather />
                 {/if}
                 {#if settings.showTasks}
                     <Tasks />
                 {/if}
+                {#if settings.showNotes}
+                    <Notes />
+                {/if}
             </div>
         {/if}
-        {#if settings.showLinks}
-            <Links />
+        {#if settings.showQuote}
+            <Quote />
         {/if}
     </div>
 

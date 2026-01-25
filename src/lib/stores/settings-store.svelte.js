@@ -15,6 +15,24 @@ let defaultSettings = {
     forecastMode: 'hourly',
     linksPerColumn: 4,
     linkTarget: '_self',
+    // Widget visibility
+    showClock: true,
+    showStats: true,
+    showWeather: true,
+    showTasks: true,
+    showLinks: true,
+    showPomodoro: false,
+    showNotes: false,
+    showQuote: false,
+    // Pomodoro settings
+    pomodoroWorkMinutes: 25,
+    pomodoroShortBreak: 5,
+    pomodoroLongBreak: 15,
+    pomodoroSound: true,
+    // Notes content
+    notesContent: '',
+    // User name for greeting
+    userName: '',
     links: [
         { title: 'gmail', url: 'https://mail.google.com' },
         { title: 'calendar', url: 'https://calendar.google.com' },
@@ -34,11 +52,6 @@ let defaultSettings = {
         { title: 'feedly', url: 'https://feedly.com' },
     ],
     customCSS: '',
-    showClock: true,
-    showStats: true,
-    showWeather: true,
-    showTasks: true,
-    showLinks: true,
 }
 
 function loadSettings() {

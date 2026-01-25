@@ -7,8 +7,12 @@ features:
 - task list with multiple backend options (local, todoist, google tasks (chrome only))
 - smart task input with natural date and project parsing
 - weather summary (from open-meteo)
+- pomodoro timer widget
+- quotes widget
+- notes widget
 - customizable quick links
 - stats (load time, ping, fps, viewport size)
+- privacy blur toggle to obscure sensitive content
 - multiple color themes
 - custom css support
 - lightweight & performant (~100kb including fonts, loads in <50ms)
