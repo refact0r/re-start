@@ -7,56 +7,19 @@ import path from 'path'
 // Read version from manifest.json at build time
 const manifest = JSON.parse(fs.readFileSync('./public/manifest.json', 'utf-8'))
 
-// Plugin to inline theme CSS and inject theme switching script
-function injectThemeScript() {
+// Plugin to inline theme CSS into the HTML head
+function injectThemeCSS() {
     return {
-        name: 'inject-theme-script',
+        name: 'inject-theme-css',
         transformIndexHtml(html) {
             // Read theme CSS file
             const themesCSS = fs.readFileSync('./src/lib/config/themes.css', 'utf-8')
 
-            // Read default theme from themes.js
-            const themesModule = fs.readFileSync('./src/lib/config/themes.js', 'utf-8')
-            const defaultThemeMatch = themesModule.match(
-                /export const defaultTheme = ['"](.+?)['"]/
-            )
-
-            if (!defaultThemeMatch) {
-                console.error('Failed to extract default theme')
-                return html
-            }
-
-            const defaultTheme = defaultThemeMatch[1]
-
             // Create inline styles with all themes
             const styleTag = `<style>${themesCSS}</style>`
 
-            // Create simplified theme switching script
-            const themeScript = `<script>
-            (function() {
-                const defaultTheme = '${defaultTheme}';
-                try {
-                    const stored = localStorage.getItem('settings');
-                    let themeName = defaultTheme;
-                    if (stored) {
-                        const parsed = JSON.parse(stored);
-                        if (parsed.currentTheme) {
-                            themeName = parsed.currentTheme;
-                        }
-                    }
-                    document.documentElement.className = 'theme-' + themeName;
-                } catch (e) {
-                    document.documentElement.className = 'theme-' + defaultTheme;
-                }
-            })();
-            </script>`
-
-            // Replace the old script placeholder with new implementation
-            // Inject styles in head, and the script stays where it is
-            return html.replace(
-                /<script>[\s\S]*?__THEMES_DATA__[\s\S]*?<\/script>/,
-                themeScript
-            ).replace('</head>', `${styleTag}\n</head>`)
+            // Inject styles before closing head tag
+            return html.replace('</head>', `${styleTag}\n</head>`)
         },
     }
 }
@@ -100,7 +63,7 @@ function buildManifest() {
 // https://vite.dev/config/
 export default defineConfig({
     base: './',
-    plugins: [svelte(), injectThemeScript(), excludeManifest(), buildManifest()],
+    plugins: [svelte(), injectThemeCSS(), excludeManifest(), buildManifest()],
     define: {
         __APP_VERSION__: JSON.stringify(manifest.version),
     },

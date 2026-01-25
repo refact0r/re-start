@@ -7,7 +7,7 @@ const manifestPath = './public/manifest.json'
 
 // OAuth2 client IDs
 const CLIENT_IDS = {
-    dev: '489393578728-r6p53q4oe7ngcm6r4kmtgbk17s2cgpk8.apps.googleusercontent.com',
+    dev: '992839123761-e8l791fd5kemrnticmkn93s4uidtl69i.apps.googleusercontent.com',
     prod: '489393578728-s8v9trudldppumhduidbko2v82i79hv5.apps.googleusercontent.com'
 }
 
