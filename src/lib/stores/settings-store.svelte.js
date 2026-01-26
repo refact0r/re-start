@@ -24,6 +24,11 @@ let defaultSettings = {
     showPomodoro: false,
     showNotes: false,
     showQuote: false,
+    showCalendar: false,
+    // Google Calendar credentials (user-provided)
+    googleCalendarClientId: '',
+    googleCalendarClientSecret: '',
+    googleCalendarRefreshToken: '',
     // Pomodoro settings
     pomodoroWorkMinutes: 25,
     pomodoroShortBreak: 5,

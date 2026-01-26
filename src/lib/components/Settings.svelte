@@ -11,6 +11,7 @@
     import Checkbox from './ui/Checkbox.svelte'
     import { createTaskBackend } from '../backends/index.js'
     import { isChrome } from '../utils/browser-detect.js'
+    import GoogleCalendarBackend from '../backends/google-calendar-backend.js'
 
     let { showSettings = false, closeSettings } = $props()
 
@@ -23,6 +24,78 @@
     let googleTasksApi = $state(null)
     let signingIn = $state(false)
     let signInError = $state('')
+
+    // Google Calendar state
+    let calendarSigningIn = $state(false)
+    let calendarSignInError = $state('')
+    let calendarCredentialsInput = $state(null)
+
+    async function handleCalendarCredentialsUpload(event) {
+        const file = event.target.files?.[0]
+        if (!file) return
+
+        try {
+            const text = await file.text()
+            const credentials = JSON.parse(text)
+            
+            // Handle both "installed" and "web" credential types
+            const creds = credentials.installed || credentials.web
+            if (!creds || !creds.client_id || !creds.client_secret) {
+                throw new Error('Invalid credentials file')
+            }
+
+            settings.googleCalendarClientId = creds.client_id
+            settings.googleCalendarClientSecret = creds.client_secret
+            saveSettings(settings)
+        } catch (err) {
+            console.error('Failed to parse credentials:', err)
+            calendarSignInError = 'invalid credentials file'
+            setTimeout(() => calendarSignInError = '', 3000)
+        }
+        
+        event.target.value = ''
+    }
+
+    async function handleCalendarSignIn() {
+        if (!settings.googleCalendarClientId || !settings.googleCalendarClientSecret) {
+            calendarSignInError = 'upload credentials first'
+            setTimeout(() => calendarSignInError = '', 3000)
+            return
+        }
+
+        try {
+            calendarSigningIn = true
+            calendarSignInError = ''
+
+            const backend = new GoogleCalendarBackend(
+                settings.googleCalendarClientId,
+                settings.googleCalendarClientSecret
+            )
+
+            const tokens = await backend.signIn()
+            settings.googleCalendarRefreshToken = tokens.refreshToken
+            saveSettings(settings)
+        } catch (err) {
+            console.error('Google Calendar sign in failed:', err)
+            calendarSignInError = err.message || 'sign in failed'
+        } finally {
+            calendarSigningIn = false
+        }
+    }
+
+    function handleCalendarSignOut() {
+        settings.googleCalendarRefreshToken = ''
+        saveSettings(settings)
+        calendarSignInError = ''
+    }
+
+    function handleCalendarClearCredentials() {
+        settings.googleCalendarClientId = ''
+        settings.googleCalendarClientSecret = ''
+        settings.googleCalendarRefreshToken = ''
+        saveSettings(settings)
+        calendarSignInError = ''
+    }
 
     async function handleGoogleSignIn() {
         try {
@@ -275,6 +348,7 @@
                     <Checkbox bind:checked={settings.showQuote}>quote</Checkbox>
                     <Checkbox bind:checked={settings.showNotes}>notes</Checkbox>
                     <Checkbox bind:checked={settings.showLinks}>links</Checkbox>
+                    <Checkbox bind:checked={settings.showCalendar}>calendar</Checkbox>
                 </div>
             </div>
             <div class="group">
@@ -408,6 +482,71 @@
                                 ? 'signing in...'
                                 : 'sign in with google'}]
                     </button>
+                </div>
+            {/if}
+
+            {#if settings.showCalendar}
+                <div class="group">
+                    <div class="setting-label">google calendar</div>
+                    <div class="calendar-redirect-info">
+                        <span class="label">redirect uri (add to google cloud console):</span>
+                        <code class="redirect-uri">{GoogleCalendarBackend.getRedirectUrl()}</code>
+                    </div>
+                    {#if !settings.googleCalendarClientId}
+                        <div class="calendar-auth">
+                            <button
+                                class="button"
+                                onclick={() => calendarCredentialsInput?.click()}
+                            >
+                                <span class="bracket">[</span><span class="action-text">upload credentials.json</span><span class="bracket">]</span>
+                            </button>
+                            <input
+                                type="file"
+                                accept=".json"
+                                bind:this={calendarCredentialsInput}
+                                onchange={handleCalendarCredentialsUpload}
+                                style="display: none;"
+                            />
+                            {#if calendarSignInError}
+                                <span class="error">{calendarSignInError}</span>
+                            {/if}
+                        </div>
+                    {:else if !settings.googleCalendarRefreshToken}
+                        <div class="calendar-auth">
+                            <button
+                                class="button"
+                                onclick={handleCalendarSignIn}
+                                disabled={calendarSigningIn}
+                            >
+                                <span class="bracket">[</span><span class="action-text">{calendarSigningIn ? 'signing in...' : 'sign in with google'}</span><span class="bracket">]</span>
+                            </button>
+                            <button
+                                class="button"
+                                onclick={handleCalendarClearCredentials}
+                            >
+                                <span class="bracket">[</span><span class="action-text">clear credentials</span><span class="bracket">]</span>
+                            </button>
+                            {#if calendarSignInError}
+                                <span class="error">{calendarSignInError}</span>
+                            {/if}
+                        </div>
+                    {:else}
+                        <div class="calendar-auth">
+                            <span class="signed-in">✓ signed in</span>
+                            <button
+                                class="button"
+                                onclick={handleCalendarSignOut}
+                            >
+                                <span class="bracket">[</span><span class="action-text">sign out</span><span class="bracket">]</span>
+                            </button>
+                            <button
+                                class="button"
+                                onclick={handleCalendarClearCredentials}
+                            >
+                                <span class="bracket">[</span><span class="action-text">clear credentials</span><span class="bracket">]</span>
+                            </button>
+                        </div>
+                    {/if}
                 </div>
             {/if}
 
@@ -865,5 +1004,32 @@
     .checkbox-group {
         display: flex;
         gap: 3ch;
+    }
+    .calendar-auth {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+    }
+    .signed-in {
+        color: var(--txt-green);
+    }
+    .calendar-redirect-info {
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+    }
+    .calendar-redirect-info .label {
+        color: var(--txt-3);
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    .redirect-uri {
+        background: var(--bg-2);
+        padding: 0.25rem 0.5rem;
+        border: 1px solid var(--bg-3);
+        font-size: 0.8rem;
+        word-break: break-all;
+        display: block;
+        user-select: all;
     }
 </style>

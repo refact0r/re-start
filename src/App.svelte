@@ -2,6 +2,7 @@
     import '@fontsource-variable/geist-mono'
     import { settings } from './lib/stores/settings-store.svelte.js'
     import { defaultTheme } from './lib/config/themes.js'
+    import Calendar from './lib/components/Calendar.svelte'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
     import Notes from './lib/components/Notes.svelte'
@@ -14,7 +15,22 @@
     import { saveSettings } from './lib/stores/settings-store.svelte.js'
     import { isChrome } from './lib/utils/browser-detect.js'
 
+    import { onMount, onDestroy } from 'svelte'
+
     let showSettings = $state(false)
+
+    // Listen for open-settings event from widgets
+    function handleOpenSettings() {
+        showSettings = true
+    }
+
+    onMount(() => {
+        window.addEventListener('open-settings', handleOpenSettings)
+    })
+
+    onDestroy(() => {
+        window.removeEventListener('open-settings', handleOpenSettings)
+    })
 
     // Check if Google Tasks is available (Chrome only)
     const googleTasksAvailable = isChrome()
@@ -111,10 +127,13 @@
                 {/if}
             </div>
         {/if}
-        {#if settings.showWeather || settings.showTasks || settings.showNotes}
+        {#if settings.showWeather || settings.showTasks || settings.showNotes || settings.showCalendar}
             <div class="widgets">
                 {#if settings.showWeather}
                     <Weather />
+                {/if}
+                {#if settings.showCalendar}
+                    <Calendar />
                 {/if}
                 {#if settings.showTasks}
                     <Tasks />

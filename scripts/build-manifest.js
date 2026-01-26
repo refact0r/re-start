@@ -28,6 +28,9 @@ if (browser === 'chrome') {
         if (manifest.oauth2) {
             manifest.oauth2.client_id = CLIENT_IDS[clientEnv]
         }
+    } else {
+        // Remove oauth2 if no client ID is configured (empty client_id is invalid)
+        delete manifest.oauth2
     }
 } else if (browser === 'firefox') {
     // Remove Chrome-specific oauth2 configuration
