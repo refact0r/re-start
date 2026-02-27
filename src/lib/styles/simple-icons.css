@@ -1,0 +1,13600 @@
+/* Auto-generated from simple-icons-font — do not edit */
+@font-face {
+    font-family: 'Simple Icons';
+    src: url('simple-icons-font/font/SimpleIcons.woff2') format('woff2');
+    font-display: block;
+}
+
+.si {
+    font-style: normal;
+    font-family: 'Simple Icons', sans-serif;
+    vertical-align: middle;
+}
+
+.si-dotenv::before {
+    content: '\ea01';
+}
+
+.si-dotnet::before {
+    content: '\ea02';
+}
+
+.si-e::before {
+    content: '\ea03';
+}
+
+.si-1dot1dot1dot1::before {
+    content: '\ea04';
+}
+
+.si-1and1::before {
+    content: '\ea05';
+}
+
+.si-1001tracklists::before {
+    content: '\ea06';
+}
+
+.si-1panel::before {
+    content: '\ea07';
+}
+
+.si-1password::before {
+    content: '\ea08';
+}
+
+.si-2fas::before {
+    content: '\ea09';
+}
+
+.si-2k::before {
+    content: '\ea0a';
+}
+
+.si-30secondsofcode::before {
+    content: '\ea0b';
+}
+
+.si-365datascience::before {
+    content: '\ea0c';
+}
+
+.si-3m::before {
+    content: '\ea0d';
+}
+
+.si-42::before {
+    content: '\ea0e';
+}
+
+.si-4chan::before {
+    content: '\ea0f';
+}
+
+.si-4d::before {
+    content: '\ea10';
+}
+
+.si-500px::before {
+    content: '\ea11';
+}
+
+.si-7zip::before {
+    content: '\ea12';
+}
+
+.si-99designs::before {
+    content: '\ea13';
+}
+
+.si-9gag::before {
+    content: '\ea14';
+}
+
+.si-aframe::before {
+    content: '\ea15';
+}
+
+.si-abdownloadmanager::before {
+    content: '\ea16';
+}
+
+.si-abb::before {
+    content: '\ea17';
+}
+
+.si-abbott::before {
+    content: '\ea18';
+}
+
+.si-abbvie::before {
+    content: '\ea19';
+}
+
+.si-aboutdotme::before {
+    content: '\ea1a';
+}
+
+.si-abstract::before {
+    content: '\ea1b';
+}
+
+.si-abusedotch::before {
+    content: '\ea1c';
+}
+
+.si-academia::before {
+    content: '\ea1d';
+}
+
+.si-accenture::before {
+    content: '\ea1e';
+}
+
+.si-accusoft::before {
+    content: '\ea1f';
+}
+
+.si-accuweather::before {
+    content: '\ea20';
+}
+
+.si-acer::before {
+    content: '\ea21';
+}
+
+.si-acm::before {
+    content: '\ea22';
+}
+
+.si-acode::before {
+    content: '\ea23';
+}
+
+.si-actigraph::before {
+    content: '\ea24';
+}
+
+.si-activeloop::before {
+    content: '\ea25';
+}
+
+.si-activision::before {
+    content: '\ea26';
+}
+
+.si-activitypub::before {
+    content: '\ea27';
+}
+
+.si-actix::before {
+    content: '\ea28';
+}
+
+.si-actualbudget::before {
+    content: '\ea29';
+}
+
+.si-acura::before {
+    content: '\ea2a';
+}
+
+.si-ada::before {
+    content: '\ea2b';
+}
+
+.si-adafruit::before {
+    content: '\ea2c';
+}
+
+.si-adaway::before {
+    content: '\ea2d';
+}
+
+.si-adblock::before {
+    content: '\ea2e';
+}
+
+.si-adblockplus::before {
+    content: '\ea2f';
+}
+
+.si-addydotio::before {
+    content: '\ea30';
+}
+
+.si-adguard::before {
+    content: '\ea31';
+}
+
+.si-adidas::before {
+    content: '\ea32';
+}
+
+.si-adminer::before {
+    content: '\ea33';
+}
+
+.si-adonisjs::before {
+    content: '\ea34';
+}
+
+.si-adp::before {
+    content: '\ea35';
+}
+
+.si-adroll::before {
+    content: '\ea36';
+}
+
+.si-adventofcode::before {
+    content: '\ea37';
+}
+
+.si-adyen::before {
+    content: '\ea38';
+}
+
+.si-aegisauthenticator::before {
+    content: '\ea39';
+}
+
+.si-aeroflot::before {
+    content: '\ea3a';
+}
+
+.si-aeromexico::before {
+    content: '\ea3b';
+}
+
+.si-afdian::before {
+    content: '\ea3c';
+}
+
+.si-affine::before {
+    content: '\ea3d';
+}
+
+.si-afterpay::before {
+    content: '\ea3e';
+}
+
+.si-aftership::before {
+    content: '\ea3f';
+}
+
+.si-agora::before {
+    content: '\ea40';
+}
+
+.si-aidungeon::before {
+    content: '\ea41';
+}
+
+.si-aib::before {
+    content: '\ea42';
+}
+
+.si-aiohttp::before {
+    content: '\ea43';
+}
+
+.si-aiqfome::before {
+    content: '\ea44';
+}
+
+.si-aircanada::before {
+    content: '\ea45';
+}
+
+.si-airchina::before {
+    content: '\ea46';
+}
+
+.si-airfrance::before {
+    content: '\ea47';
+}
+
+.si-airindia::before {
+    content: '\ea48';
+}
+
+.si-airserbia::before {
+    content: '\ea49';
+}
+
+.si-airtransat::before {
+    content: '\ea4a';
+}
+
+.si-airasia::before {
+    content: '\ea4b';
+}
+
+.si-airbnb::before {
+    content: '\ea4c';
+}
+
+.si-airbrake::before {
+    content: '\ea4d';
+}
+
+.si-airbus::before {
+    content: '\ea4e';
+}
+
+.si-airbyte::before {
+    content: '\ea4f';
+}
+
+.si-aircall::before {
+    content: '\ea50';
+}
+
+.si-airplayaudio::before {
+    content: '\ea51';
+}
+
+.si-airplayvideo::before {
+    content: '\ea52';
+}
+
+.si-airtable::before {
+    content: '\ea53';
+}
+
+.si-airtel::before {
+    content: '\ea54';
+}
+
+.si-ajv::before {
+    content: '\ea55';
+}
+
+.si-akamai::before {
+    content: '\ea56';
+}
+
+.si-akasaair::before {
+    content: '\ea57';
+}
+
+.si-akaunting::before {
+    content: '\ea58';
+}
+
+.si-akiflow::before {
+    content: '\ea59';
+}
+
+.si-alacritty::before {
+    content: '\ea5a';
+}
+
+.si-alamy::before {
+    content: '\ea5b';
+}
+
+.si-albertheijn::before {
+    content: '\ea5c';
+}
+
+.si-alby::before {
+    content: '\ea5d';
+}
+
+.si-alchemy::before {
+    content: '\ea5e';
+}
+
+.si-aldinord::before {
+    content: '\ea5f';
+}
+
+.si-aldisud::before {
+    content: '\ea60';
+}
+
+.si-alfred::before {
+    content: '\ea61';
+}
+
+.si-algolia::before {
+    content: '\ea62';
+}
+
+.si-algorand::before {
+    content: '\ea63';
+}
+
+.si-alibabacloud::before {
+    content: '\ea64';
+}
+
+.si-alibabadotcom::before {
+    content: '\ea65';
+}
+
+.si-alienware::before {
+    content: '\ea66';
+}
+
+.si-aliexpress::before {
+    content: '\ea67';
+}
+
+.si-alipay::before {
+    content: '\ea68';
+}
+
+.si-alist::before {
+    content: '\ea69';
+}
+
+.si-allegro::before {
+    content: '\ea6a';
+}
+
+.si-alliedmodders::before {
+    content: '\ea6b';
+}
+
+.si-alltrails::before {
+    content: '\ea6c';
+}
+
+.si-almalinux::before {
+    content: '\ea6d';
+}
+
+.si-alpinelinux::before {
+    content: '\ea6e';
+}
+
+.si-alpinedotjs::before {
+    content: '\ea6f';
+}
+
+.si-alternativeto::before {
+    content: '\ea70';
+}
+
+.si-alwaysdata::before {
+    content: '\ea71';
+}
+
+.si-amd::before {
+    content: '\ea72';
+}
+
+.si-ameba::before {
+    content: '\ea73';
+}
+
+.si-americanairlines::before {
+    content: '\ea74';
+}
+
+.si-americanexpress::before {
+    content: '\ea75';
+}
+
+.si-amg::before {
+    content: '\ea76';
+}
+
+.si-amp::before {
+    content: '\ea77';
+}
+
+.si-amul::before {
+    content: '\ea78';
+}
+
+.si-ana::before {
+    content: '\ea79';
+}
+
+.si-anaconda::before {
+    content: '\ea7a';
+}
+
+.si-analogue::before {
+    content: '\ea7b';
+}
+
+.si-andela::before {
+    content: '\ea7c';
+}
+
+.si-android::before {
+    content: '\ea7d';
+}
+
+.si-androidauto::before {
+    content: '\ea7e';
+}
+
+.si-androidstudio::before {
+    content: '\ea7f';
+}
+
+.si-angular::before {
+    content: '\ea80';
+}
+
+.si-anichart::before {
+    content: '\ea81';
+}
+
+.si-anilist::before {
+    content: '\ea82';
+}
+
+.si-animalplanet::before {
+    content: '\ea83';
+}
+
+.si-animedotjs::before {
+    content: '\ea84';
+}
+
+.si-ankermake::before {
+    content: '\ea85';
+}
+
+.si-anki::before {
+    content: '\ea86';
+}
+
+.si-ansible::before {
+    content: '\ea87';
+}
+
+.si-answer::before {
+    content: '\ea88';
+}
+
+.si-ansys::before {
+    content: '\ea89';
+}
+
+.si-antdesign::before {
+    content: '\ea8a';
+}
+
+.si-anta::before {
+    content: '\ea8b';
+}
+
+.si-antena3::before {
+    content: '\ea8c';
+}
+
+.si-antennapod::before {
+    content: '\ea8d';
+}
+
+.si-anthropic::before {
+    content: '\ea8e';
+}
+
+.si-antv::before {
+    content: '\ea8f';
+}
+
+.si-anycubic::before {
+    content: '\ea90';
+}
+
+.si-anydesk::before {
+    content: '\ea91';
+}
+
+.si-anytype::before {
+    content: '\ea92';
+}
+
+.si-apache::before {
+    content: '\ea93';
+}
+
+.si-apacheairflow::before {
+    content: '\ea94';
+}
+
+.si-apacheant::before {
+    content: '\ea95';
+}
+
+.si-apacheavro::before {
+    content: '\ea96';
+}
+
+.si-apachecassandra::before {
+    content: '\ea97';
+}
+
+.si-apachecloudstack::before {
+    content: '\ea98';
+}
+
+.si-apachecordova::before {
+    content: '\ea99';
+}
+
+.si-apachecouchdb::before {
+    content: '\ea9a';
+}
+
+.si-apachedolphinscheduler::before {
+    content: '\ea9b';
+}
+
+.si-apachedoris::before {
+    content: '\ea9c';
+}
+
+.si-apachedruid::before {
+    content: '\ea9d';
+}
+
+.si-apacheecharts::before {
+    content: '\ea9e';
+}
+
+.si-apacheflink::before {
+    content: '\ea9f';
+}
+
+.si-apachefreemarker::before {
+    content: '\eaa0';
+}
+
+.si-apachegroovy::before {
+    content: '\eaa1';
+}
+
+.si-apacheguacamole::before {
+    content: '\eaa2';
+}
+
+.si-apachehadoop::before {
+    content: '\eaa3';
+}
+
+.si-apachehbase::before {
+    content: '\eaa4';
+}
+
+.si-apachehive::before {
+    content: '\eaa5';
+}
+
+.si-apachejmeter::before {
+    content: '\eaa6';
+}
+
+.si-apachekafka::before {
+    content: '\eaa7';
+}
+
+.si-apachekylin::before {
+    content: '\eaa8';
+}
+
+.si-apachelucene::before {
+    content: '\eaa9';
+}
+
+.si-apachemaven::before {
+    content: '\eaaa';
+}
+
+.si-apachenetbeanside::before {
+    content: '\eaab';
+}
+
+.si-apachenifi::before {
+    content: '\eaac';
+}
+
+.si-apacheopenoffice::before {
+    content: '\eaad';
+}
+
+.si-apacheparquet::before {
+    content: '\eaae';
+}
+
+.si-apachepdfbox::before {
+    content: '\eaaf';
+}
+
+.si-apachepulsar::before {
+    content: '\eab0';
+}
+
+.si-apacherocketmq::before {
+    content: '\eab1';
+}
+
+.si-apachesolr::before {
+    content: '\eab2';
+}
+
+.si-apachespark::before {
+    content: '\eab3';
+}
+
+.si-apachestorm::before {
+    content: '\eab4';
+}
+
+.si-apachesuperset::before {
+    content: '\eab5';
+}
+
+.si-apachetomcat::before {
+    content: '\eab6';
+}
+
+.si-aparat::before {
+    content: '\eab7';
+}
+
+.si-apifox::before {
+    content: '\eab8';
+}
+
+.si-apmterminals::before {
+    content: '\eab9';
+}
+
+.si-apollographql::before {
+    content: '\eaba';
+}
+
+.si-apostrophe::before {
+    content: '\eabb';
+}
+
+.si-appstore::before {
+    content: '\eabc';
+}
+
+.si-appgallery::before {
+    content: '\eabd';
+}
+
+.si-appian::before {
+    content: '\eabe';
+}
+
+.si-appimage::before {
+    content: '\eabf';
+}
+
+.si-appium::before {
+    content: '\eac0';
+}
+
+.si-apple::before {
+    content: '\eac1';
+}
+
+.si-applearcade::before {
+    content: '\eac2';
+}
+
+.si-applemusic::before {
+    content: '\eac3';
+}
+
+.si-applenews::before {
+    content: '\eac4';
+}
+
+.si-applepay::before {
+    content: '\eac5';
+}
+
+.si-applepodcasts::before {
+    content: '\eac6';
+}
+
+.si-appletv::before {
+    content: '\eac7';
+}
+
+.si-appmanager::before {
+    content: '\eac8';
+}
+
+.si-appsignal::before {
+    content: '\eac9';
+}
+
+.si-appsmith::before {
+    content: '\eaca';
+}
+
+.si-appveyor::before {
+    content: '\eacb';
+}
+
+.si-appwrite::before {
+    content: '\eacc';
+}
+
+.si-aqua::before {
+    content: '\eacd';
+}
+
+.si-aral::before {
+    content: '\eace';
+}
+
+.si-arangodb::before {
+    content: '\eacf';
+}
+
+.si-arc::before {
+    content: '\ead0';
+}
+
+.si-arcgis::before {
+    content: '\ead1';
+}
+
+.si-archlinux::before {
+    content: '\ead2';
+}
+
+.si-archicad::before {
+    content: '\ead3';
+}
+
+.si-archiveofourown::before {
+    content: '\ead4';
+}
+
+.si-ardour::before {
+    content: '\ead5';
+}
+
+.si-arduino::before {
+    content: '\ead6';
+}
+
+.si-argo::before {
+    content: '\ead7';
+}
+
+.si-argos::before {
+    content: '\ead8';
+}
+
+.si-ariakit::before {
+    content: '\ead9';
+}
+
+.si-arkecosystem::before {
+    content: '\eada';
+}
+
+.si-arlo::before {
+    content: '\eadb';
+}
+
+.si-arm::before {
+    content: '\eadc';
+}
+
+.si-armkeil::before {
+    content: '\eadd';
+}
+
+.si-arstechnica::before {
+    content: '\eade';
+}
+
+.si-artifacthub::before {
+    content: '\eadf';
+}
+
+.si-artixlinux::before {
+    content: '\eae0';
+}
+
+.si-artstation::before {
+    content: '\eae1';
+}
+
+.si-arxiv::before {
+    content: '\eae2';
+}
+
+.si-asahilinux::before {
+    content: '\eae3';
+}
+
+.si-asana::before {
+    content: '\eae4';
+}
+
+.si-asciidoctor::before {
+    content: '\eae5';
+}
+
+.si-asciinema::before {
+    content: '\eae6';
+}
+
+.si-asda::before {
+    content: '\eae7';
+}
+
+.si-aseprite::before {
+    content: '\eae8';
+}
+
+.si-assemblyscript::before {
+    content: '\eae9';
+}
+
+.si-asterisk::before {
+    content: '\eaea';
+}
+
+.si-astonmartin::before {
+    content: '\eaeb';
+}
+
+.si-astra::before {
+    content: '\eaec';
+}
+
+.si-astral::before {
+    content: '\eaed';
+}
+
+.si-astro::before {
+    content: '\eaee';
+}
+
+.si-asus::before {
+    content: '\eaef';
+}
+
+.si-atandt::before {
+    content: '\eaf0';
+}
+
+.si-atari::before {
+    content: '\eaf1';
+}
+
+.si-atlasos::before {
+    content: '\eaf2';
+}
+
+.si-atlassian::before {
+    content: '\eaf3';
+}
+
+.si-auchan::before {
+    content: '\eaf4';
+}
+
+.si-audacity::before {
+    content: '\eaf5';
+}
+
+.si-audi::before {
+    content: '\eaf6';
+}
+
+.si-audible::before {
+    content: '\eaf7';
+}
+
+.si-audiotechnica::before {
+    content: '\eaf8';
+}
+
+.si-audiobookshelf::before {
+    content: '\eaf9';
+}
+
+.si-audioboom::before {
+    content: '\eafa';
+}
+
+.si-audiomack::before {
+    content: '\eafb';
+}
+
+.si-aurelia::before {
+    content: '\eafc';
+}
+
+.si-autentique::before {
+    content: '\eafd';
+}
+
+.si-auth0::before {
+    content: '\eafe';
+}
+
+.si-authelia::before {
+    content: '\eaff';
+}
+
+.si-authentik::before {
+    content: '\eb00';
+}
+
+.si-autocad::before {
+    content: '\eb01';
+}
+
+.si-autocannon::before {
+    content: '\eb02';
+}
+
+.si-autodesk::before {
+    content: '\eb03';
+}
+
+.si-autodeskmaya::before {
+    content: '\eb04';
+}
+
+.si-autodeskrevit::before {
+    content: '\eb05';
+}
+
+.si-autohotkey::before {
+    content: '\eb06';
+}
+
+.si-autoit::before {
+    content: '\eb07';
+}
+
+.si-automattic::before {
+    content: '\eb08';
+}
+
+.si-autoprefixer::before {
+    content: '\eb09';
+}
+
+.si-autozone::before {
+    content: '\eb0a';
+}
+
+.si-avajs::before {
+    content: '\eb0b';
+}
+
+.si-avaloniaui::before {
+    content: '\eb0c';
+}
+
+.si-avast::before {
+    content: '\eb0d';
+}
+
+.si-avianca::before {
+    content: '\eb0e';
+}
+
+.si-avira::before {
+    content: '\eb0f';
+}
+
+.si-avm::before {
+    content: '\eb10';
+}
+
+.si-awesomelists::before {
+    content: '\eb11';
+}
+
+.si-awesomewm::before {
+    content: '\eb12';
+}
+
+.si-awwwards::before {
+    content: '\eb13';
+}
+
+.si-axios::before {
+    content: '\eb14';
+}
+
+.si-axisbank::before {
+    content: '\eb15';
+}
+
+.si-bandrautomation::before {
+    content: '\eb16';
+}
+
+.si-b4x::before {
+    content: '\eb17';
+}
+
+.si-babel::before {
+    content: '\eb18';
+}
+
+.si-babelio::before {
+    content: '\eb19';
+}
+
+.si-babylondotjs::before {
+    content: '\eb1a';
+}
+
+.si-backblaze::before {
+    content: '\eb1b';
+}
+
+.si-backbone::before {
+    content: '\eb1c';
+}
+
+.si-backbonedotjs::before {
+    content: '\eb1d';
+}
+
+.si-backendless::before {
+    content: '\eb1e';
+}
+
+.si-backstage::before {
+    content: '\eb1f';
+}
+
+.si-backstage_casting::before {
+    content: '\eb20';
+}
+
+.si-badoo::before {
+    content: '\eb21';
+}
+
+.si-baidu::before {
+    content: '\eb22';
+}
+
+.si-bakalari::before {
+    content: '\eb23';
+}
+
+.si-bamboo::before {
+    content: '\eb24';
+}
+
+.si-bambulab::before {
+    content: '\eb25';
+}
+
+.si-bandcamp::before {
+    content: '\eb26';
+}
+
+.si-bandlab::before {
+    content: '\eb27';
+}
+
+.si-bandsintown::before {
+    content: '\eb28';
+}
+
+.si-bankofamerica::before {
+    content: '\eb29';
+}
+
+.si-barclays::before {
+    content: '\eb2a';
+}
+
+.si-baremetrics::before {
+    content: '\eb2b';
+}
+
+.si-barmenia::before {
+    content: '\eb2c';
+}
+
+.si-basecamp::before {
+    content: '\eb2d';
+}
+
+.si-baserow::before {
+    content: '\eb2e';
+}
+
+.si-basicattentiontoken::before {
+    content: '\eb2f';
+}
+
+.si-bastyon::before {
+    content: '\eb30';
+}
+
+.si-bat::before {
+    content: '\eb31';
+}
+
+.si-bata::before {
+    content: '\eb32';
+}
+
+.si-battledotnet::before {
+    content: '\eb33';
+}
+
+.si-bazel::before {
+    content: '\eb34';
+}
+
+.si-beatport::before {
+    content: '\eb35';
+}
+
+.si-beats::before {
+    content: '\eb36';
+}
+
+.si-beatsbydre::before {
+    content: '\eb37';
+}
+
+.si-beatstars::before {
+    content: '\eb38';
+}
+
+.si-beekeeperstudio::before {
+    content: '\eb39';
+}
+
+.si-behance::before {
+    content: '\eb3a';
+}
+
+.si-beijingsubway::before {
+    content: '\eb3b';
+}
+
+.si-bem::before {
+    content: '\eb3c';
+}
+
+.si-bentley::before {
+    content: '\eb3d';
+}
+
+.si-bento::before {
+    content: '\eb3e';
+}
+
+.si-bentobox::before {
+    content: '\eb3f';
+}
+
+.si-bentoml::before {
+    content: '\eb40';
+}
+
+.si-bereal::before {
+    content: '\eb41';
+}
+
+.si-betfair::before {
+    content: '\eb42';
+}
+
+.si-betterauth::before {
+    content: '\eb43';
+}
+
+.si-betterstack::before {
+    content: '\eb44';
+}
+
+.si-betterdiscord::before {
+    content: '\eb45';
+}
+
+.si-bevy::before {
+    content: '\eb46';
+}
+
+.si-bigcartel::before {
+    content: '\eb47';
+}
+
+.si-bigbasket::before {
+    content: '\eb48';
+}
+
+.si-bigbluebutton::before {
+    content: '\eb49';
+}
+
+.si-bigcommerce::before {
+    content: '\eb4a';
+}
+
+.si-bilibili::before {
+    content: '\eb4b';
+}
+
+.si-billboard::before {
+    content: '\eb4c';
+}
+
+.si-bim::before {
+    content: '\eb4d';
+}
+
+.si-binance::before {
+    content: '\eb4e';
+}
+
+.si-biolink::before {
+    content: '\eb4f';
+}
+
+.si-bioconductor::before {
+    content: '\eb50';
+}
+
+.si-biome::before {
+    content: '\eb51';
+}
+
+.si-bisecthosting::before {
+    content: '\eb52';
+}
+
+.si-bit::before {
+    content: '\eb53';
+}
+
+.si-bitbucket::before {
+    content: '\eb54';
+}
+
+.si-bitcoin::before {
+    content: '\eb55';
+}
+
+.si-bitcoincash::before {
+    content: '\eb56';
+}
+
+.si-bitcoinsv::before {
+    content: '\eb57';
+}
+
+.si-bitcomet::before {
+    content: '\eb58';
+}
+
+.si-bitdefender::before {
+    content: '\eb59';
+}
+
+.si-bitly::before {
+    content: '\eb5a';
+}
+
+.si-bitrise::before {
+    content: '\eb5b';
+}
+
+.si-bitsy::before {
+    content: '\eb5c';
+}
+
+.si-bittorrent::before {
+    content: '\eb5d';
+}
+
+.si-bitwarden::before {
+    content: '\eb5e';
+}
+
+.si-bitwig::before {
+    content: '\eb5f';
+}
+
+.si-black::before {
+    content: '\eb60';
+}
+
+.si-blackberry::before {
+    content: '\eb61';
+}
+
+.si-blackmagicdesign::before {
+    content: '\eb62';
+}
+
+.si-blazemeter::before {
+    content: '\eb63';
+}
+
+.si-blazor::before {
+    content: '\eb64';
+}
+
+.si-blender::before {
+    content: '\eb65';
+}
+
+.si-blibli::before {
+    content: '\eb66';
+}
+
+.si-blockbench::before {
+    content: '\eb67';
+}
+
+.si-blockchaindotcom::before {
+    content: '\eb68';
+}
+
+.si-blogger::before {
+    content: '\eb69';
+}
+
+.si-bloglovin::before {
+    content: '\eb6a';
+}
+
+.si-blueprint::before {
+    content: '\eb6b';
+}
+
+.si-bluesky::before {
+    content: '\eb6c';
+}
+
+.si-bluesound::before {
+    content: '\eb6d';
+}
+
+.si-bluetooth::before {
+    content: '\eb6e';
+}
+
+.si-bmcsoftware::before {
+    content: '\eb6f';
+}
+
+.si-bmw::before {
+    content: '\eb70';
+}
+
+.si-bnbchain::before {
+    content: '\eb71';
+}
+
+.si-boardgamegeek::before {
+    content: '\eb72';
+}
+
+.si-boat::before {
+    content: '\eb73';
+}
+
+.si-boehringeringelheim::before {
+    content: '\eb74';
+}
+
+.si-boeing::before {
+    content: '\eb75';
+}
+
+.si-bohemiainteractive::before {
+    content: '\eb76';
+}
+
+.si-bombardier::before {
+    content: '\eb77';
+}
+
+.si-bookalope::before {
+    content: '\eb78';
+}
+
+.si-bookbub::before {
+    content: '\eb79';
+}
+
+.si-bookingdotcom::before {
+    content: '\eb7a';
+}
+
+.si-bookmeter::before {
+    content: '\eb7b';
+}
+
+.si-bookmyshow::before {
+    content: '\eb7c';
+}
+
+.si-bookstack::before {
+    content: '\eb7d';
+}
+
+.si-boost::before {
+    content: '\eb7e';
+}
+
+.si-boosty::before {
+    content: '\eb7f';
+}
+
+.si-boots::before {
+    content: '\eb80';
+}
+
+.si-bootstrap::before {
+    content: '\eb81';
+}
+
+.si-borgbackup::before {
+    content: '\eb82';
+}
+
+.si-bosch::before {
+    content: '\eb83';
+}
+
+.si-bose::before {
+    content: '\eb84';
+}
+
+.si-botblecms::before {
+    content: '\eb85';
+}
+
+.si-boulanger::before {
+    content: '\eb86';
+}
+
+.si-bower::before {
+    content: '\eb87';
+}
+
+.si-box::before {
+    content: '\eb88';
+}
+
+.si-boxysvg::before {
+    content: '\eb89';
+}
+
+.si-braintree::before {
+    content: '\eb8a';
+}
+
+.si-braintrust::before {
+    content: '\eb8b';
+}
+
+.si-brandfetch::before {
+    content: '\eb8c';
+}
+
+.si-brandfolder::before {
+    content: '\eb8d';
+}
+
+.si-brave::before {
+    content: '\eb8e';
+}
+
+.si-breaker::before {
+    content: '\eb8f';
+}
+
+.si-brenntag::before {
+    content: '\eb90';
+}
+
+.si-brevo::before {
+    content: '\eb91';
+}
+
+.si-brex::before {
+    content: '\eb92';
+}
+
+.si-bricks::before {
+    content: '\eb93';
+}
+
+.si-britishairways::before {
+    content: '\eb94';
+}
+
+.si-broadcom::before {
+    content: '\eb95';
+}
+
+.si-bruno::before {
+    content: '\eb96';
+}
+
+.si-bsd::before {
+    content: '\eb97';
+}
+
+.si-bspwm::before {
+    content: '\eb98';
+}
+
+.si-bt::before {
+    content: '\eb99';
+}
+
+.si-buddy::before {
+    content: '\eb9a';
+}
+
+.si-budibase::before {
+    content: '\eb9b';
+}
+
+.si-buefy::before {
+    content: '\eb9c';
+}
+
+.si-buffer::before {
+    content: '\eb9d';
+}
+
+.si-bugatti::before {
+    content: '\eb9e';
+}
+
+.si-bugcrowd::before {
+    content: '\eb9f';
+}
+
+.si-buhl::before {
+    content: '\eba0';
+}
+
+.si-buildkite::before {
+    content: '\eba1';
+}
+
+.si-builtbybit::before {
+    content: '\eba2';
+}
+
+.si-bukalapak::before {
+    content: '\eba3';
+}
+
+.si-bulma::before {
+    content: '\eba4';
+}
+
+.si-bun::before {
+    content: '\eba5';
+}
+
+.si-bungie::before {
+    content: '\eba6';
+}
+
+.si-bunnydotnet::before {
+    content: '\eba7';
+}
+
+.si-bunq::before {
+    content: '\eba8';
+}
+
+.si-burgerking::before {
+    content: '\eba9';
+}
+
+.si-burpsuite::before {
+    content: '\ebaa';
+}
+
+.si-burton::before {
+    content: '\ebab';
+}
+
+.si-buymeacoffee::before {
+    content: '\ebac';
+}
+
+.si-buysellads::before {
+    content: '\ebad';
+}
+
+.si-buzzfeed::before {
+    content: '\ebae';
+}
+
+.si-bvg::before {
+    content: '\ebaf';
+}
+
+.si-byjus::before {
+    content: '\ebb0';
+}
+
+.si-bytedance::before {
+    content: '\ebb1';
+}
+
+.si-c::before {
+    content: '\ebb2';
+}
+
+.si-cplusplus::before {
+    content: '\ebb3';
+}
+
+.si-cplusplusbuilder::before {
+    content: '\ebb4';
+}
+
+.si-cachet::before {
+    content: '\ebb5';
+}
+
+.si-caddy::before {
+    content: '\ebb6';
+}
+
+.si-cadillac::before {
+    content: '\ebb7';
+}
+
+.si-cafepress::before {
+    content: '\ebb8';
+}
+
+.si-cairographics::before {
+    content: '\ebb9';
+}
+
+.si-cairometro::before {
+    content: '\ebba';
+}
+
+.si-caixabank::before {
+    content: '\ebbb';
+}
+
+.si-cakephp::before {
+    content: '\ebbc';
+}
+
+.si-caldotcom::before {
+    content: '\ebbd';
+}
+
+.si-calendly::before {
+    content: '\ebbe';
+}
+
+.si-calibreweb::before {
+    content: '\ebbf';
+}
+
+.si-campaignmonitor::before {
+    content: '\ebc0';
+}
+
+.si-camunda::before {
+    content: '\ebc1';
+}
+
+.si-canonical::before {
+    content: '\ebc2';
+}
+
+.si-canvas::before {
+    content: '\ebc3';
+}
+
+.si-capacitor::before {
+    content: '\ebc4';
+}
+
+.si-caprover::before {
+    content: '\ebc5';
+}
+
+.si-carthrottle::before {
+    content: '\ebc6';
+}
+
+.si-cardano::before {
+    content: '\ebc7';
+}
+
+.si-cardmarket::before {
+    content: '\ebc8';
+}
+
+.si-carlsberggroup::before {
+    content: '\ebc9';
+}
+
+.si-carrd::before {
+    content: '\ebca';
+}
+
+.si-carrefour::before {
+    content: '\ebcb';
+}
+
+.si-carto::before {
+    content: '\ebcc';
+}
+
+.si-cashapp::before {
+    content: '\ebcd';
+}
+
+.si-castbox::before {
+    content: '\ebce';
+}
+
+.si-castorama::before {
+    content: '\ebcf';
+}
+
+.si-castro::before {
+    content: '\ebd0';
+}
+
+.si-caterpillar::before {
+    content: '\ebd1';
+}
+
+.si-cbc::before {
+    content: '\ebd2';
+}
+
+.si-cbs::before {
+    content: '\ebd3';
+}
+
+.si-ccc::before {
+    content: '\ebd4';
+}
+
+.si-ccleaner::before {
+    content: '\ebd5';
+}
+
+.si-cdprojekt::before {
+    content: '\ebd6';
+}
+
+.si-ce::before {
+    content: '\ebd7';
+}
+
+.si-celery::before {
+    content: '\ebd8';
+}
+
+.si-celestron::before {
+    content: '\ebd9';
+}
+
+.si-centos::before {
+    content: '\ebda';
+}
+
+.si-ceph::before {
+    content: '\ebdb';
+}
+
+.si-cesium::before {
+    content: '\ebdc';
+}
+
+.si-chai::before {
+    content: '\ebdd';
+}
+
+.si-chainguard::before {
+    content: '\ebde';
+}
+
+.si-chainlink::before {
+    content: '\ebdf';
+}
+
+.si-chakraui::before {
+    content: '\ebe0';
+}
+
+.si-changedetection::before {
+    content: '\ebe1';
+}
+
+.si-channel4::before {
+    content: '\ebe2';
+}
+
+.si-charles::before {
+    content: '\ebe3';
+}
+
+.si-chartdotjs::before {
+    content: '\ebe4';
+}
+
+.si-chartmogul::before {
+    content: '\ebe5';
+}
+
+.si-chase::before {
+    content: '\ebe6';
+}
+
+.si-chatbot::before {
+    content: '\ebe7';
+}
+
+.si-chatwoot::before {
+    content: '\ebe8';
+}
+
+.si-checkio::before {
+    content: '\ebe9';
+}
+
+.si-checkmarx::before {
+    content: '\ebea';
+}
+
+.si-checkmk::before {
+    content: '\ebeb';
+}
+
+.si-chedraui::before {
+    content: '\ebec';
+}
+
+.si-cheerio::before {
+    content: '\ebed';
+}
+
+.si-chef::before {
+    content: '\ebee';
+}
+
+.si-chemex::before {
+    content: '\ebef';
+}
+
+.si-chessdotcom::before {
+    content: '\ebf0';
+}
+
+.si-chevrolet::before {
+    content: '\ebf1';
+}
+
+.si-chianetwork::before {
+    content: '\ebf2';
+}
+
+.si-chinaeasternairlines::before {
+    content: '\ebf3';
+}
+
+.si-chinarailway::before {
+    content: '\ebf4';
+}
+
+.si-chinasouthernairlines::before {
+    content: '\ebf5';
+}
+
+.si-chocolatey::before {
+    content: '\ebf6';
+}
+
+.si-chromatic::before {
+    content: '\ebf7';
+}
+
+.si-chromewebstore::before {
+    content: '\ebf8';
+}
+
+.si-chrysler::before {
+    content: '\ebf9';
+}
+
+.si-chupachups::before {
+    content: '\ebfa';
+}
+
+.si-cilium::before {
+    content: '\ebfb';
+}
+
+.si-cinema4d::before {
+    content: '\ebfc';
+}
+
+.si-cinnamon::before {
+    content: '\ebfd';
+}
+
+.si-circle::before {
+    content: '\ebfe';
+}
+
+.si-circleci::before {
+    content: '\ebff';
+}
+
+.si-circuitverse::before {
+    content: '\ec00';
+}
+
+.si-cirrusci::before {
+    content: '\ec01';
+}
+
+.si-cisco::before {
+    content: '\ec02';
+}
+
+.si-citrix::before {
+    content: '\ec03';
+}
+
+.si-citroen::before {
+    content: '\ec04';
+}
+
+.si-civicrm::before {
+    content: '\ec05';
+}
+
+.si-civo::before {
+    content: '\ec06';
+}
+
+.si-clarifai::before {
+    content: '\ec07';
+}
+
+.si-claris::before {
+    content: '\ec08';
+}
+
+.si-clarivate::before {
+    content: '\ec09';
+}
+
+.si-claude::before {
+    content: '\ec0a';
+}
+
+.si-clerk::before {
+    content: '\ec0b';
+}
+
+.si-clevercloud::before {
+    content: '\ec0c';
+}
+
+.si-clickhouse::before {
+    content: '\ec0d';
+}
+
+.si-clickup::before {
+    content: '\ec0e';
+}
+
+.si-clion::before {
+    content: '\ec0f';
+}
+
+.si-clockify::before {
+    content: '\ec10';
+}
+
+.si-clojure::before {
+    content: '\ec11';
+}
+
+.si-cloud66::before {
+    content: '\ec12';
+}
+
+.si-cloudfoundry::before {
+    content: '\ec13';
+}
+
+.si-cloudnativebuild::before {
+    content: '\ec14';
+}
+
+.si-cloudbees::before {
+    content: '\ec15';
+}
+
+.si-cloudcannon::before {
+    content: '\ec16';
+}
+
+.si-cloudera::before {
+    content: '\ec17';
+}
+
+.si-cloudflare::before {
+    content: '\ec18';
+}
+
+.si-cloudflarepages::before {
+    content: '\ec19';
+}
+
+.si-cloudflareworkers::before {
+    content: '\ec1a';
+}
+
+.si-cloudinary::before {
+    content: '\ec1b';
+}
+
+.si-cloudron::before {
+    content: '\ec1c';
+}
+
+.si-cloudsmith::before {
+    content: '\ec1d';
+}
+
+.si-cloudways::before {
+    content: '\ec1e';
+}
+
+.si-clubforce::before {
+    content: '\ec1f';
+}
+
+.si-clubhouse::before {
+    content: '\ec20';
+}
+
+.si-clyp::before {
+    content: '\ec21';
+}
+
+.si-cmake::before {
+    content: '\ec22';
+}
+
+.si-cncf::before {
+    content: '\ec23';
+}
+
+.si-cnes::before {
+    content: '\ec24';
+}
+
+.si-cnet::before {
+    content: '\ec25';
+}
+
+.si-cnn::before {
+    content: '\ec26';
+}
+
+.si-coop::before {
+    content: '\ec27';
+}
+
+.si-cobalt::before {
+    content: '\ec28';
+}
+
+.si-cocacola::before {
+    content: '\ec29';
+}
+
+.si-cockpit::before {
+    content: '\ec2a';
+}
+
+.si-cockroachlabs::before {
+    content: '\ec2b';
+}
+
+.si-cocoapods::before {
+    content: '\ec2c';
+}
+
+.si-cocos::before {
+    content: '\ec2d';
+}
+
+.si-coda::before {
+    content: '\ec2e';
+}
+
+.si-codacy::before {
+    content: '\ec2f';
+}
+
+.si-codeclimate::before {
+    content: '\ec30';
+}
+
+.si-codeblocks::before {
+    content: '\ec31';
+}
+
+.si-codeberg::before {
+    content: '\ec32';
+}
+
+.si-codecademy::before {
+    content: '\ec33';
+}
+
+.si-codeceptjs::before {
+    content: '\ec34';
+}
+
+.si-codechef::before {
+    content: '\ec35';
+}
+
+.si-codecov::before {
+    content: '\ec36';
+}
+
+.si-codecrafters::before {
+    content: '\ec37';
+}
+
+.si-codefactor::before {
+    content: '\ec38';
+}
+
+.si-codeforces::before {
+    content: '\ec39';
+}
+
+.si-codefresh::before {
+    content: '\ec3a';
+}
+
+.si-codeigniter::before {
+    content: '\ec3b';
+}
+
+.si-codemagic::before {
+    content: '\ec3c';
+}
+
+.si-codementor::before {
+    content: '\ec3d';
+}
+
+.si-codemirror::before {
+    content: '\ec3e';
+}
+
+.si-codenewbie::before {
+    content: '\ec3f';
+}
+
+.si-codeproject::before {
+    content: '\ec40';
+}
+
+.si-coder::before {
+    content: '\ec41';
+}
+
+.si-coderabbit::before {
+    content: '\ec42';
+}
+
+.si-codersrank::before {
+    content: '\ec43';
+}
+
+.si-coderwall::before {
+    content: '\ec44';
+}
+
+.si-codesandbox::before {
+    content: '\ec45';
+}
+
+.si-codeship::before {
+    content: '\ec46';
+}
+
+.si-codesignal::before {
+    content: '\ec47';
+}
+
+.si-codestream::before {
+    content: '\ec48';
+}
+
+.si-codewars::before {
+    content: '\ec49';
+}
+
+.si-codingninjas::before {
+    content: '\ec4a';
+}
+
+.si-codingame::before {
+    content: '\ec4b';
+}
+
+.si-codio::before {
+    content: '\ec4c';
+}
+
+.si-coffeescript::before {
+    content: '\ec4d';
+}
+
+.si-coggle::before {
+    content: '\ec4e';
+}
+
+.si-coinbase::before {
+    content: '\ec4f';
+}
+
+.si-coinmarketcap::before {
+    content: '\ec50';
+}
+
+.si-collaboraonline::before {
+    content: '\ec51';
+}
+
+.si-comicfury::before {
+    content: '\ec52';
+}
+
+.si-comma::before {
+    content: '\ec53';
+}
+
+.si-commerzbank::before {
+    content: '\ec54';
+}
+
+.si-commitlint::before {
+    content: '\ec55';
+}
+
+.si-commodore::before {
+    content: '\ec56';
+}
+
+.si-commonlisp::before {
+    content: '\ec57';
+}
+
+.si-commonworkflowlanguage::before {
+    content: '\ec58';
+}
+
+.si-compilerexplorer::before {
+    content: '\ec59';
+}
+
+.si-composer::before {
+    content: '\ec5a';
+}
+
+.si-comptia::before {
+    content: '\ec5b';
+}
+
+.si-comsol::before {
+    content: '\ec5c';
+}
+
+.si-conan::before {
+    content: '\ec5d';
+}
+
+.si-concourse::before {
+    content: '\ec5e';
+}
+
+.si-condaforge::before {
+    content: '\ec5f';
+}
+
+.si-conekta::before {
+    content: '\ec60';
+}
+
+.si-confluence::before {
+    content: '\ec61';
+}
+
+.si-construct3::before {
+    content: '\ec62';
+}
+
+.si-consul::before {
+    content: '\ec63';
+}
+
+.si-contabo::before {
+    content: '\ec64';
+}
+
+.si-contactlesspayment::before {
+    content: '\ec65';
+}
+
+.si-containerd::before {
+    content: '\ec66';
+}
+
+.si-contao::before {
+    content: '\ec67';
+}
+
+.si-contentful::before {
+    content: '\ec68';
+}
+
+.si-contentstack::before {
+    content: '\ec69';
+}
+
+.si-continente::before {
+    content: '\ec6a';
+}
+
+.si-contributorcovenant::before {
+    content: '\ec6b';
+}
+
+.si-conventionalcommits::before {
+    content: '\ec6c';
+}
+
+.si-convertio::before {
+    content: '\ec6d';
+}
+
+.si-convex::before {
+    content: '\ec6e';
+}
+
+.si-cookiecutter::before {
+    content: '\ec6f';
+}
+
+.si-coolermaster::before {
+    content: '\ec70';
+}
+
+.si-coolify::before {
+    content: '\ec71';
+}
+
+.si-copaairlines::before {
+    content: '\ec72';
+}
+
+.si-coppel::before {
+    content: '\ec73';
+}
+
+.si-cora::before {
+    content: '\ec74';
+}
+
+.si-coreboot::before {
+    content: '\ec75';
+}
+
+.si-coreldraw::before {
+    content: '\ec76';
+}
+
+.si-coronaengine::before {
+    content: '\ec77';
+}
+
+.si-coronarenderer::before {
+    content: '\ec78';
+}
+
+.si-corsair::before {
+    content: '\ec79';
+}
+
+.si-couchbase::before {
+    content: '\ec7a';
+}
+
+.si-counterstrike::before {
+    content: '\ec7b';
+}
+
+.si-countingworkspro::before {
+    content: '\ec7c';
+}
+
+.si-coursera::before {
+    content: '\ec7d';
+}
+
+.si-coveralls::before {
+    content: '\ec7e';
+}
+
+.si-coze::before {
+    content: '\ec7f';
+}
+
+.si-cpanel::before {
+    content: '\ec80';
+}
+
+.si-craftcms::before {
+    content: '\ec81';
+}
+
+.si-craftsman::before {
+    content: '\ec82';
+}
+
+.si-cratedb::before {
+    content: '\ec83';
+}
+
+.si-crayon::before {
+    content: '\ec84';
+}
+
+.si-creality::before {
+    content: '\ec85';
+}
+
+.si-createreactapp::before {
+    content: '\ec86';
+}
+
+.si-creativecommons::before {
+    content: '\ec87';
+}
+
+.si-creativetechnology::before {
+    content: '\ec88';
+}
+
+.si-credly::before {
+    content: '\ec89';
+}
+
+.si-crehana::before {
+    content: '\ec8a';
+}
+
+.si-crewunited::before {
+    content: '\ec8b';
+}
+
+.si-crewai::before {
+    content: '\ec8c';
+}
+
+.si-criticalrole::before {
+    content: '\ec8d';
+}
+
+.si-crowdin::before {
+    content: '\ec8e';
+}
+
+.si-crowdsource::before {
+    content: '\ec8f';
+}
+
+.si-crunchbase::before {
+    content: '\ec90';
+}
+
+.si-crunchyroll::before {
+    content: '\ec91';
+}
+
+.si-cryengine::before {
+    content: '\ec92';
+}
+
+.si-cryptomator::before {
+    content: '\ec93';
+}
+
+.si-cryptpad::before {
+    content: '\ec94';
+}
+
+.si-crystal::before {
+    content: '\ec95';
+}
+
+.si-csdn::before {
+    content: '\ec96';
+}
+
+.si-css::before {
+    content: '\ec97';
+}
+
+.si-cssdesignawards::before {
+    content: '\ec98';
+}
+
+.si-cssmodules::before {
+    content: '\ec99';
+}
+
+.si-csswizardry::before {
+    content: '\ec9a';
+}
+
+.si-cts::before {
+    content: '\ec9b';
+}
+
+.si-cucumber::before {
+    content: '\ec9c';
+}
+
+.si-cultura::before {
+    content: '\ec9d';
+}
+
+.si-curl::before {
+    content: '\ec9e';
+}
+
+.si-curseforge::before {
+    content: '\ec9f';
+}
+
+.si-cursor::before {
+    content: '\eca0';
+}
+
+.si-customink::before {
+    content: '\eca1';
+}
+
+.si-cyberdefenders::before {
+    content: '\eca2';
+}
+
+.si-cycling74::before {
+    content: '\eca3';
+}
+
+.si-cypress::before {
+    content: '\eca4';
+}
+
+.si-cytoscapedotjs::before {
+    content: '\eca5';
+}
+
+.si-d::before {
+    content: '\eca6';
+}
+
+.si-dedge::before {
+    content: '\eca7';
+}
+
+.si-dwavesystems::before {
+    content: '\eca8';
+}
+
+.si-d3::before {
+    content: '\eca9';
+}
+
+.si-dacia::before {
+    content: '\ecaa';
+}
+
+.si-daf::before {
+    content: '\ecab';
+}
+
+.si-dailydotdev::before {
+    content: '\ecac';
+}
+
+.si-dailymotion::before {
+    content: '\ecad';
+}
+
+.si-daisyui::before {
+    content: '\ecae';
+}
+
+.si-dapr::before {
+    content: '\ecaf';
+}
+
+.si-darkreader::before {
+    content: '\ecb0';
+}
+
+.si-dart::before {
+    content: '\ecb1';
+}
+
+.si-darty::before {
+    content: '\ecb2';
+}
+
+.si-daserste::before {
+    content: '\ecb3';
+}
+
+.si-dash::before {
+    content: '\ecb4';
+}
+
+.si-dash0::before {
+    content: '\ecb5';
+}
+
+.si-dashlane::before {
+    content: '\ecb6';
+}
+
+.si-dask::before {
+    content: '\ecb7';
+}
+
+.si-dassaultsystemes::before {
+    content: '\ecb8';
+}
+
+.si-datadotai::before {
+    content: '\ecb9';
+}
+
+.si-databricks::before {
+    content: '\ecba';
+}
+
+.si-datacamp::before {
+    content: '\ecbb';
+}
+
+.si-datadog::before {
+    content: '\ecbc';
+}
+
+.si-datagrip::before {
+    content: '\ecbd';
+}
+
+.si-dataiku::before {
+    content: '\ecbe';
+}
+
+.si-datastax::before {
+    content: '\ecbf';
+}
+
+.si-datefns::before {
+    content: '\ecc0';
+}
+
+.si-datev::before {
+    content: '\ecc1';
+}
+
+.si-datocms::before {
+    content: '\ecc2';
+}
+
+.si-datto::before {
+    content: '\ecc3';
+}
+
+.si-davinciresolve::before {
+    content: '\ecc4';
+}
+
+.si-dazhongdianping::before {
+    content: '\ecc5';
+}
+
+.si-dazn::before {
+    content: '\ecc6';
+}
+
+.si-dbeaver::before {
+    content: '\ecc7';
+}
+
+.si-dblp::before {
+    content: '\ecc8';
+}
+
+.si-dcentertainment::before {
+    content: '\ecc9';
+}
+
+.si-delonghi::before {
+    content: '\ecca';
+}
+
+.si-debian::before {
+    content: '\eccb';
+}
+
+.si-debridlink::before {
+    content: '\eccc';
+}
+
+.si-decapcms::before {
+    content: '\eccd';
+}
+
+.si-decentraland::before {
+    content: '\ecce';
+}
+
+.si-deepcool::before {
+    content: '\eccf';
+}
+
+.si-deepgram::before {
+    content: '\ecd0';
+}
+
+.si-deepin::before {
+    content: '\ecd1';
+}
+
+.si-deepl::before {
+    content: '\ecd2';
+}
+
+.si-deepmind::before {
+    content: '\ecd3';
+}
+
+.si-deepnote::before {
+    content: '\ecd4';
+}
+
+.si-deezer::before {
+    content: '\ecd5';
+}
+
+.si-deliveroo::before {
+    content: '\ecd6';
+}
+
+.si-dell::before {
+    content: '\ecd7';
+}
+
+.si-delphi::before {
+    content: '\ecd8';
+}
+
+.si-delta::before {
+    content: '\ecd9';
+}
+
+.si-deluge::before {
+    content: '\ecda';
+}
+
+.si-deno::before {
+    content: '\ecdb';
+}
+
+.si-denodeploy::before {
+    content: '\ecdc';
+}
+
+.si-denon::before {
+    content: '\ecdd';
+}
+
+.si-dependabot::before {
+    content: '\ecde';
+}
+
+.si-depositphotos::before {
+    content: '\ecdf';
+}
+
+.si-derspiegel::before {
+    content: '\ece0';
+}
+
+.si-deutschebahn::before {
+    content: '\ece1';
+}
+
+.si-deutschebank::before {
+    content: '\ece2';
+}
+
+.si-deutschepost::before {
+    content: '\ece3';
+}
+
+.si-deutschetelekom::before {
+    content: '\ece4';
+}
+
+.si-deutschewelle::before {
+    content: '\ece5';
+}
+
+.si-devdotto::before {
+    content: '\ece6';
+}
+
+.si-devbox::before {
+    content: '\ece7';
+}
+
+.si-developmentcontainers::before {
+    content: '\ece8';
+}
+
+.si-devexpress::before {
+    content: '\ece9';
+}
+
+.si-deviantart::before {
+    content: '\ecea';
+}
+
+.si-devpost::before {
+    content: '\eceb';
+}
+
+.si-devrant::before {
+    content: '\ecec';
+}
+
+.si-devuan::before {
+    content: '\eced';
+}
+
+.si-dgraph::before {
+    content: '\ecee';
+}
+
+.si-dhl::before {
+    content: '\ecef';
+}
+
+.si-diagramsdotnet::before {
+    content: '\ecf0';
+}
+
+.si-dialogflow::before {
+    content: '\ecf1';
+}
+
+.si-diaspora::before {
+    content: '\ecf2';
+}
+
+.si-dictionarydotcom::before {
+    content: '\ecf3';
+}
+
+.si-digg::before {
+    content: '\ecf4';
+}
+
+.si-digikeyelectronics::before {
+    content: '\ecf5';
+}
+
+.si-digitalocean::before {
+    content: '\ecf6';
+}
+
+.si-dinersclub::before {
+    content: '\ecf7';
+}
+
+.si-dior::before {
+    content: '\ecf8';
+}
+
+.si-directus::before {
+    content: '\ecf9';
+}
+
+.si-discogs::before {
+    content: '\ecfa';
+}
+
+.si-discord::before {
+    content: '\ecfb';
+}
+
+.si-discorddotjs::before {
+    content: '\ecfc';
+}
+
+.si-discourse::before {
+    content: '\ecfd';
+}
+
+.si-discover::before {
+    content: '\ecfe';
+}
+
+.si-disqus::before {
+    content: '\ecff';
+}
+
+.si-disroot::before {
+    content: '\ed00';
+}
+
+.si-distrobox::before {
+    content: '\ed01';
+}
+
+.si-distrokid::before {
+    content: '\ed02';
+}
+
+.si-django::before {
+    content: '\ed03';
+}
+
+.si-dji::before {
+    content: '\ed04';
+}
+
+.si-dlib::before {
+    content: '\ed05';
+}
+
+.si-dlna::before {
+    content: '\ed06';
+}
+
+.si-dm::before {
+    content: '\ed07';
+}
+
+.si-dmm::before {
+    content: '\ed08';
+}
+
+.si-docker::before {
+    content: '\ed09';
+}
+
+.si-docsdotrs::before {
+    content: '\ed0a';
+}
+
+.si-docsify::before {
+    content: '\ed0b';
+}
+
+.si-doctrine::before {
+    content: '\ed0c';
+}
+
+.si-docusaurus::before {
+    content: '\ed0d';
+}
+
+.si-dodopayments::before {
+    content: '\ed0e';
+}
+
+.si-dogecoin::before {
+    content: '\ed0f';
+}
+
+.si-doi::before {
+    content: '\ed10';
+}
+
+.si-dolby::before {
+    content: '\ed11';
+}
+
+.si-dolibarr::before {
+    content: '\ed12';
+}
+
+.si-dolphin::before {
+    content: '\ed13';
+}
+
+.si-doordash::before {
+    content: '\ed14';
+}
+
+.si-dota2::before {
+    content: '\ed15';
+}
+
+.si-douban::before {
+    content: '\ed16';
+}
+
+.si-doubanread::before {
+    content: '\ed17';
+}
+
+.si-dovecot::before {
+    content: '\ed18';
+}
+
+.si-dovetail::before {
+    content: '\ed19';
+}
+
+.si-downdetector::before {
+    content: '\ed1a';
+}
+
+.si-doxygen::before {
+    content: '\ed1b';
+}
+
+.si-dpd::before {
+    content: '\ed1c';
+}
+
+.si-dragonframe::before {
+    content: '\ed1d';
+}
+
+.si-draugiemdotlv::before {
+    content: '\ed1e';
+}
+
+.si-dreamstime::before {
+    content: '\ed1f';
+}
+
+.si-dribbble::before {
+    content: '\ed20';
+}
+
+.si-drizzle::before {
+    content: '\ed21';
+}
+
+.si-drone::before {
+    content: '\ed22';
+}
+
+.si-drooble::before {
+    content: '\ed23';
+}
+
+.si-dropbox::before {
+    content: '\ed24';
+}
+
+.si-drupal::before {
+    content: '\ed25';
+}
+
+.si-dsautomobiles::before {
+    content: '\ed26';
+}
+
+.si-dts::before {
+    content: '\ed27';
+}
+
+.si-dtube::before {
+    content: '\ed28';
+}
+
+.si-ducati::before {
+    content: '\ed29';
+}
+
+.si-duckdb::before {
+    content: '\ed2a';
+}
+
+.si-duckduckgo::before {
+    content: '\ed2b';
+}
+
+.si-dungeonsanddragons::before {
+    content: '\ed2c';
+}
+
+.si-dunked::before {
+    content: '\ed2d';
+}
+
+.si-dunzo::before {
+    content: '\ed2e';
+}
+
+.si-duolingo::before {
+    content: '\ed2f';
+}
+
+.si-duplicati::before {
+    content: '\ed30';
+}
+
+.si-dvc::before {
+    content: '\ed31';
+}
+
+.si-dwm::before {
+    content: '\ed32';
+}
+
+.si-dynatrace::before {
+    content: '\ed33';
+}
+
+.si-edotleclerc::before {
+    content: '\ed34';
+}
+
+.si-e3::before {
+    content: '\ed35';
+}
+
+.si-ea::before {
+    content: '\ed36';
+}
+
+.si-eac::before {
+    content: '\ed37';
+}
+
+.si-eagle::before {
+    content: '\ed38';
+}
+
+.si-easyeda::before {
+    content: '\ed39';
+}
+
+.si-easyjet::before {
+    content: '\ed3a';
+}
+
+.si-ebay::before {
+    content: '\ed3b';
+}
+
+.si-ebox::before {
+    content: '\ed3c';
+}
+
+.si-eclipseadoptium::before {
+    content: '\ed3d';
+}
+
+.si-eclipseche::before {
+    content: '\ed3e';
+}
+
+.si-eclipseide::before {
+    content: '\ed3f';
+}
+
+.si-eclipsejetty::before {
+    content: '\ed40';
+}
+
+.si-eclipsemosquitto::before {
+    content: '\ed41';
+}
+
+.si-eclipsevertdotx::before {
+    content: '\ed42';
+}
+
+.si-ecosia::before {
+    content: '\ed43';
+}
+
+.si-ecovacs::before {
+    content: '\ed44';
+}
+
+.si-edeka::before {
+    content: '\ed45';
+}
+
+.si-edgeimpulse::before {
+    content: '\ed46';
+}
+
+.si-editorconfig::before {
+    content: '\ed47';
+}
+
+.si-educative::before {
+    content: '\ed48';
+}
+
+.si-edx::before {
+    content: '\ed49';
+}
+
+.si-effect::before {
+    content: '\ed4a';
+}
+
+.si-egghead::before {
+    content: '\ed4b';
+}
+
+.si-egnyte::before {
+    content: '\ed4c';
+}
+
+.si-eight::before {
+    content: '\ed4d';
+}
+
+.si-eightsleep::before {
+    content: '\ed4e';
+}
+
+.si-ejs::before {
+    content: '\ed4f';
+}
+
+.si-elastic::before {
+    content: '\ed50';
+}
+
+.si-elasticcloud::before {
+    content: '\ed51';
+}
+
+.si-elasticstack::before {
+    content: '\ed52';
+}
+
+.si-elasticsearch::before {
+    content: '\ed53';
+}
+
+.si-elavon::before {
+    content: '\ed54';
+}
+
+.si-electron::before {
+    content: '\ed55';
+}
+
+.si-electronfiddle::before {
+    content: '\ed56';
+}
+
+.si-electronbuilder::before {
+    content: '\ed57';
+}
+
+.si-elegoo::before {
+    content: '\ed58';
+}
+
+.si-element::before {
+    content: '\ed59';
+}
+
+.si-elementary::before {
+    content: '\ed5a';
+}
+
+.si-elementor::before {
+    content: '\ed5b';
+}
+
+.si-elevenlabs::before {
+    content: '\ed5c';
+}
+
+.si-eleventy::before {
+    content: '\ed5d';
+}
+
+.si-elgato::before {
+    content: '\ed5e';
+}
+
+.si-elixir::before {
+    content: '\ed5f';
+}
+
+.si-elk::before {
+    content: '\ed60';
+}
+
+.si-elm::before {
+    content: '\ed61';
+}
+
+.si-elsevier::before {
+    content: '\ed62';
+}
+
+.si-embarcadero::before {
+    content: '\ed63';
+}
+
+.si-embark::before {
+    content: '\ed64';
+}
+
+.si-emberdotjs::before {
+    content: '\ed65';
+}
+
+.si-emby::before {
+    content: '\ed66';
+}
+
+.si-emirates::before {
+    content: '\ed67';
+}
+
+.si-emlakjet::before {
+    content: '\ed68';
+}
+
+.si-endeavouros::before {
+    content: '\ed69';
+}
+
+.si-enpass::before {
+    content: '\ed6a';
+}
+
+.si-ens::before {
+    content: '\ed6b';
+}
+
+.si-ente::before {
+    content: '\ed6c';
+}
+
+.si-enterprisedb::before {
+    content: '\ed6d';
+}
+
+.si-envato::before {
+    content: '\ed6e';
+}
+
+.si-envoyproxy::before {
+    content: '\ed6f';
+}
+
+.si-epel::before {
+    content: '\ed70';
+}
+
+.si-epicgames::before {
+    content: '\ed71';
+}
+
+.si-epson::before {
+    content: '\ed72';
+}
+
+.si-equinixmetal::before {
+    content: '\ed73';
+}
+
+.si-eraser::before {
+    content: '\ed74';
+}
+
+.si-ericsson::before {
+    content: '\ed75';
+}
+
+.si-erlang::before {
+    content: '\ed76';
+}
+
+.si-erpnext::before {
+    content: '\ed77';
+}
+
+.si-esbuild::before {
+    content: '\ed78';
+}
+
+.si-esea::before {
+    content: '\ed79';
+}
+
+.si-eslgaming::before {
+    content: '\ed7a';
+}
+
+.si-eslint::before {
+    content: '\ed7b';
+}
+
+.si-esotericsoftware::before {
+    content: '\ed7c';
+}
+
+.si-esphome::before {
+    content: '\ed7d';
+}
+
+.si-espressif::before {
+    content: '\ed7e';
+}
+
+.si-esri::before {
+    content: '\ed7f';
+}
+
+.si-etcd::before {
+    content: '\ed80';
+}
+
+.si-ethereum::before {
+    content: '\ed81';
+}
+
+.si-ethers::before {
+    content: '\ed82';
+}
+
+.si-ethiopianairlines::before {
+    content: '\ed83';
+}
+
+.si-etihadairways::before {
+    content: '\ed84';
+}
+
+.si-etsy::before {
+    content: '\ed85';
+}
+
+.si-europeanunion::before {
+    content: '\ed86';
+}
+
+.si-eventstore::before {
+    content: '\ed87';
+}
+
+.si-evernote::before {
+    content: '\ed88';
+}
+
+.si-everydotorg::before {
+    content: '\ed89';
+}
+
+.si-excalidraw::before {
+    content: '\ed8a';
+}
+
+.si-exercism::before {
+    content: '\ed8b';
+}
+
+.si-exordo::before {
+    content: '\ed8c';
+}
+
+.si-exoscale::before {
+    content: '\ed8d';
+}
+
+.si-expedia::before {
+    content: '\ed8e';
+}
+
+.si-expensify::before {
+    content: '\ed8f';
+}
+
+.si-expertsexchange::before {
+    content: '\ed90';
+}
+
+.si-expo::before {
+    content: '\ed91';
+}
+
+.si-express::before {
+    content: '\ed92';
+}
+
+.si-expressdotcom::before {
+    content: '\ed93';
+}
+
+.si-expressvpn::before {
+    content: '\ed94';
+}
+
+.si-eyeem::before {
+    content: '\ed95';
+}
+
+.si-fdroid::before {
+    content: '\ed96';
+}
+
+.si-fsharp::before {
+    content: '\ed97';
+}
+
+.si-f1::before {
+    content: '\ed98';
+}
+
+.si-f5::before {
+    content: '\ed99';
+}
+
+.si-facebook::before {
+    content: '\ed9a';
+}
+
+.si-facebookgaming::before {
+    content: '\ed9b';
+}
+
+.si-facebooklive::before {
+    content: '\ed9c';
+}
+
+.si-faceit::before {
+    content: '\ed9d';
+}
+
+.si-facepunch::before {
+    content: '\ed9e';
+}
+
+.si-fairphone::before {
+    content: '\ed9f';
+}
+
+.si-falco::before {
+    content: '\eda0';
+}
+
+.si-falcon::before {
+    content: '\eda1';
+}
+
+.si-fampay::before {
+    content: '\eda2';
+}
+
+.si-fandango::before {
+    content: '\eda3';
+}
+
+.si-fandom::before {
+    content: '\eda4';
+}
+
+.si-fanfou::before {
+    content: '\eda5';
+}
+
+.si-fantom::before {
+    content: '\eda6';
+}
+
+.si-farcaster::before {
+    content: '\eda7';
+}
+
+.si-fareharbor::before {
+    content: '\eda8';
+}
+
+.si-farfetch::before {
+    content: '\eda9';
+}
+
+.si-fastapi::before {
+    content: '\edaa';
+}
+
+.si-fastify::before {
+    content: '\edab';
+}
+
+.si-fastlane::before {
+    content: '\edac';
+}
+
+.si-fastly::before {
+    content: '\edad';
+}
+
+.si-fathom::before {
+    content: '\edae';
+}
+
+.si-fauna::before {
+    content: '\edaf';
+}
+
+.si-favro::before {
+    content: '\edb0';
+}
+
+.si-fcc::before {
+    content: '\edb1';
+}
+
+.si-fedex::before {
+    content: '\edb2';
+}
+
+.si-fedora::before {
+    content: '\edb3';
+}
+
+.si-feedly::before {
+    content: '\edb4';
+}
+
+.si-ferrari::before {
+    content: '\edb5';
+}
+
+.si-ferrarinv::before {
+    content: '\edb6';
+}
+
+.si-ferretdb::before {
+    content: '\edb7';
+}
+
+.si-ffmpeg::before {
+    content: '\edb8';
+}
+
+.si-fi::before {
+    content: '\edb9';
+}
+
+.si-fiat::before {
+    content: '\edba';
+}
+
+.si-fidoalliance::before {
+    content: '\edbb';
+}
+
+.si-fifa::before {
+    content: '\edbc';
+}
+
+.si-fig::before {
+    content: '\edbd';
+}
+
+.si-figma::before {
+    content: '\edbe';
+}
+
+.si-figshare::before {
+    content: '\edbf';
+}
+
+.si-fila::before {
+    content: '\edc0';
+}
+
+.si-filament::before {
+    content: '\edc1';
+}
+
+.si-filedotio::before {
+    content: '\edc2';
+}
+
+.si-filen::before {
+    content: '\edc3';
+}
+
+.si-files::before {
+    content: '\edc4';
+}
+
+.si-filezilla::before {
+    content: '\edc5';
+}
+
+.si-fillout::before {
+    content: '\edc6';
+}
+
+.si-fineco::before {
+    content: '\edc7';
+}
+
+.si-fing::before {
+    content: '\edc8';
+}
+
+.si-firebase::before {
+    content: '\edc9';
+}
+
+.si-firefish::before {
+    content: '\edca';
+}
+
+.si-fireflyiii::before {
+    content: '\edcb';
+}
+
+.si-firefox::before {
+    content: '\edcc';
+}
+
+.si-firefoxbrowser::before {
+    content: '\edcd';
+}
+
+.si-fireship::before {
+    content: '\edce';
+}
+
+.si-firewalla::before {
+    content: '\edcf';
+}
+
+.si-first::before {
+    content: '\edd0';
+}
+
+.si-fishaudio::before {
+    content: '\edd1';
+}
+
+.si-fishshell::before {
+    content: '\edd2';
+}
+
+.si-fitbit::before {
+    content: '\edd3';
+}
+
+.si-fivem::before {
+    content: '\edd4';
+}
+
+.si-fiverr::before {
+    content: '\edd5';
+}
+
+.si-fizz::before {
+    content: '\edd6';
+}
+
+.si-flashforge::before {
+    content: '\edd7';
+}
+
+.si-flask::before {
+    content: '\edd8';
+}
+
+.si-flat::before {
+    content: '\edd9';
+}
+
+.si-flathub::before {
+    content: '\edda';
+}
+
+.si-flatpak::before {
+    content: '\eddb';
+}
+
+.si-flickr::before {
+    content: '\eddc';
+}
+
+.si-flightaware::before {
+    content: '\eddd';
+}
+
+.si-flipboard::before {
+    content: '\edde';
+}
+
+.si-floatplane::before {
+    content: '\eddf';
+}
+
+.si-flood::before {
+    content: '\ede0';
+}
+
+.si-floorp::before {
+    content: '\ede1';
+}
+
+.si-flower::before {
+    content: '\ede2';
+}
+
+.si-fluentbit::before {
+    content: '\ede3';
+}
+
+.si-fluentd::before {
+    content: '\ede4';
+}
+
+.si-fluke::before {
+    content: '\ede5';
+}
+
+.si-flutter::before {
+    content: '\ede6';
+}
+
+.si-flux::before {
+    content: '\ede7';
+}
+
+.si-flydotio::before {
+    content: '\ede8';
+}
+
+.si-flyway::before {
+    content: '\ede9';
+}
+
+.si-fmod::before {
+    content: '\edea';
+}
+
+.si-fnac::before {
+    content: '\edeb';
+}
+
+.si-folium::before {
+    content: '\edec';
+}
+
+.si-folo::before {
+    content: '\eded';
+}
+
+.si-fonoma::before {
+    content: '\edee';
+}
+
+.si-fontawesome::before {
+    content: '\edef';
+}
+
+.si-fontbase::before {
+    content: '\edf0';
+}
+
+.si-fontforge::before {
+    content: '\edf1';
+}
+
+.si-foobar2000::before {
+    content: '\edf2';
+}
+
+.si-foodpanda::before {
+    content: '\edf3';
+}
+
+.si-ford::before {
+    content: '\edf4';
+}
+
+.si-forgejo::before {
+    content: '\edf5';
+}
+
+.si-formbricks::before {
+    content: '\edf6';
+}
+
+.si-formik::before {
+    content: '\edf7';
+}
+
+.si-formspree::before {
+    content: '\edf8';
+}
+
+.si-formstack::before {
+    content: '\edf9';
+}
+
+.si-fortinet::before {
+    content: '\edfa';
+}
+
+.si-fortnite::before {
+    content: '\edfb';
+}
+
+.si-fortran::before {
+    content: '\edfc';
+}
+
+.si-fossa::before {
+    content: '\edfd';
+}
+
+.si-fossilscm::before {
+    content: '\edfe';
+}
+
+.si-foundryvirtualtabletop::before {
+    content: '\edff';
+}
+
+.si-foursquare::before {
+    content: '\ee00';
+}
+
+.si-fox::before {
+    content: '\ee01';
+}
+
+.si-foxtel::before {
+    content: '\ee02';
+}
+
+.si-fozzy::before {
+    content: '\ee03';
+}
+
+.si-framer::before {
+    content: '\ee04';
+}
+
+.si-framework::before {
+    content: '\ee05';
+}
+
+.si-framework7::before {
+    content: '\ee06';
+}
+
+.si-franprix::before {
+    content: '\ee07';
+}
+
+.si-frappe::before {
+    content: '\ee08';
+}
+
+.si-fraunhofergesellschaft::before {
+    content: '\ee09';
+}
+
+.si-freebsd::before {
+    content: '\ee0a';
+}
+
+.si-freecad::before {
+    content: '\ee0b';
+}
+
+.si-freecodecamp::before {
+    content: '\ee0c';
+}
+
+.si-freedesktopdotorg::before {
+    content: '\ee0d';
+}
+
+.si-freelancer::before {
+    content: '\ee0e';
+}
+
+.si-freelancermap::before {
+    content: '\ee0f';
+}
+
+.si-freenas::before {
+    content: '\ee10';
+}
+
+.si-freenet::before {
+    content: '\ee11';
+}
+
+.si-freepik::before {
+    content: '\ee12';
+}
+
+.si-freetube::before {
+    content: '\ee13';
+}
+
+.si-fresh::before {
+    content: '\ee14';
+}
+
+.si-freshrss::before {
+    content: '\ee15';
+}
+
+.si-frigate::before {
+    content: '\ee16';
+}
+
+.si-fritz::before {
+    content: '\ee17';
+}
+
+.si-frontendmentor::before {
+    content: '\ee18';
+}
+
+.si-frontify::before {
+    content: '\ee19';
+}
+
+.si-fubo::before {
+    content: '\ee1a';
+}
+
+.si-fueler::before {
+    content: '\ee1b';
+}
+
+.si-fugacloud::before {
+    content: '\ee1c';
+}
+
+.si-fujifilm::before {
+    content: '\ee1d';
+}
+
+.si-fujitsu::before {
+    content: '\ee1e';
+}
+
+.si-furaffinity::before {
+    content: '\ee1f';
+}
+
+.si-furrynetwork::before {
+    content: '\ee20';
+}
+
+.si-fusionauth::before {
+    content: '\ee21';
+}
+
+.si-futurelearn::before {
+    content: '\ee22';
+}
+
+.si-fyle::before {
+    content: '\ee23';
+}
+
+.si-g2::before {
+    content: '\ee24';
+}
+
+.si-g2a::before {
+    content: '\ee25';
+}
+
+.si-g2g::before {
+    content: '\ee26';
+}
+
+.si-galaxus::before {
+    content: '\ee27';
+}
+
+.si-gamedeveloper::before {
+    content: '\ee28';
+}
+
+.si-gamejolt::before {
+    content: '\ee29';
+}
+
+.si-gamescience::before {
+    content: '\ee2a';
+}
+
+.si-gamebanana::before {
+    content: '\ee2b';
+}
+
+.si-gameloft::before {
+    content: '\ee2c';
+}
+
+.si-gamemaker::before {
+    content: '\ee2d';
+}
+
+.si-gandi::before {
+    content: '\ee2e';
+}
+
+.si-garmin::before {
+    content: '\ee2f';
+}
+
+.si-garudalinux::before {
+    content: '\ee30';
+}
+
+.si-gatling::before {
+    content: '\ee31';
+}
+
+.si-gatsby::before {
+    content: '\ee32';
+}
+
+.si-gcore::before {
+    content: '\ee33';
+}
+
+.si-gdal::before {
+    content: '\ee34';
+}
+
+.si-geeksforgeeks::before {
+    content: '\ee35';
+}
+
+.si-generalelectric::before {
+    content: '\ee36';
+}
+
+.si-generalmotors::before {
+    content: '\ee37';
+}
+
+.si-genius::before {
+    content: '\ee38';
+}
+
+.si-gentoo::before {
+    content: '\ee39';
+}
+
+.si-geocaching::before {
+    content: '\ee3a';
+}
+
+.si-geode::before {
+    content: '\ee3b';
+}
+
+.si-geopandas::before {
+    content: '\ee3c';
+}
+
+.si-gerrit::before {
+    content: '\ee3d';
+}
+
+.si-getx::before {
+    content: '\ee3e';
+}
+
+.si-ghost::before {
+    content: '\ee3f';
+}
+
+.si-ghostery::before {
+    content: '\ee40';
+}
+
+.si-ghostty::before {
+    content: '\ee41';
+}
+
+.si-gimp::before {
+    content: '\ee42';
+}
+
+.si-gin::before {
+    content: '\ee43';
+}
+
+.si-giphy::before {
+    content: '\ee44';
+}
+
+.si-git::before {
+    content: '\ee45';
+}
+
+.si-gitextensions::before {
+    content: '\ee46';
+}
+
+.si-gitforwindows::before {
+    content: '\ee47';
+}
+
+.si-gitlfs::before {
+    content: '\ee48';
+}
+
+.si-gitbook::before {
+    content: '\ee49';
+}
+
+.si-gitcode::before {
+    content: '\ee4a';
+}
+
+.si-gitconnected::before {
+    content: '\ee4b';
+}
+
+.si-gitea::before {
+    content: '\ee4c';
+}
+
+.si-gitee::before {
+    content: '\ee4d';
+}
+
+.si-github::before {
+    content: '\ee4e';
+}
+
+.si-githubactions::before {
+    content: '\ee4f';
+}
+
+.si-githubcopilot::before {
+    content: '\ee50';
+}
+
+.si-githubpages::before {
+    content: '\ee51';
+}
+
+.si-githubsponsors::before {
+    content: '\ee52';
+}
+
+.si-gitignoredotio::before {
+    content: '\ee53';
+}
+
+.si-gitkraken::before {
+    content: '\ee54';
+}
+
+.si-gitlab::before {
+    content: '\ee55';
+}
+
+.si-gitpod::before {
+    content: '\ee56';
+}
+
+.si-gitter::before {
+    content: '\ee57';
+}
+
+.si-gldotinet::before {
+    content: '\ee58';
+}
+
+.si-glance::before {
+    content: '\ee59';
+}
+
+.si-glassdoor::before {
+    content: '\ee5a';
+}
+
+.si-gleam::before {
+    content: '\ee5b';
+}
+
+.si-glide::before {
+    content: '\ee5c';
+}
+
+.si-glitch::before {
+    content: '\ee5d';
+}
+
+.si-globus::before {
+    content: '\ee5e';
+}
+
+.si-glovo::before {
+    content: '\ee5f';
+}
+
+.si-gltf::before {
+    content: '\ee60';
+}
+
+.si-gmail::before {
+    content: '\ee61';
+}
+
+.si-gmx::before {
+    content: '\ee62';
+}
+
+.si-gnome::before {
+    content: '\ee63';
+}
+
+.si-gnometerminal::before {
+    content: '\ee64';
+}
+
+.si-gnu::before {
+    content: '\ee65';
+}
+
+.si-gnubash::before {
+    content: '\ee66';
+}
+
+.si-gnuemacs::before {
+    content: '\ee67';
+}
+
+.si-gnuicecat::before {
+    content: '\ee68';
+}
+
+.si-gnuprivacyguard::before {
+    content: '\ee69';
+}
+
+.si-gnusocial::before {
+    content: '\ee6a';
+}
+
+.si-go::before {
+    content: '\ee6b';
+}
+
+.si-gocd::before {
+    content: '\ee6c';
+}
+
+.si-godaddy::before {
+    content: '\ee6d';
+}
+
+.si-godotengine::before {
+    content: '\ee6e';
+}
+
+.si-gofundme::before {
+    content: '\ee6f';
+}
+
+.si-gogdotcom::before {
+    content: '\ee70';
+}
+
+.si-gojek::before {
+    content: '\ee71';
+}
+
+.si-goland::before {
+    content: '\ee72';
+}
+
+.si-goldmansachs::before {
+    content: '\ee73';
+}
+
+.si-goodreads::before {
+    content: '\ee74';
+}
+
+.si-google::before {
+    content: '\ee75';
+}
+
+.si-googleadmob::before {
+    content: '\ee76';
+}
+
+.si-googleads::before {
+    content: '\ee77';
+}
+
+.si-googleadsense::before {
+    content: '\ee78';
+}
+
+.si-googleanalytics::before {
+    content: '\ee79';
+}
+
+.si-googleappsscript::before {
+    content: '\ee7a';
+}
+
+.si-googleassistant::before {
+    content: '\ee7b';
+}
+
+.si-googleauthenticator::before {
+    content: '\ee7c';
+}
+
+.si-googlebigquery::before {
+    content: '\ee7d';
+}
+
+.si-googlebigtable::before {
+    content: '\ee7e';
+}
+
+.si-googlecalendar::before {
+    content: '\ee7f';
+}
+
+.si-googlecampaignmanager360::before {
+    content: '\ee80';
+}
+
+.si-googlecardboard::before {
+    content: '\ee81';
+}
+
+.si-googlecast::before {
+    content: '\ee82';
+}
+
+.si-googlechat::before {
+    content: '\ee83';
+}
+
+.si-googlechrome::before {
+    content: '\ee84';
+}
+
+.si-googlechronicle::before {
+    content: '\ee85';
+}
+
+.si-googleclassroom::before {
+    content: '\ee86';
+}
+
+.si-googlecloud::before {
+    content: '\ee87';
+}
+
+.si-googlecloudcomposer::before {
+    content: '\ee88';
+}
+
+.si-googlecloudspanner::before {
+    content: '\ee89';
+}
+
+.si-googlecloudstorage::before {
+    content: '\ee8a';
+}
+
+.si-googlecolab::before {
+    content: '\ee8b';
+}
+
+.si-googlecontaineroptimizedos::before {
+    content: '\ee8c';
+}
+
+.si-googledataflow::before {
+    content: '\ee8d';
+}
+
+.si-googledataproc::before {
+    content: '\ee8e';
+}
+
+.si-googledisplayandvideo360::before {
+    content: '\ee8f';
+}
+
+.si-googledocs::before {
+    content: '\ee90';
+}
+
+.si-googledrive::before {
+    content: '\ee91';
+}
+
+.si-googleearth::before {
+    content: '\ee92';
+}
+
+.si-googleearthengine::before {
+    content: '\ee93';
+}
+
+.si-googlefonts::before {
+    content: '\ee94';
+}
+
+.si-googleforms::before {
+    content: '\ee95';
+}
+
+.si-googlegemini::before {
+    content: '\ee96';
+}
+
+.si-googlehome::before {
+    content: '\ee97';
+}
+
+.si-googlejules::before {
+    content: '\ee98';
+}
+
+.si-googlekeep::before {
+    content: '\ee99';
+}
+
+.si-googlelens::before {
+    content: '\ee9a';
+}
+
+.si-googlemaps::before {
+    content: '\ee9b';
+}
+
+.si-googlemarketingplatform::before {
+    content: '\ee9c';
+}
+
+.si-googlemeet::before {
+    content: '\ee9d';
+}
+
+.si-googlemessages::before {
+    content: '\ee9e';
+}
+
+.si-googlenearby::before {
+    content: '\ee9f';
+}
+
+.si-googlenews::before {
+    content: '\eea0';
+}
+
+.si-googlepay::before {
+    content: '\eea1';
+}
+
+.si-googlephotos::before {
+    content: '\eea2';
+}
+
+.si-googleplay::before {
+    content: '\eea3';
+}
+
+.si-googlepubsub::before {
+    content: '\eea4';
+}
+
+.si-googlescholar::before {
+    content: '\eea5';
+}
+
+.si-googlesearchconsole::before {
+    content: '\eea6';
+}
+
+.si-googlesheets::before {
+    content: '\eea7';
+}
+
+.si-googleslides::before {
+    content: '\eea8';
+}
+
+.si-googlestreetview::before {
+    content: '\eea9';
+}
+
+.si-googlesummerofcode::before {
+    content: '\eeaa';
+}
+
+.si-googletagmanager::before {
+    content: '\eeab';
+}
+
+.si-googletasks::before {
+    content: '\eeac';
+}
+
+.si-googletranslate::before {
+    content: '\eead';
+}
+
+.si-googletv::before {
+    content: '\eeae';
+}
+
+.si-gotomeeting::before {
+    content: '\eeaf';
+}
+
+.si-gplv3::before {
+    content: '\eeb0';
+}
+
+.si-grab::before {
+    content: '\eeb1';
+}
+
+.si-gradio::before {
+    content: '\eeb2';
+}
+
+.si-gradle::before {
+    content: '\eeb3';
+}
+
+.si-gradleplaypublisher::before {
+    content: '\eeb4';
+}
+
+.si-grafana::before {
+    content: '\eeb5';
+}
+
+.si-grammarly::before {
+    content: '\eeb6';
+}
+
+.si-grandfrais::before {
+    content: '\eeb7';
+}
+
+.si-grapheneos::before {
+    content: '\eeb8';
+}
+
+.si-graphite::before {
+    content: '\eeb9';
+}
+
+.si-graphite_editor::before {
+    content: '\eeba';
+}
+
+.si-graphql::before {
+    content: '\eebb';
+}
+
+.si-grav::before {
+    content: '\eebc';
+}
+
+.si-gravatar::before {
+    content: '\eebd';
+}
+
+.si-graylog::before {
+    content: '\eebe';
+}
+
+.si-greasyfork::before {
+    content: '\eebf';
+}
+
+.si-greatlearning::before {
+    content: '\eec0';
+}
+
+.si-greenhouse::before {
+    content: '\eec1';
+}
+
+.si-greensock::before {
+    content: '\eec2';
+}
+
+.si-greptimedb::before {
+    content: '\eec3';
+}
+
+.si-griddotai::before {
+    content: '\eec4';
+}
+
+.si-gridsome::before {
+    content: '\eec5';
+}
+
+.si-grocy::before {
+    content: '\eec6';
+}
+
+.si-groupme::before {
+    content: '\eec7';
+}
+
+.si-groupon::before {
+    content: '\eec8';
+}
+
+.si-grunt::before {
+    content: '\eec9';
+}
+
+.si-gsap::before {
+    content: '\eeca';
+}
+
+.si-gsk::before {
+    content: '\eecb';
+}
+
+.si-gsma::before {
+    content: '\eecc';
+}
+
+.si-gsmarenadotcom::before {
+    content: '\eecd';
+}
+
+.si-gstreamer::before {
+    content: '\eece';
+}
+
+.si-gtk::before {
+    content: '\eecf';
+}
+
+.si-guangzhoumetro::before {
+    content: '\eed0';
+}
+
+.si-guilded::before {
+    content: '\eed1';
+}
+
+.si-guitarpro::before {
+    content: '\eed2';
+}
+
+.si-gulp::before {
+    content: '\eed3';
+}
+
+.si-gumroad::before {
+    content: '\eed4';
+}
+
+.si-gumtree::before {
+    content: '\eed5';
+}
+
+.si-gunicorn::before {
+    content: '\eed6';
+}
+
+.si-gurobi::before {
+    content: '\eed7';
+}
+
+.si-gusto::before {
+    content: '\eed8';
+}
+
+.si-gutenberg::before {
+    content: '\eed9';
+}
+
+.si-handm::before {
+    content: '\eeda';
+}
+
+.si-h2database::before {
+    content: '\eedb';
+}
+
+.si-h3::before {
+    content: '\eedc';
+}
+
+.si-habr::before {
+    content: '\eedd';
+}
+
+.si-hackclub::before {
+    content: '\eede';
+}
+
+.si-hackthebox::before {
+    content: '\eedf';
+}
+
+.si-hackaday::before {
+    content: '\eee0';
+}
+
+.si-hackernoon::before {
+    content: '\eee1';
+}
+
+.si-hackerearth::before {
+    content: '\eee2';
+}
+
+.si-hackerone::before {
+    content: '\eee3';
+}
+
+.si-hackerrank::before {
+    content: '\eee4';
+}
+
+.si-hackmd::before {
+    content: '\eee5';
+}
+
+.si-hackster::before {
+    content: '\eee6';
+}
+
+.si-hal::before {
+    content: '\eee7';
+}
+
+.si-handlebarsdotjs::before {
+    content: '\eee8';
+}
+
+.si-handshake::before {
+    content: '\eee9';
+}
+
+.si-handshake_protocol::before {
+    content: '\eeea';
+}
+
+.si-happycow::before {
+    content: '\eeeb';
+}
+
+.si-harbor::before {
+    content: '\eeec';
+}
+
+.si-harmonyos::before {
+    content: '\eeed';
+}
+
+.si-hashcat::before {
+    content: '\eeee';
+}
+
+.si-hashicorp::before {
+    content: '\eeef';
+}
+
+.si-hashnode::before {
+    content: '\eef0';
+}
+
+.si-haskell::before {
+    content: '\eef1';
+}
+
+.si-hasura::before {
+    content: '\eef2';
+}
+
+.si-hatenabookmark::before {
+    content: '\eef3';
+}
+
+.si-haveibeenpwned::before {
+    content: '\eef4';
+}
+
+.si-havells::before {
+    content: '\eef5';
+}
+
+.si-haxe::before {
+    content: '\eef6';
+}
+
+.si-haystack::before {
+    content: '\eef7';
+}
+
+.si-hbo::before {
+    content: '\eef8';
+}
+
+.si-hbomax::before {
+    content: '\eef9';
+}
+
+.si-hcl::before {
+    content: '\eefa';
+}
+
+.si-hdfcbank::before {
+    content: '\eefb';
+}
+
+.si-headlessui::before {
+    content: '\eefc';
+}
+
+.si-headphonezone::before {
+    content: '\eefd';
+}
+
+.si-headspace::before {
+    content: '\eefe';
+}
+
+.si-hearth::before {
+    content: '\eeff';
+}
+
+.si-hearthisdotat::before {
+    content: '\ef00';
+}
+
+.si-hedera::before {
+    content: '\ef01';
+}
+
+.si-hedgedoc::before {
+    content: '\ef02';
+}
+
+.si-helium::before {
+    content: '\ef03';
+}
+
+.si-helix::before {
+    content: '\ef04';
+}
+
+.si-hellofresh::before {
+    content: '\ef05';
+}
+
+.si-hellyhansen::before {
+    content: '\ef06';
+}
+
+.si-helm::before {
+    content: '\ef07';
+}
+
+.si-helpscout::before {
+    content: '\ef08';
+}
+
+.si-helpdesk::before {
+    content: '\ef09';
+}
+
+.si-hepsiemlak::before {
+    content: '\ef0a';
+}
+
+.si-here::before {
+    content: '\ef0b';
+}
+
+.si-hermes::before {
+    content: '\ef0c';
+}
+
+.si-heroicgameslauncher::before {
+    content: '\ef0d';
+}
+
+.si-heroui::before {
+    content: '\ef0e';
+}
+
+.si-hetzner::before {
+    content: '\ef0f';
+}
+
+.si-hevy::before {
+    content: '\ef10';
+}
+
+.si-hexlet::before {
+    content: '\ef11';
+}
+
+.si-hexo::before {
+    content: '\ef12';
+}
+
+.si-hey::before {
+    content: '\ef13';
+}
+
+.si-hibob::before {
+    content: '\ef14';
+}
+
+.si-hibernate::before {
+    content: '\ef15';
+}
+
+.si-hilton::before {
+    content: '\ef16';
+}
+
+.si-hiltonhotelsandresorts::before {
+    content: '\ef17';
+}
+
+.si-hitachi::before {
+    content: '\ef18';
+}
+
+.si-hive::before {
+    content: '\ef19';
+}
+
+.si-hive_blockchain::before {
+    content: '\ef1a';
+}
+
+.si-hivemq::before {
+    content: '\ef1b';
+}
+
+.si-homarr::before {
+    content: '\ef1c';
+}
+
+.si-homeassistant::before {
+    content: '\ef1d';
+}
+
+.si-homeassistantcommunitystore::before {
+    content: '\ef1e';
+}
+
+.si-homeadvisor::before {
+    content: '\ef1f';
+}
+
+.si-homebrew::before {
+    content: '\ef20';
+}
+
+.si-homebridge::before {
+    content: '\ef21';
+}
+
+.si-homepage::before {
+    content: '\ef22';
+}
+
+.si-homify::before {
+    content: '\ef23';
+}
+
+.si-honda::before {
+    content: '\ef24';
+}
+
+.si-honey::before {
+    content: '\ef25';
+}
+
+.si-honeybadger::before {
+    content: '\ef26';
+}
+
+.si-honeygain::before {
+    content: '\ef27';
+}
+
+.si-hono::before {
+    content: '\ef28';
+}
+
+.si-honor::before {
+    content: '\ef29';
+}
+
+.si-hootsuite::before {
+    content: '\ef2a';
+}
+
+.si-hoppscotch::before {
+    content: '\ef2b';
+}
+
+.si-hostinger::before {
+    content: '\ef2c';
+}
+
+.si-hotelsdotcom::before {
+    content: '\ef2d';
+}
+
+.si-hotjar::before {
+    content: '\ef2e';
+}
+
+.si-hotwire::before {
+    content: '\ef2f';
+}
+
+.si-houdini::before {
+    content: '\ef30';
+}
+
+.si-houzz::before {
+    content: '\ef31';
+}
+
+.si-hp::before {
+    content: '\ef32';
+}
+
+.si-hsbc::before {
+    content: '\ef33';
+}
+
+.si-htc::before {
+    content: '\ef34';
+}
+
+.si-htcvive::before {
+    content: '\ef35';
+}
+
+.si-htmlacademy::before {
+    content: '\ef36';
+}
+
+.si-html5::before {
+    content: '\ef37';
+}
+
+.si-htmx::before {
+    content: '\ef38';
+}
+
+.si-htop::before {
+    content: '\ef39';
+}
+
+.si-httpie::before {
+    content: '\ef3a';
+}
+
+.si-huawei::before {
+    content: '\ef3b';
+}
+
+.si-hubspot::before {
+    content: '\ef3c';
+}
+
+.si-huggingface::before {
+    content: '\ef3d';
+}
+
+.si-hugo::before {
+    content: '\ef3e';
+}
+
+.si-humblebundle::before {
+    content: '\ef3f';
+}
+
+.si-humhub::before {
+    content: '\ef40';
+}
+
+.si-hungryjacks::before {
+    content: '\ef41';
+}
+
+.si-husqvarna::before {
+    content: '\ef42';
+}
+
+.si-hyper::before {
+    content: '\ef43';
+}
+
+.si-hyperskill::before {
+    content: '\ef44';
+}
+
+.si-hyperx::before {
+    content: '\ef45';
+}
+
+.si-hypothesis::before {
+    content: '\ef46';
+}
+
+.si-hyprland::before {
+    content: '\ef47';
+}
+
+.si-hyundai::before {
+    content: '\ef48';
+}
+
+.si-i18next::before {
+    content: '\ef49';
+}
+
+.si-i3::before {
+    content: '\ef4a';
+}
+
+.si-iata::before {
+    content: '\ef4b';
+}
+
+.si-ibeacon::before {
+    content: '\ef4c';
+}
+
+.si-iberia::before {
+    content: '\ef4d';
+}
+
+.si-iced::before {
+    content: '\ef4e';
+}
+
+.si-iceland::before {
+    content: '\ef4f';
+}
+
+.si-icicibank::before {
+    content: '\ef50';
+}
+
+.si-icinga::before {
+    content: '\ef51';
+}
+
+.si-icloud::before {
+    content: '\ef52';
+}
+
+.si-icomoon::before {
+    content: '\ef53';
+}
+
+.si-icon::before {
+    content: '\ef54';
+}
+
+.si-iconfinder::before {
+    content: '\ef55';
+}
+
+.si-iconify::before {
+    content: '\ef56';
+}
+
+.si-iconjar::before {
+    content: '\ef57';
+}
+
+.si-icons8::before {
+    content: '\ef58';
+}
+
+.si-icq::before {
+    content: '\ef59';
+}
+
+.si-ieee::before {
+    content: '\ef5a';
+}
+
+.si-ifixit::before {
+    content: '\ef5b';
+}
+
+.si-ifood::before {
+    content: '\ef5c';
+}
+
+.si-ifttt::before {
+    content: '\ef5d';
+}
+
+.si-igdb::before {
+    content: '\ef5e';
+}
+
+.si-ign::before {
+    content: '\ef5f';
+}
+
+.si-iheartradio::before {
+    content: '\ef60';
+}
+
+.si-ikea::before {
+    content: '\ef61';
+}
+
+.si-iledefrancemobilites::before {
+    content: '\ef62';
+}
+
+.si-ilovepdf::before {
+    content: '\ef63';
+}
+
+.si-imagetoolbox::before {
+    content: '\ef64';
+}
+
+.si-imagedotsc::before {
+    content: '\ef65';
+}
+
+.si-imagej::before {
+    content: '\ef66';
+}
+
+.si-imdb::before {
+    content: '\ef67';
+}
+
+.si-imessage::before {
+    content: '\ef68';
+}
+
+.si-imgur::before {
+    content: '\ef69';
+}
+
+.si-immer::before {
+    content: '\ef6a';
+}
+
+.si-immersivetranslate::before {
+    content: '\ef6b';
+}
+
+.si-immich::before {
+    content: '\ef6c';
+}
+
+.si-imou::before {
+    content: '\ef6d';
+}
+
+.si-improvmx::before {
+    content: '\ef6e';
+}
+
+.si-indeed::before {
+    content: '\ef6f';
+}
+
+.si-indiansuperleague::before {
+    content: '\ef70';
+}
+
+.si-indiehackers::before {
+    content: '\ef71';
+}
+
+.si-indieweb::before {
+    content: '\ef72';
+}
+
+.si-indigo::before {
+    content: '\ef73';
+}
+
+.si-inductiveautomation::before {
+    content: '\ef74';
+}
+
+.si-inertia::before {
+    content: '\ef75';
+}
+
+.si-infiniti::before {
+    content: '\ef76';
+}
+
+.si-infinityfree::before {
+    content: '\ef77';
+}
+
+.si-influxdb::before {
+    content: '\ef78';
+}
+
+.si-infomaniak::before {
+    content: '\ef79';
+}
+
+.si-infoq::before {
+    content: '\ef7a';
+}
+
+.si-infosys::before {
+    content: '\ef7b';
+}
+
+.si-infracost::before {
+    content: '\ef7c';
+}
+
+.si-infuse::before {
+    content: '\ef7d';
+}
+
+.si-ingress::before {
+    content: '\ef7e';
+}
+
+.si-inkdrop::before {
+    content: '\ef7f';
+}
+
+.si-inkscape::before {
+    content: '\ef80';
+}
+
+.si-inoreader::before {
+    content: '\ef81';
+}
+
+.si-inquirer::before {
+    content: '\ef82';
+}
+
+.si-insomnia::before {
+    content: '\ef83';
+}
+
+.si-inspire::before {
+    content: '\ef84';
+}
+
+.si-insta360::before {
+    content: '\ef85';
+}
+
+.si-instacart::before {
+    content: '\ef86';
+}
+
+.si-instagram::before {
+    content: '\ef87';
+}
+
+.si-instapaper::before {
+    content: '\ef88';
+}
+
+.si-instatus::before {
+    content: '\ef89';
+}
+
+.si-instructables::before {
+    content: '\ef8a';
+}
+
+.si-instructure::before {
+    content: '\ef8b';
+}
+
+.si-intel::before {
+    content: '\ef8c';
+}
+
+.si-intellijidea::before {
+    content: '\ef8d';
+}
+
+.si-interactiondesignfoundation::before {
+    content: '\ef8e';
+}
+
+.si-interactjs::before {
+    content: '\ef8f';
+}
+
+.si-interbase::before {
+    content: '\ef90';
+}
+
+.si-intercom::before {
+    content: '\ef91';
+}
+
+.si-intermarche::before {
+    content: '\ef92';
+}
+
+.si-internetarchive::before {
+    content: '\ef93';
+}
+
+.si-internetcomputer::before {
+    content: '\ef94';
+}
+
+.si-intigriti::before {
+    content: '\ef95';
+}
+
+.si-intuit::before {
+    content: '\ef96';
+}
+
+.si-invidious::before {
+    content: '\ef97';
+}
+
+.si-invoiceninja::before {
+    content: '\ef98';
+}
+
+.si-iobroker::before {
+    content: '\ef99';
+}
+
+.si-ionic::before {
+    content: '\ef9a';
+}
+
+.si-ionos::before {
+    content: '\ef9b';
+}
+
+.si-ios::before {
+    content: '\ef9c';
+}
+
+.si-iota::before {
+    content: '\ef9d';
+}
+
+.si-ipfs::before {
+    content: '\ef9e';
+}
+
+.si-iris::before {
+    content: '\ef9f';
+}
+
+.si-irobot::before {
+    content: '\efa0';
+}
+
+.si-isc2::before {
+    content: '\efa1';
+}
+
+.si-isro::before {
+    content: '\efa2';
+}
+
+.si-issuu::before {
+    content: '\efa3';
+}
+
+.si-istio::before {
+    content: '\efa4';
+}
+
+.si-itchdotio::before {
+    content: '\efa5';
+}
+
+.si-iterm2::before {
+    content: '\efa6';
+}
+
+.si-itunes::before {
+    content: '\efa7';
+}
+
+.si-itvx::before {
+    content: '\efa8';
+}
+
+.si-iveco::before {
+    content: '\efa9';
+}
+
+.si-jabber::before {
+    content: '\efaa';
+}
+
+.si-jaeger::before {
+    content: '\efab';
+}
+
+.si-jameson::before {
+    content: '\efac';
+}
+
+.si-jamstack::before {
+    content: '\efad';
+}
+
+.si-japanairlines::before {
+    content: '\efae';
+}
+
+.si-jasmine::before {
+    content: '\efaf';
+}
+
+.si-javascript::before {
+    content: '\efb0';
+}
+
+.si-jbl::before {
+    content: '\efb1';
+}
+
+.si-jcb::before {
+    content: '\efb2';
+}
+
+.si-jdoodle::before {
+    content: '\efb3';
+}
+
+.si-jeep::before {
+    content: '\efb4';
+}
+
+.si-jekyll::before {
+    content: '\efb5';
+}
+
+.si-jellyfin::before {
+    content: '\efb6';
+}
+
+.si-jenkins::before {
+    content: '\efb7';
+}
+
+.si-jest::before {
+    content: '\efb8';
+}
+
+.si-jet::before {
+    content: '\efb9';
+}
+
+.si-jetblue::before {
+    content: '\efba';
+}
+
+.si-jetbrains::before {
+    content: '\efbb';
+}
+
+.si-jetpackcompose::before {
+    content: '\efbc';
+}
+
+.si-jfrog::before {
+    content: '\efbd';
+}
+
+.si-jfrogpipelines::before {
+    content: '\efbe';
+}
+
+.si-jhipster::before {
+    content: '\efbf';
+}
+
+.si-jinja::before {
+    content: '\efc0';
+}
+
+.si-jio::before {
+    content: '\efc1';
+}
+
+.si-jira::before {
+    content: '\efc2';
+}
+
+.si-jirasoftware::before {
+    content: '\efc3';
+}
+
+.si-jitpack::before {
+    content: '\efc4';
+}
+
+.si-jitsi::before {
+    content: '\efc5';
+}
+
+.si-johndeere::before {
+    content: '\efc6';
+}
+
+.si-joomla::before {
+    content: '\efc7';
+}
+
+.si-joplin::before {
+    content: '\efc8';
+}
+
+.si-jordan::before {
+    content: '\efc9';
+}
+
+.si-jouav::before {
+    content: '\efca';
+}
+
+.si-jovian::before {
+    content: '\efcb';
+}
+
+.si-jpeg::before {
+    content: '\efcc';
+}
+
+.si-jquery::before {
+    content: '\efcd';
+}
+
+.si-jrgroup::before {
+    content: '\efce';
+}
+
+.si-jsdelivr::before {
+    content: '\efcf';
+}
+
+.si-jsfiddle::before {
+    content: '\efd0';
+}
+
+.si-json::before {
+    content: '\efd1';
+}
+
+.si-jsonwebtokens::before {
+    content: '\efd2';
+}
+
+.si-jsr::before {
+    content: '\efd3';
+}
+
+.si-jss::before {
+    content: '\efd4';
+}
+
+.si-juce::before {
+    content: '\efd5';
+}
+
+.si-juejin::before {
+    content: '\efd6';
+}
+
+.si-juke::before {
+    content: '\efd7';
+}
+
+.si-julia::before {
+    content: '\efd8';
+}
+
+.si-junipernetworks::before {
+    content: '\efd9';
+}
+
+.si-junit5::before {
+    content: '\efda';
+}
+
+.si-jupyter::before {
+    content: '\efdb';
+}
+
+.si-just::before {
+    content: '\efdc';
+}
+
+.si-justeat::before {
+    content: '\efdd';
+}
+
+.si-justgiving::before {
+    content: '\efde';
+}
+
+.si-k3s::before {
+    content: '\efdf';
+}
+
+.si-k6::before {
+    content: '\efe0';
+}
+
+.si-kaggle::before {
+    content: '\efe1';
+}
+
+.si-kagi::before {
+    content: '\efe2';
+}
+
+.si-kahoot::before {
+    content: '\efe3';
+}
+
+.si-kaios::before {
+    content: '\efe4';
+}
+
+.si-kakao::before {
+    content: '\efe5';
+}
+
+.si-kakaotalk::before {
+    content: '\efe6';
+}
+
+.si-kalilinux::before {
+    content: '\efe7';
+}
+
+.si-kamailio::before {
+    content: '\efe8';
+}
+
+.si-kando::before {
+    content: '\efe9';
+}
+
+.si-kaniko::before {
+    content: '\efea';
+}
+
+.si-karlsruherverkehrsverbund::before {
+    content: '\efeb';
+}
+
+.si-kasasmart::before {
+    content: '\efec';
+}
+
+.si-kashflow::before {
+    content: '\efed';
+}
+
+.si-kaspersky::before {
+    content: '\efee';
+}
+
+.si-katana::before {
+    content: '\efef';
+}
+
+.si-kaufland::before {
+    content: '\eff0';
+}
+
+.si-kde::before {
+    content: '\eff1';
+}
+
+.si-kdeneon::before {
+    content: '\eff2';
+}
+
+.si-kdeplasma::before {
+    content: '\eff3';
+}
+
+.si-kdenlive::before {
+    content: '\eff4';
+}
+
+.si-kedro::before {
+    content: '\eff5';
+}
+
+.si-keenetic::before {
+    content: '\eff6';
+}
+
+.si-keepachangelog::before {
+    content: '\eff7';
+}
+
+.si-keepassxc::before {
+    content: '\eff8';
+}
+
+.si-keeper::before {
+    content: '\eff9';
+}
+
+.si-keeweb::before {
+    content: '\effa';
+}
+
+.si-kenmei::before {
+    content: '\effb';
+}
+
+.si-kentico::before {
+    content: '\effc';
+}
+
+.si-keploy::before {
+    content: '\effd';
+}
+
+.si-keras::before {
+    content: '\effe';
+}
+
+.si-keybase::before {
+    content: '\efff';
+}
+
+.si-keycdn::before {
+    content: '\f000';
+}
+
+.si-keycloak::before {
+    content: '\f001';
+}
+
+.si-keystone::before {
+    content: '\f002';
+}
+
+.si-kfc::before {
+    content: '\f003';
+}
+
+.si-khanacademy::before {
+    content: '\f004';
+}
+
+.si-khronosgroup::before {
+    content: '\f005';
+}
+
+.si-kia::before {
+    content: '\f006';
+}
+
+.si-kibana::before {
+    content: '\f007';
+}
+
+.si-kicad::before {
+    content: '\f008';
+}
+
+.si-kick::before {
+    content: '\f009';
+}
+
+.si-kickstarter::before {
+    content: '\f00a';
+}
+
+.si-kik::before {
+    content: '\f00b';
+}
+
+.si-kingstontechnology::before {
+    content: '\f00c';
+}
+
+.si-kinopoisk::before {
+    content: '\f00d';
+}
+
+.si-kinsta::before {
+    content: '\f00e';
+}
+
+.si-kirby::before {
+    content: '\f00f';
+}
+
+.si-kit::before {
+    content: '\f010';
+}
+
+.si-kitsu::before {
+    content: '\f011';
+}
+
+.si-kiwix::before {
+    content: '\f012';
+}
+
+.si-klarna::before {
+    content: '\f013';
+}
+
+.si-kleinanzeigen::before {
+    content: '\f014';
+}
+
+.si-klm::before {
+    content: '\f015';
+}
+
+.si-klook::before {
+    content: '\f016';
+}
+
+.si-knative::before {
+    content: '\f017';
+}
+
+.si-knexdotjs::before {
+    content: '\f018';
+}
+
+.si-knime::before {
+    content: '\f019';
+}
+
+.si-knip::before {
+    content: '\f01a';
+}
+
+.si-knowledgebase::before {
+    content: '\f01b';
+}
+
+.si-known::before {
+    content: '\f01c';
+}
+
+.si-kofi::before {
+    content: '\f01d';
+}
+
+.si-koa::before {
+    content: '\f01e';
+}
+
+.si-koc::before {
+    content: '\f01f';
+}
+
+.si-kodak::before {
+    content: '\f020';
+}
+
+.si-kodi::before {
+    content: '\f021';
+}
+
+.si-kodular::before {
+    content: '\f022';
+}
+
+.si-koenigsegg::before {
+    content: '\f023';
+}
+
+.si-kofax::before {
+    content: '\f024';
+}
+
+.si-komoot::before {
+    content: '\f025';
+}
+
+.si-konami::before {
+    content: '\f026';
+}
+
+.si-kong::before {
+    content: '\f027';
+}
+
+.si-kongregate::before {
+    content: '\f028';
+}
+
+.si-konva::before {
+    content: '\f029';
+}
+
+.si-koreader::before {
+    content: '\f02a';
+}
+
+.si-kotlin::before {
+    content: '\f02b';
+}
+
+.si-koyeb::before {
+    content: '\f02c';
+}
+
+.si-kred::before {
+    content: '\f02d';
+}
+
+.si-krita::before {
+    content: '\f02e';
+}
+
+.si-ktm::before {
+    content: '\f02f';
+}
+
+.si-ktor::before {
+    content: '\f030';
+}
+
+.si-kuaishou::before {
+    content: '\f031';
+}
+
+.si-kubernetes::before {
+    content: '\f032';
+}
+
+.si-kubespray::before {
+    content: '\f033';
+}
+
+.si-kubuntu::before {
+    content: '\f034';
+}
+
+.si-kucoin::before {
+    content: '\f035';
+}
+
+.si-kueski::before {
+    content: '\f036';
+}
+
+.si-kuma::before {
+    content: '\f037';
+}
+
+.si-kununu::before {
+    content: '\f038';
+}
+
+.si-kuula::before {
+    content: '\f039';
+}
+
+.si-kx::before {
+    content: '\f03a';
+}
+
+.si-kyocera::before {
+    content: '\f03b';
+}
+
+.si-lequipe::before {
+    content: '\f03c';
+}
+
+.si-labex::before {
+    content: '\f03d';
+}
+
+.si-labview::before {
+    content: '\f03e';
+}
+
+.si-lada::before {
+    content: '\f03f';
+}
+
+.si-lamborghini::before {
+    content: '\f040';
+}
+
+.si-langchain::before {
+    content: '\f041';
+}
+
+.si-langflow::before {
+    content: '\f042';
+}
+
+.si-langgraph::before {
+    content: '\f043';
+}
+
+.si-languagetool::before {
+    content: '\f044';
+}
+
+.si-lapce::before {
+    content: '\f045';
+}
+
+.si-laragon::before {
+    content: '\f046';
+}
+
+.si-laravel::before {
+    content: '\f047';
+}
+
+.si-laravelhorizon::before {
+    content: '\f048';
+}
+
+.si-laravelnova::before {
+    content: '\f049';
+}
+
+.si-lastdotfm::before {
+    content: '\f04a';
+}
+
+.si-lastpass::before {
+    content: '\f04b';
+}
+
+.si-latex::before {
+    content: '\f04c';
+}
+
+.si-launchpad::before {
+    content: '\f04d';
+}
+
+.si-lazarus::before {
+    content: '\f04e';
+}
+
+.si-lazyvim::before {
+    content: '\f04f';
+}
+
+.si-lbry::before {
+    content: '\f050';
+}
+
+.si-leaderprice::before {
+    content: '\f051';
+}
+
+.si-leaflet::before {
+    content: '\f052';
+}
+
+.si-leagueoflegends::before {
+    content: '\f053';
+}
+
+.si-leanpub::before {
+    content: '\f054';
+}
+
+.si-leetcode::before {
+    content: '\f055';
+}
+
+.si-lefthook::before {
+    content: '\f056';
+}
+
+.si-legacygames::before {
+    content: '\f057';
+}
+
+.si-leica::before {
+    content: '\f058';
+}
+
+.si-lemmy::before {
+    content: '\f059';
+}
+
+.si-lemonsqueezy::before {
+    content: '\f05a';
+}
+
+.si-lenovo::before {
+    content: '\f05b';
+}
+
+.si-lens::before {
+    content: '\f05c';
+}
+
+.si-leptos::before {
+    content: '\f05d';
+}
+
+.si-lerna::before {
+    content: '\f05e';
+}
+
+.si-leroymerlin::before {
+    content: '\f05f';
+}
+
+.si-leslibraires::before {
+    content: '\f060';
+}
+
+.si-less::before {
+    content: '\f061';
+}
+
+.si-letsencrypt::before {
+    content: '\f062';
+}
+
+.si-letterboxd::before {
+    content: '\f063';
+}
+
+.si-levelsdotfyi::before {
+    content: '\f064';
+}
+
+.si-lg::before {
+    content: '\f065';
+}
+
+.si-lining::before {
+    content: '\f066';
+}
+
+.si-liberadotchat::before {
+    content: '\f067';
+}
+
+.si-liberapay::before {
+    content: '\f068';
+}
+
+.si-librariesdotio::before {
+    content: '\f069';
+}
+
+.si-librarything::before {
+    content: '\f06a';
+}
+
+.si-libreoffice::before {
+    content: '\f06b';
+}
+
+.si-libreofficebase::before {
+    content: '\f06c';
+}
+
+.si-libreofficecalc::before {
+    content: '\f06d';
+}
+
+.si-libreofficedraw::before {
+    content: '\f06e';
+}
+
+.si-libreofficeimpress::before {
+    content: '\f06f';
+}
+
+.si-libreofficemath::before {
+    content: '\f070';
+}
+
+.si-libreofficewriter::before {
+    content: '\f071';
+}
+
+.si-libretranslate::before {
+    content: '\f072';
+}
+
+.si-libretube::before {
+    content: '\f073';
+}
+
+.si-librewolf::before {
+    content: '\f074';
+}
+
+.si-libuv::before {
+    content: '\f075';
+}
+
+.si-lichess::before {
+    content: '\f076';
+}
+
+.si-lidl::before {
+    content: '\f077';
+}
+
+.si-lifx::before {
+    content: '\f078';
+}
+
+.si-lightburn::before {
+    content: '\f079';
+}
+
+.si-lighthouse::before {
+    content: '\f07a';
+}
+
+.si-lightning::before {
+    content: '\f07b';
+}
+
+.si-limesurvey::before {
+    content: '\f07c';
+}
+
+.si-line::before {
+    content: '\f07d';
+}
+
+.si-lineageos::before {
+    content: '\f07e';
+}
+
+.si-linear::before {
+    content: '\f07f';
+}
+
+.si-linkerd::before {
+    content: '\f080';
+}
+
+.si-linkfire::before {
+    content: '\f081';
+}
+
+.si-linksys::before {
+    content: '\f082';
+}
+
+.si-linktree::before {
+    content: '\f083';
+}
+
+.si-linphone::before {
+    content: '\f084';
+}
+
+.si-lintcode::before {
+    content: '\f085';
+}
+
+.si-linux::before {
+    content: '\f086';
+}
+
+.si-linuxcontainers::before {
+    content: '\f087';
+}
+
+.si-linuxfoundation::before {
+    content: '\f088';
+}
+
+.si-linuxmint::before {
+    content: '\f089';
+}
+
+.si-linuxprofessionalinstitute::before {
+    content: '\f08a';
+}
+
+.si-linuxserver::before {
+    content: '\f08b';
+}
+
+.si-lionair::before {
+    content: '\f08c';
+}
+
+.si-liquibase::before {
+    content: '\f08d';
+}
+
+.si-listenhub::before {
+    content: '\f08e';
+}
+
+.si-listmonk::before {
+    content: '\f08f';
+}
+
+.si-lit::before {
+    content: '\f090';
+}
+
+.si-litecoin::before {
+    content: '\f091';
+}
+
+.si-literal::before {
+    content: '\f092';
+}
+
+.si-litiengine::before {
+    content: '\f093';
+}
+
+.si-livechat::before {
+    content: '\f094';
+}
+
+.si-livejournal::before {
+    content: '\f095';
+}
+
+.si-livekit::before {
+    content: '\f096';
+}
+
+.si-livewire::before {
+    content: '\f097';
+}
+
+.si-llvm::before {
+    content: '\f098';
+}
+
+.si-lmms::before {
+    content: '\f099';
+}
+
+.si-lobsters::before {
+    content: '\f09a';
+}
+
+.si-local::before {
+    content: '\f09b';
+}
+
+.si-localsend::before {
+    content: '\f09c';
+}
+
+.si-localxpose::before {
+    content: '\f09d';
+}
+
+.si-lodash::before {
+    content: '\f09e';
+}
+
+.si-logmein::before {
+    content: '\f09f';
+}
+
+.si-logseq::before {
+    content: '\f0a0';
+}
+
+.si-logstash::before {
+    content: '\f0a1';
+}
+
+.si-looker::before {
+    content: '\f0a2';
+}
+
+.si-loom::before {
+    content: '\f0a3';
+}
+
+.si-loop::before {
+    content: '\f0a4';
+}
+
+.si-loopback::before {
+    content: '\f0a5';
+}
+
+.si-lootcrate::before {
+    content: '\f0a6';
+}
+
+.si-lospec::before {
+    content: '\f0a7';
+}
+
+.si-lotpolishairlines::before {
+    content: '\f0a8';
+}
+
+.si-lottiefiles::before {
+    content: '\f0a9';
+}
+
+.si-ltspice::before {
+    content: '\f0aa';
+}
+
+.si-lua::before {
+    content: '\f0ab';
+}
+
+.si-luanti::before {
+    content: '\f0ac';
+}
+
+.si-luau::before {
+    content: '\f0ad';
+}
+
+.si-lubuntu::before {
+    content: '\f0ae';
+}
+
+.si-lucia::before {
+    content: '\f0af';
+}
+
+.si-lucid::before {
+    content: '\f0b0';
+}
+
+.si-lucide::before {
+    content: '\f0b1';
+}
+
+.si-ludwig::before {
+    content: '\f0b2';
+}
+
+.si-lufthansa::before {
+    content: '\f0b3';
+}
+
+.si-lumen::before {
+    content: '\f0b4';
+}
+
+.si-lunacy::before {
+    content: '\f0b5';
+}
+
+.si-luogu::before {
+    content: '\f0b6';
+}
+
+.si-lutris::before {
+    content: '\f0b7';
+}
+
+.si-lvgl::before {
+    content: '\f0b8';
+}
+
+.si-lydia::before {
+    content: '\f0b9';
+}
+
+.si-lyft::before {
+    content: '\f0ba';
+}
+
+.si-maas::before {
+    content: '\f0bb';
+}
+
+.si-macos::before {
+    content: '\f0bc';
+}
+
+.si-macpaw::before {
+    content: '\f0bd';
+}
+
+.si-macports::before {
+    content: '\f0be';
+}
+
+.si-macys::before {
+    content: '\f0bf';
+}
+
+.si-magasinsu::before {
+    content: '\f0c0';
+}
+
+.si-magic::before {
+    content: '\f0c1';
+}
+
+.si-magisk::before {
+    content: '\f0c2';
+}
+
+.si-mahindra::before {
+    content: '\f0c3';
+}
+
+.si-maildotcom::before {
+    content: '\f0c4';
+}
+
+.si-maildotru::before {
+    content: '\f0c5';
+}
+
+.si-mailbox::before {
+    content: '\f0c6';
+}
+
+.si-mailchimp::before {
+    content: '\f0c7';
+}
+
+.si-mailgun::before {
+    content: '\f0c8';
+}
+
+.si-mailtrap::before {
+    content: '\f0c9';
+}
+
+.si-mainwp::before {
+    content: '\f0ca';
+}
+
+.si-majorleaguehacking::before {
+    content: '\f0cb';
+}
+
+.si-make::before {
+    content: '\f0cc';
+}
+
+.si-makerbot::before {
+    content: '\f0cd';
+}
+
+.si-malt::before {
+    content: '\f0ce';
+}
+
+.si-malwarebytes::before {
+    content: '\f0cf';
+}
+
+.si-mambaui::before {
+    content: '\f0d0';
+}
+
+.si-mamp::before {
+    content: '\f0d1';
+}
+
+.si-man::before {
+    content: '\f0d2';
+}
+
+.si-manageiq::before {
+    content: '\f0d3';
+}
+
+.si-mangacollec::before {
+    content: '\f0d4';
+}
+
+.si-mangaupdates::before {
+    content: '\f0d5';
+}
+
+.si-manjaro::before {
+    content: '\f0d6';
+}
+
+.si-mantine::before {
+    content: '\f0d7';
+}
+
+.si-mapbox::before {
+    content: '\f0d8';
+}
+
+.si-mapillary::before {
+    content: '\f0d9';
+}
+
+.si-maplibre::before {
+    content: '\f0da';
+}
+
+.si-maptiler::before {
+    content: '\f0db';
+}
+
+.si-mariadb::before {
+    content: '\f0dc';
+}
+
+.si-mariadbfoundation::before {
+    content: '\f0dd';
+}
+
+.si-markdown::before {
+    content: '\f0de';
+}
+
+.si-marko::before {
+    content: '\f0df';
+}
+
+.si-marriott::before {
+    content: '\f0e0';
+}
+
+.si-marvelapp::before {
+    content: '\f0e1';
+}
+
+.si-maserati::before {
+    content: '\f0e2';
+}
+
+.si-mastercard::before {
+    content: '\f0e3';
+}
+
+.si-mastercomfig::before {
+    content: '\f0e4';
+}
+
+.si-mastodon::before {
+    content: '\f0e5';
+}
+
+.si-materialdesign::before {
+    content: '\f0e6';
+}
+
+.si-materialdesignicons::before {
+    content: '\f0e7';
+}
+
+.si-materialformkdocs::before {
+    content: '\f0e8';
+}
+
+.si-matillion::before {
+    content: '\f0e9';
+}
+
+.si-matomo::before {
+    content: '\f0ea';
+}
+
+.si-matrix::before {
+    content: '\f0eb';
+}
+
+.si-matterdotjs::before {
+    content: '\f0ec';
+}
+
+.si-mattermost::before {
+    content: '\f0ed';
+}
+
+.si-matternet::before {
+    content: '\f0ee';
+}
+
+.si-mautic::before {
+    content: '\f0ef';
+}
+
+.si-max::before {
+    content: '\f0f0';
+}
+
+.si-maxplanckgesellschaft::before {
+    content: '\f0f1';
+}
+
+.si-maytag::before {
+    content: '\f0f2';
+}
+
+.si-mazda::before {
+    content: '\f0f3';
+}
+
+.si-maze::before {
+    content: '\f0f4';
+}
+
+.si-mcafee::before {
+    content: '\f0f5';
+}
+
+.si-mcdonalds::before {
+    content: '\f0f6';
+}
+
+.si-mclaren::before {
+    content: '\f0f7';
+}
+
+.si-mdblist::before {
+    content: '\f0f8';
+}
+
+.si-mdbook::before {
+    content: '\f0f9';
+}
+
+.si-mdnwebdocs::before {
+    content: '\f0fa';
+}
+
+.si-mdx::before {
+    content: '\f0fb';
+}
+
+.si-mealie::before {
+    content: '\f0fc';
+}
+
+.si-mediafire::before {
+    content: '\f0fd';
+}
+
+.si-mediamarkt::before {
+    content: '\f0fe';
+}
+
+.si-mediapipe::before {
+    content: '\f0ff';
+}
+
+.si-mediatek::before {
+    content: '\f100';
+}
+
+.si-medibangpaint::before {
+    content: '\f101';
+}
+
+.si-medium::before {
+    content: '\f102';
+}
+
+.si-medusa::before {
+    content: '\f103';
+}
+
+.si-meetup::before {
+    content: '\f104';
+}
+
+.si-mega::before {
+    content: '\f105';
+}
+
+.si-meilisearch::before {
+    content: '\f106';
+}
+
+.si-meituan::before {
+    content: '\f107';
+}
+
+.si-meizu::before {
+    content: '\f108';
+}
+
+.si-mendeley::before {
+    content: '\f109';
+}
+
+.si-mentorcruise::before {
+    content: '\f10a';
+}
+
+.si-mercadopago::before {
+    content: '\f10b';
+}
+
+.si-merck::before {
+    content: '\f10c';
+}
+
+.si-mercurial::before {
+    content: '\f10d';
+}
+
+.si-mermaid::before {
+    content: '\f10e';
+}
+
+.si-messenger::before {
+    content: '\f10f';
+}
+
+.si-meta::before {
+    content: '\f110';
+}
+
+.si-metabase::before {
+    content: '\f111';
+}
+
+.si-metacritic::before {
+    content: '\f112';
+}
+
+.si-metafilter::before {
+    content: '\f113';
+}
+
+.si-metager::before {
+    content: '\f114';
+}
+
+.si-metasploit::before {
+    content: '\f115';
+}
+
+.si-meteor::before {
+    content: '\f116';
+}
+
+.si-metro::before {
+    content: '\f117';
+}
+
+.si-metrodelaciudaddemexico::before {
+    content: '\f118';
+}
+
+.si-metrodemadrid::before {
+    content: '\f119';
+}
+
+.si-metrodeparis::before {
+    content: '\f11a';
+}
+
+.si-mewe::before {
+    content: '\f11b';
+}
+
+.si-mezmo::before {
+    content: '\f11c';
+}
+
+.si-mg::before {
+    content: '\f11d';
+}
+
+.si-microeditor::before {
+    content: '\f11e';
+}
+
+.si-microbit::before {
+    content: '\f11f';
+}
+
+.si-microdotblog::before {
+    content: '\f120';
+}
+
+.si-micropython::before {
+    content: '\f121';
+}
+
+.si-microstation::before {
+    content: '\f122';
+}
+
+.si-microstrategy::before {
+    content: '\f123';
+}
+
+.si-midi::before {
+    content: '\f124';
+}
+
+.si-migadu::before {
+    content: '\f125';
+}
+
+.si-mihon::before {
+    content: '\f126';
+}
+
+.si-mihoyo::before {
+    content: '\f127';
+}
+
+.si-mikrotik::before {
+    content: '\f128';
+}
+
+.si-milanote::before {
+    content: '\f129';
+}
+
+.si-milvus::before {
+    content: '\f12a';
+}
+
+.si-minds::before {
+    content: '\f12b';
+}
+
+.si-mingww64::before {
+    content: '\f12c';
+}
+
+.si-mini::before {
+    content: '\f12d';
+}
+
+.si-minimax::before {
+    content: '\f12e';
+}
+
+.si-minio::before {
+    content: '\f12f';
+}
+
+.si-mintlify::before {
+    content: '\f130';
+}
+
+.si-minutemailer::before {
+    content: '\f131';
+}
+
+.si-miraheze::before {
+    content: '\f132';
+}
+
+.si-miro::before {
+    content: '\f133';
+}
+
+.si-misskey::before {
+    content: '\f134';
+}
+
+.si-mistralai::before {
+    content: '\f135';
+}
+
+.si-mitsubishi::before {
+    content: '\f136';
+}
+
+.si-mix::before {
+    content: '\f137';
+}
+
+.si-mixcloud::before {
+    content: '\f138';
+}
+
+.si-mixpanel::before {
+    content: '\f139';
+}
+
+.si-mlb::before {
+    content: '\f13a';
+}
+
+.si-mlflow::before {
+    content: '\f13b';
+}
+
+.si-mobx::before {
+    content: '\f13c';
+}
+
+.si-mobxstatetree::before {
+    content: '\f13d';
+}
+
+.si-mocha::before {
+    content: '\f13e';
+}
+
+.si-mockserviceworker::before {
+    content: '\f13f';
+}
+
+.si-modal::before {
+    content: '\f140';
+}
+
+.si-modelcontextprotocol::before {
+    content: '\f141';
+}
+
+.si-modelscope::before {
+    content: '\f142';
+}
+
+.si-modin::before {
+    content: '\f143';
+}
+
+.si-modrinth::before {
+    content: '\f144';
+}
+
+.si-modx::before {
+    content: '\f145';
+}
+
+.si-mojeek::before {
+    content: '\f146';
+}
+
+.si-moleculer::before {
+    content: '\f147';
+}
+
+.si-momenteo::before {
+    content: '\f148';
+}
+
+.si-monero::before {
+    content: '\f149';
+}
+
+.si-moneygram::before {
+    content: '\f14a';
+}
+
+.si-mongodb::before {
+    content: '\f14b';
+}
+
+.si-mongoose::before {
+    content: '\f14c';
+}
+
+.si-mongoosedotws::before {
+    content: '\f14d';
+}
+
+.si-monica::before {
+    content: '\f14e';
+}
+
+.si-monkeytie::before {
+    content: '\f14f';
+}
+
+.si-monkeytype::before {
+    content: '\f150';
+}
+
+.si-monogame::before {
+    content: '\f151';
+}
+
+.si-monoprix::before {
+    content: '\f152';
+}
+
+.si-monster::before {
+    content: '\f153';
+}
+
+.si-monzo::before {
+    content: '\f154';
+}
+
+.si-moo::before {
+    content: '\f155';
+}
+
+.si-moodle::before {
+    content: '\f156';
+}
+
+.si-moonrepo::before {
+    content: '\f157';
+}
+
+.si-moq::before {
+    content: '\f158';
+}
+
+.si-moqups::before {
+    content: '\f159';
+}
+
+.si-morrisons::before {
+    content: '\f15a';
+}
+
+.si-moscowmetro::before {
+    content: '\f15b';
+}
+
+.si-motorola::before {
+    content: '\f15c';
+}
+
+.si-movistar::before {
+    content: '\f15d';
+}
+
+.si-mozilla::before {
+    content: '\f15e';
+}
+
+.si-mpv::before {
+    content: '\f15f';
+}
+
+.si-mqtt::before {
+    content: '\f160';
+}
+
+.si-msi::before {
+    content: '\f161';
+}
+
+.si-msibusiness::before {
+    content: '\f162';
+}
+
+.si-mta::before {
+    content: '\f163';
+}
+
+.si-mtr::before {
+    content: '\f164';
+}
+
+.si-mubi::before {
+    content: '\f165';
+}
+
+.si-mui::before {
+    content: '\f166';
+}
+
+.si-muller::before {
+    content: '\f167';
+}
+
+.si-mullvad::before {
+    content: '\f168';
+}
+
+.si-multisim::before {
+    content: '\f169';
+}
+
+.si-mumble::before {
+    content: '\f16a';
+}
+
+.si-muo::before {
+    content: '\f16b';
+}
+
+.si-mural::before {
+    content: '\f16c';
+}
+
+.si-musicbrainz::before {
+    content: '\f16d';
+}
+
+.si-mxlinux::before {
+    content: '\f16e';
+}
+
+.si-myanimelist::before {
+    content: '\f16f';
+}
+
+.si-myget::before {
+    content: '\f170';
+}
+
+.si-myob::before {
+    content: '\f171';
+}
+
+.si-myshows::before {
+    content: '\f172';
+}
+
+.si-myspace::before {
+    content: '\f173';
+}
+
+.si-mysql::before {
+    content: '\f174';
+}
+
+.si-n26::before {
+    content: '\f175';
+}
+
+.si-n8n::before {
+    content: '\f176';
+}
+
+.si-namebase::before {
+    content: '\f177';
+}
+
+.si-namecheap::before {
+    content: '\f178';
+}
+
+.si-namemc::before {
+    content: '\f179';
+}
+
+.si-namesilo::before {
+    content: '\f17a';
+}
+
+.si-namuwiki::before {
+    content: '\f17b';
+}
+
+.si-nano::before {
+    content: '\f17c';
+}
+
+.si-nanostores::before {
+    content: '\f17d';
+}
+
+.si-napster::before {
+    content: '\f17e';
+}
+
+.si-nasa::before {
+    content: '\f17f';
+}
+
+.si-nationalgrid::before {
+    content: '\f180';
+}
+
+.si-nationalrail::before {
+    content: '\f181';
+}
+
+.si-nativescript::before {
+    content: '\f182';
+}
+
+.si-natsdotio::before {
+    content: '\f183';
+}
+
+.si-naver::before {
+    content: '\f184';
+}
+
+.si-nba::before {
+    content: '\f185';
+}
+
+.si-nbb::before {
+    content: '\f186';
+}
+
+.si-nbc::before {
+    content: '\f187';
+}
+
+.si-ndi::before {
+    content: '\f188';
+}
+
+.si-ndr::before {
+    content: '\f189';
+}
+
+.si-near::before {
+    content: '\f18a';
+}
+
+.si-nebula::before {
+    content: '\f18b';
+}
+
+.si-nec::before {
+    content: '\f18c';
+}
+
+.si-nederlandsespoorwegen::before {
+    content: '\f18d';
+}
+
+.si-neo4j::before {
+    content: '\f18e';
+}
+
+.si-neovim::before {
+    content: '\f18f';
+}
+
+.si-neptune::before {
+    content: '\f190';
+}
+
+.si-nestjs::before {
+    content: '\f191';
+}
+
+.si-netapp::before {
+    content: '\f192';
+}
+
+.si-netbsd::before {
+    content: '\f193';
+}
+
+.si-netcup::before {
+    content: '\f194';
+}
+
+.si-netdata::before {
+    content: '\f195';
+}
+
+.si-neteasecloudmusic::before {
+    content: '\f196';
+}
+
+.si-netflix::before {
+    content: '\f197';
+}
+
+.si-netgear::before {
+    content: '\f198';
+}
+
+.si-netim::before {
+    content: '\f199';
+}
+
+.si-netlify::before {
+    content: '\f19a';
+}
+
+.si-nette::before {
+    content: '\f19b';
+}
+
+.si-netto::before {
+    content: '\f19c';
+}
+
+.si-neutralinojs::before {
+    content: '\f19d';
+}
+
+.si-newbalance::before {
+    content: '\f19e';
+}
+
+.si-newjapanprowrestling::before {
+    content: '\f19f';
+}
+
+.si-newrelic::before {
+    content: '\f1a0';
+}
+
+.si-newyorktimes::before {
+    content: '\f1a1';
+}
+
+.si-newegg::before {
+    content: '\f1a2';
+}
+
+.si-newgrounds::before {
+    content: '\f1a3';
+}
+
+.si-newpipe::before {
+    content: '\f1a4';
+}
+
+.si-nexon::before {
+    content: '\f1a5';
+}
+
+.si-nextdotjs::before {
+    content: '\f1a6';
+}
+
+.si-nextbike::before {
+    content: '\f1a7';
+}
+
+.si-nextbilliondotai::before {
+    content: '\f1a8';
+}
+
+.si-nextcloud::before {
+    content: '\f1a9';
+}
+
+.si-nextdns::before {
+    content: '\f1aa';
+}
+
+.si-nextdoor::before {
+    content: '\f1ab';
+}
+
+.si-nextflow::before {
+    content: '\f1ac';
+}
+
+.si-nextra::before {
+    content: '\f1ad';
+}
+
+.si-nfcore::before {
+    content: '\f1ae';
+}
+
+.si-nfc::before {
+    content: '\f1af';
+}
+
+.si-nginx::before {
+    content: '\f1b0';
+}
+
+.si-nginxproxymanager::before {
+    content: '\f1b1';
+}
+
+.si-ngrok::before {
+    content: '\f1b2';
+}
+
+.si-ngrx::before {
+    content: '\f1b3';
+}
+
+.si-nhl::before {
+    content: '\f1b4';
+}
+
+.si-nhost::before {
+    content: '\f1b5';
+}
+
+.si-nicehash::before {
+    content: '\f1b6';
+}
+
+.si-niconico::before {
+    content: '\f1b7';
+}
+
+.si-nike::before {
+    content: '\f1b8';
+}
+
+.si-nikon::before {
+    content: '\f1b9';
+}
+
+.si-nim::before {
+    content: '\f1ba';
+}
+
+.si-niri::before {
+    content: '\f1bb';
+}
+
+.si-nissan::before {
+    content: '\f1bc';
+}
+
+.si-nixos::before {
+    content: '\f1bd';
+}
+
+.si-nobaralinux::before {
+    content: '\f1be';
+}
+
+.si-nodered::before {
+    content: '\f1bf';
+}
+
+.si-nodedotjs::before {
+    content: '\f1c0';
+}
+
+.si-nodebb::before {
+    content: '\f1c1';
+}
+
+.si-nodegui::before {
+    content: '\f1c2';
+}
+
+.si-nodemon::before {
+    content: '\f1c3';
+}
+
+.si-nokia::before {
+    content: '\f1c4';
+}
+
+.si-nomad::before {
+    content: '\f1c5';
+}
+
+.si-norco::before {
+    content: '\f1c6';
+}
+
+.si-nordicsemiconductor::before {
+    content: '\f1c7';
+}
+
+.si-nordvpn::before {
+    content: '\f1c8';
+}
+
+.si-normalizedotcss::before {
+    content: '\f1c9';
+}
+
+.si-norton::before {
+    content: '\f1ca';
+}
+
+.si-norwegian::before {
+    content: '\f1cb';
+}
+
+.si-note::before {
+    content: '\f1cc';
+}
+
+.si-notebooklm::before {
+    content: '\f1cd';
+}
+
+.si-notepadplusplus::before {
+    content: '\f1ce';
+}
+
+.si-notion::before {
+    content: '\f1cf';
+}
+
+.si-notist::before {
+    content: '\f1d0';
+}
+
+.si-nounproject::before {
+    content: '\f1d1';
+}
+
+.si-novu::before {
+    content: '\f1d2';
+}
+
+.si-now::before {
+    content: '\f1d3';
+}
+
+.si-npm::before {
+    content: '\f1d4';
+}
+
+.si-nrwl::before {
+    content: '\f1d5';
+}
+
+.si-nsis::before {
+    content: '\f1d6';
+}
+
+.si-ntfy::before {
+    content: '\f1d7';
+}
+
+.si-nubank::before {
+    content: '\f1d8';
+}
+
+.si-nucleo::before {
+    content: '\f1d9';
+}
+
+.si-nuget::before {
+    content: '\f1da';
+}
+
+.si-nuke::before {
+    content: '\f1db';
+}
+
+.si-numba::before {
+    content: '\f1dc';
+}
+
+.si-numpy::before {
+    content: '\f1dd';
+}
+
+.si-nunjucks::before {
+    content: '\f1de';
+}
+
+.si-nushell::before {
+    content: '\f1df';
+}
+
+.si-nutanix::before {
+    content: '\f1e0';
+}
+
+.si-nuxt::before {
+    content: '\f1e1';
+}
+
+.si-nvidia::before {
+    content: '\f1e2';
+}
+
+.si-nvm::before {
+    content: '\f1e3';
+}
+
+.si-nx::before {
+    content: '\f1e4';
+}
+
+.si-nxp::before {
+    content: '\f1e5';
+}
+
+.si-nzxt::before {
+    content: '\f1e6';
+}
+
+.si-oreilly::before {
+    content: '\f1e7';
+}
+
+.si-o2::before {
+    content: '\f1e8';
+}
+
+.si-obb::before {
+    content: '\f1e9';
+}
+
+.si-obsstudio::before {
+    content: '\f1ea';
+}
+
+.si-observable::before {
+    content: '\f1eb';
+}
+
+.si-obsidian::before {
+    content: '\f1ec';
+}
+
+.si-obtainium::before {
+    content: '\f1ed';
+}
+
+.si-ocaml::before {
+    content: '\f1ee';
+}
+
+.si-oclc::before {
+    content: '\f1ef';
+}
+
+.si-oclif::before {
+    content: '\f1f0';
+}
+
+.si-octanerender::before {
+    content: '\f1f1';
+}
+
+.si-octave::before {
+    content: '\f1f2';
+}
+
+.si-octobercms::before {
+    content: '\f1f3';
+}
+
+.si-octoprint::before {
+    content: '\f1f4';
+}
+
+.si-octopusdeploy::before {
+    content: '\f1f5';
+}
+
+.si-oculus::before {
+    content: '\f1f6';
+}
+
+.si-odido::before {
+    content: '\f1f7';
+}
+
+.si-odin::before {
+    content: '\f1f8';
+}
+
+.si-odnoklassniki::before {
+    content: '\f1f9';
+}
+
+.si-odoo::before {
+    content: '\f1fa';
+}
+
+.si-odysee::before {
+    content: '\f1fb';
+}
+
+.si-ohdear::before {
+    content: '\f1fc';
+}
+
+.si-okcupid::before {
+    content: '\f1fd';
+}
+
+.si-okta::before {
+    content: '\f1fe';
+}
+
+.si-okx::before {
+    content: '\f1ff';
+}
+
+.si-ollama::before {
+    content: '\f200';
+}
+
+.si-omadacloud::before {
+    content: '\f201';
+}
+
+.si-omarchy::before {
+    content: '\f202';
+}
+
+.si-oneplus::before {
+    content: '\f203';
+}
+
+.si-onestream::before {
+    content: '\f204';
+}
+
+.si-onlyfans::before {
+    content: '\f205';
+}
+
+.si-onlyoffice::before {
+    content: '\f206';
+}
+
+.si-onnx::before {
+    content: '\f207';
+}
+
+.si-onstar::before {
+    content: '\f208';
+}
+
+.si-opel::before {
+    content: '\f209';
+}
+
+.si-openaccess::before {
+    content: '\f20a';
+}
+
+.si-openbadges::before {
+    content: '\f20b';
+}
+
+.si-openbugbounty::before {
+    content: '\f20c';
+}
+
+.si-opencollective::before {
+    content: '\f20d';
+}
+
+.si-opencontainersinitiative::before {
+    content: '\f20e';
+}
+
+.si-opensourcehardware::before {
+    content: '\f20f';
+}
+
+.si-opensourceinitiative::before {
+    content: '\f210';
+}
+
+.si-open3d::before {
+    content: '\f211';
+}
+
+.si-openaigym::before {
+    content: '\f212';
+}
+
+.si-openapiinitiative::before {
+    content: '\f213';
+}
+
+.si-openbsd::before {
+    content: '\f214';
+}
+
+.si-opencage::before {
+    content: '\f215';
+}
+
+.si-opencritic::before {
+    content: '\f216';
+}
+
+.si-opencv::before {
+    content: '\f217';
+}
+
+.si-openfaas::before {
+    content: '\f218';
+}
+
+.si-opengl::before {
+    content: '\f219';
+}
+
+.si-openhab::before {
+    content: '\f21a';
+}
+
+.si-openid::before {
+    content: '\f21b';
+}
+
+.si-openjdk::before {
+    content: '\f21c';
+}
+
+.si-openjsfoundation::before {
+    content: '\f21d';
+}
+
+.si-openlayers::before {
+    content: '\f21e';
+}
+
+.si-openmediavault::before {
+    content: '\f21f';
+}
+
+.si-openmined::before {
+    content: '\f220';
+}
+
+.si-opennebula::before {
+    content: '\f221';
+}
+
+.si-openproject::before {
+    content: '\f222';
+}
+
+.si-openrouter::before {
+    content: '\f223';
+}
+
+.si-openscad::before {
+    content: '\f224';
+}
+
+.si-opensea::before {
+    content: '\f225';
+}
+
+.si-opensearch::before {
+    content: '\f226';
+}
+
+.si-openssl::before {
+    content: '\f227';
+}
+
+.si-openstack::before {
+    content: '\f228';
+}
+
+.si-openstreetmap::before {
+    content: '\f229';
+}
+
+.si-opensuse::before {
+    content: '\f22a';
+}
+
+.si-opentelemetry::before {
+    content: '\f22b';
+}
+
+.si-opentext::before {
+    content: '\f22c';
+}
+
+.si-opentofu::before {
+    content: '\f22d';
+}
+
+.si-openverse::before {
+    content: '\f22e';
+}
+
+.si-openvpn::before {
+    content: '\f22f';
+}
+
+.si-openwrt::before {
+    content: '\f230';
+}
+
+.si-openzeppelin::before {
+    content: '\f231';
+}
+
+.si-openzfs::before {
+    content: '\f232';
+}
+
+.si-opera::before {
+    content: '\f233';
+}
+
+.si-operagx::before {
+    content: '\f234';
+}
+
+.si-opnsense::before {
+    content: '\f235';
+}
+
+.si-oppo::before {
+    content: '\f236';
+}
+
+.si-opsgenie::before {
+    content: '\f237';
+}
+
+.si-opslevel::before {
+    content: '\f238';
+}
+
+.si-optimism::before {
+    content: '\f239';
+}
+
+.si-optuna::before {
+    content: '\f23a';
+}
+
+.si-orange::before {
+    content: '\f23b';
+}
+
+.si-orchardcore::before {
+    content: '\f23c';
+}
+
+.si-orcid::before {
+    content: '\f23d';
+}
+
+.si-org::before {
+    content: '\f23e';
+}
+
+.si-organicmaps::before {
+    content: '\f23f';
+}
+
+.si-origin::before {
+    content: '\f240';
+}
+
+.si-ory::before {
+    content: '\f241';
+}
+
+.si-osano::before {
+    content: '\f242';
+}
+
+.si-osf::before {
+    content: '\f243';
+}
+
+.si-osgeo::before {
+    content: '\f244';
+}
+
+.si-oshkosh::before {
+    content: '\f245';
+}
+
+.si-osmand::before {
+    content: '\f246';
+}
+
+.si-osmc::before {
+    content: '\f247';
+}
+
+.si-osu::before {
+    content: '\f248';
+}
+
+.si-otto::before {
+    content: '\f249';
+}
+
+.si-outline::before {
+    content: '\f24a';
+}
+
+.si-overcast::before {
+    content: '\f24b';
+}
+
+.si-overleaf::before {
+    content: '\f24c';
+}
+
+.si-ovh::before {
+    content: '\f24d';
+}
+
+.si-owasp::before {
+    content: '\f24e';
+}
+
+.si-dependencycheck::before {
+    content: '\f24f';
+}
+
+.si-owncloud::before {
+    content: '\f250';
+}
+
+.si-oxc::before {
+    content: '\f251';
+}
+
+.si-oxygen::before {
+    content: '\f252';
+}
+
+.si-oyo::before {
+    content: '\f253';
+}
+
+.si-p5dotjs::before {
+    content: '\f254';
+}
+
+.si-packagist::before {
+    content: '\f255';
+}
+
+.si-packer::before {
+    content: '\f256';
+}
+
+.si-packt::before {
+    content: '\f257';
+}
+
+.si-paddle::before {
+    content: '\f258';
+}
+
+.si-paddlepaddle::before {
+    content: '\f259';
+}
+
+.si-paddypower::before {
+    content: '\f25a';
+}
+
+.si-padlet::before {
+    content: '\f25b';
+}
+
+.si-pagekit::before {
+    content: '\f25c';
+}
+
+.si-pagerduty::before {
+    content: '\f25d';
+}
+
+.si-pagespeedinsights::before {
+    content: '\f25e';
+}
+
+.si-pagseguro::before {
+    content: '\f25f';
+}
+
+.si-palantir::before {
+    content: '\f260';
+}
+
+.si-paloaltonetworks::before {
+    content: '\f261';
+}
+
+.si-paloaltosoftware::before {
+    content: '\f262';
+}
+
+.si-panasonic::before {
+    content: '\f263';
+}
+
+.si-pandas::before {
+    content: '\f264';
+}
+
+.si-pandoc::before {
+    content: '\f265';
+}
+
+.si-pandora::before {
+    content: '\f266';
+}
+
+.si-pantheon::before {
+    content: '\f267';
+}
+
+.si-paperlessngx::before {
+    content: '\f268';
+}
+
+.si-paperswithcode::before {
+    content: '\f269';
+}
+
+.si-paperspace::before {
+    content: '\f26a';
+}
+
+.si-paradoxinteractive::before {
+    content: '\f26b';
+}
+
+.si-paramountplus::before {
+    content: '\f26c';
+}
+
+.si-paritysubstrate::before {
+    content: '\f26d';
+}
+
+.si-parrotsecurity::before {
+    content: '\f26e';
+}
+
+.si-parsedotly::before {
+    content: '\f26f';
+}
+
+.si-passbolt::before {
+    content: '\f270';
+}
+
+.si-passport::before {
+    content: '\f271';
+}
+
+.si-pastebin::before {
+    content: '\f272';
+}
+
+.si-patreon::before {
+    content: '\f273';
+}
+
+.si-payback::before {
+    content: '\f274';
+}
+
+.si-paychex::before {
+    content: '\f275';
+}
+
+.si-payhip::before {
+    content: '\f276';
+}
+
+.si-payloadcms::before {
+    content: '\f277';
+}
+
+.si-payoneer::before {
+    content: '\f278';
+}
+
+.si-paypal::before {
+    content: '\f279';
+}
+
+.si-paysafe::before {
+    content: '\f27a';
+}
+
+.si-paytm::before {
+    content: '\f27b';
+}
+
+.si-pcgamingwiki::before {
+    content: '\f27c';
+}
+
+.si-pdm::before {
+    content: '\f27d';
+}
+
+.si-pdq::before {
+    content: '\f27e';
+}
+
+.si-peakdesign::before {
+    content: '\f27f';
+}
+
+.si-pearson::before {
+    content: '\f280';
+}
+
+.si-peerlist::before {
+    content: '\f281';
+}
+
+.si-peertube::before {
+    content: '\f282';
+}
+
+.si-pegasusairlines::before {
+    content: '\f283';
+}
+
+.si-pelican::before {
+    content: '\f284';
+}
+
+.si-peloton::before {
+    content: '\f285';
+}
+
+.si-penny::before {
+    content: '\f286';
+}
+
+.si-penpot::before {
+    content: '\f287';
+}
+
+.si-percy::before {
+    content: '\f288';
+}
+
+.si-perforce::before {
+    content: '\f289';
+}
+
+.si-perl::before {
+    content: '\f28a';
+}
+
+.si-perplexity::before {
+    content: '\f28b';
+}
+
+.si-persistent::before {
+    content: '\f28c';
+}
+
+.si-personio::before {
+    content: '\f28d';
+}
+
+.si-petsathome::before {
+    content: '\f28e';
+}
+
+.si-peugeot::before {
+    content: '\f28f';
+}
+
+.si-pexels::before {
+    content: '\f290';
+}
+
+.si-pfsense::before {
+    content: '\f291';
+}
+
+.si-phabricator::before {
+    content: '\f292';
+}
+
+.si-philipshue::before {
+    content: '\f293';
+}
+
+.si-phoenixframework::before {
+    content: '\f294';
+}
+
+.si-phonepe::before {
+    content: '\f295';
+}
+
+.si-phosphoricons::before {
+    content: '\f296';
+}
+
+.si-photobucket::before {
+    content: '\f297';
+}
+
+.si-photocrowd::before {
+    content: '\f298';
+}
+
+.si-photon::before {
+    content: '\f299';
+}
+
+.si-photopea::before {
+    content: '\f29a';
+}
+
+.si-php::before {
+    content: '\f29b';
+}
+
+.si-phpbb::before {
+    content: '\f29c';
+}
+
+.si-phpmyadmin::before {
+    content: '\f29d';
+}
+
+.si-phpstorm::before {
+    content: '\f29e';
+}
+
+.si-pinetwork::before {
+    content: '\f29f';
+}
+
+.si-pihole::before {
+    content: '\f2a0';
+}
+
+.si-piaggiogroup::before {
+    content: '\f2a1';
+}
+
+.si-piapro::before {
+    content: '\f2a2';
+}
+
+.si-picardsurgeles::before {
+    content: '\f2a3';
+}
+
+.si-picartodottv::before {
+    content: '\f2a4';
+}
+
+.si-picnic::before {
+    content: '\f2a5';
+}
+
+.si-picpay::before {
+    content: '\f2a6';
+}
+
+.si-picrew::before {
+    content: '\f2a7';
+}
+
+.si-picsart::before {
+    content: '\f2a8';
+}
+
+.si-picxy::before {
+    content: '\f2a9';
+}
+
+.si-pimcore::before {
+    content: '\f2aa';
+}
+
+.si-pinboard::before {
+    content: '\f2ab';
+}
+
+.si-pinescript::before {
+    content: '\f2ac';
+}
+
+.si-pingdom::before {
+    content: '\f2ad';
+}
+
+.si-pinia::before {
+    content: '\f2ae';
+}
+
+.si-pino::before {
+    content: '\f2af';
+}
+
+.si-pinterest::before {
+    content: '\f2b0';
+}
+
+.si-pioneerdj::before {
+    content: '\f2b1';
+}
+
+.si-pipecat::before {
+    content: '\f2b2';
+}
+
+.si-piped::before {
+    content: '\f2b3';
+}
+
+.si-pipx::before {
+    content: '\f2b4';
+}
+
+.si-pivotaltracker::before {
+    content: '\f2b5';
+}
+
+.si-piwigo::before {
+    content: '\f2b6';
+}
+
+.si-pix::before {
+    content: '\f2b7';
+}
+
+.si-pixabay::before {
+    content: '\f2b8';
+}
+
+.si-pixelfed::before {
+    content: '\f2b9';
+}
+
+.si-pixiv::before {
+    content: '\f2ba';
+}
+
+.si-pixlr::before {
+    content: '\f2bb';
+}
+
+.si-pkgsrc::before {
+    content: '\f2bc';
+}
+
+.si-plane::before {
+    content: '\f2bd';
+}
+
+.si-planet::before {
+    content: '\f2be';
+}
+
+.si-planetscale::before {
+    content: '\f2bf';
+}
+
+.si-plangrid::before {
+    content: '\f2c0';
+}
+
+.si-platformdotsh::before {
+    content: '\f2c1';
+}
+
+.si-platformio::before {
+    content: '\f2c2';
+}
+
+.si-platzi::before {
+    content: '\f2c3';
+}
+
+.si-plausibleanalytics::before {
+    content: '\f2c4';
+}
+
+.si-playcanvas::before {
+    content: '\f2c5';
+}
+
+.si-playerfm::before {
+    content: '\f2c6';
+}
+
+.si-playerdotme::before {
+    content: '\f2c7';
+}
+
+.si-playstation::before {
+    content: '\f2c8';
+}
+
+.si-playstation2::before {
+    content: '\f2c9';
+}
+
+.si-playstation3::before {
+    content: '\f2ca';
+}
+
+.si-playstation4::before {
+    content: '\f2cb';
+}
+
+.si-playstation5::before {
+    content: '\f2cc';
+}
+
+.si-playstationportable::before {
+    content: '\f2cd';
+}
+
+.si-playstationvita::before {
+    content: '\f2ce';
+}
+
+.si-pleroma::before {
+    content: '\f2cf';
+}
+
+.si-plesk::before {
+    content: '\f2d0';
+}
+
+.si-plex::before {
+    content: '\f2d1';
+}
+
+.si-plotly::before {
+    content: '\f2d2';
+}
+
+.si-plume::before {
+    content: '\f2d3';
+}
+
+.si-pluralsight::before {
+    content: '\f2d4';
+}
+
+.si-plurk::before {
+    content: '\f2d5';
+}
+
+.si-pm2::before {
+    content: '\f2d6';
+}
+
+.si-pnpm::before {
+    content: '\f2d7';
+}
+
+.si-pocketcasts::before {
+    content: '\f2d8';
+}
+
+.si-pocketbase::before {
+    content: '\f2d9';
+}
+
+.si-podcastaddict::before {
+    content: '\f2da';
+}
+
+.si-podcastindex::before {
+    content: '\f2db';
+}
+
+.si-podman::before {
+    content: '\f2dc';
+}
+
+.si-poe::before {
+    content: '\f2dd';
+}
+
+.si-poetry::before {
+    content: '\f2de';
+}
+
+.si-polars::before {
+    content: '\f2df';
+}
+
+.si-polestar::before {
+    content: '\f2e0';
+}
+
+.si-polkadot::before {
+    content: '\f2e1';
+}
+
+.si-poly::before {
+    content: '\f2e2';
+}
+
+.si-polygon::before {
+    content: '\f2e3';
+}
+
+.si-polymerproject::before {
+    content: '\f2e4';
+}
+
+.si-polywork::before {
+    content: '\f2e5';
+}
+
+.si-pomerium::before {
+    content: '\f2e6';
+}
+
+.si-pond5::before {
+    content: '\f2e7';
+}
+
+.si-popos::before {
+    content: '\f2e8';
+}
+
+.si-porkbun::before {
+    content: '\f2e9';
+}
+
+.si-porsche::before {
+    content: '\f2ea';
+}
+
+.si-portableappsdotcom::before {
+    content: '\f2eb';
+}
+
+.si-portainer::before {
+    content: '\f2ec';
+}
+
+.si-portswigger::before {
+    content: '\f2ed';
+}
+
+.si-posit::before {
+    content: '\f2ee';
+}
+
+.si-postcss::before {
+    content: '\f2ef';
+}
+
+.si-postgresql::before {
+    content: '\f2f0';
+}
+
+.si-posthog::before {
+    content: '\f2f1';
+}
+
+.si-postiz::before {
+    content: '\f2f2';
+}
+
+.si-postman::before {
+    content: '\f2f3';
+}
+
+.si-postmates::before {
+    content: '\f2f4';
+}
+
+.si-powers::before {
+    content: '\f2f5';
+}
+
+.si-prdotco::before {
+    content: '\f2f6';
+}
+
+.si-precommit::before {
+    content: '\f2f7';
+}
+
+.si-preact::before {
+    content: '\f2f8';
+}
+
+.si-prefect::before {
+    content: '\f2f9';
+}
+
+.si-prek::before {
+    content: '\f2fa';
+}
+
+.si-premid::before {
+    content: '\f2fb';
+}
+
+.si-premierleague::before {
+    content: '\f2fc';
+}
+
+.si-prepbytes::before {
+    content: '\f2fd';
+}
+
+.si-prestashop::before {
+    content: '\f2fe';
+}
+
+.si-presto::before {
+    content: '\f2ff';
+}
+
+.si-prettier::before {
+    content: '\f300';
+}
+
+.si-pretzel::before {
+    content: '\f301';
+}
+
+.si-prevention::before {
+    content: '\f302';
+}
+
+.si-prezi::before {
+    content: '\f303';
+}
+
+.si-primefaces::before {
+    content: '\f304';
+}
+
+.si-primeng::before {
+    content: '\f305';
+}
+
+.si-primereact::before {
+    content: '\f306';
+}
+
+.si-primevue::before {
+    content: '\f307';
+}
+
+.si-printables::before {
+    content: '\f308';
+}
+
+.si-prisma::before {
+    content: '\f309';
+}
+
+.si-prismic::before {
+    content: '\f30a';
+}
+
+.si-privatedivision::before {
+    content: '\f30b';
+}
+
+.si-privateinternetaccess::before {
+    content: '\f30c';
+}
+
+.si-protools::before {
+    content: '\f30d';
+}
+
+.si-probot::before {
+    content: '\f30e';
+}
+
+.si-processingfoundation::before {
+    content: '\f30f';
+}
+
+.si-processon::before {
+    content: '\f310';
+}
+
+.si-processwire::before {
+    content: '\f311';
+}
+
+.si-producthunt::before {
+    content: '\f312';
+}
+
+.si-progate::before {
+    content: '\f313';
+}
+
+.si-progress::before {
+    content: '\f314';
+}
+
+.si-prometheus::before {
+    content: '\f315';
+}
+
+.si-pronounsdotpage::before {
+    content: '\f316';
+}
+
+.si-prosieben::before {
+    content: '\f317';
+}
+
+.si-proteus::before {
+    content: '\f318';
+}
+
+.si-protodotio::before {
+    content: '\f319';
+}
+
+.si-protocolsdotio::before {
+    content: '\f31a';
+}
+
+.si-proton::before {
+    content: '\f31b';
+}
+
+.si-protoncalendar::before {
+    content: '\f31c';
+}
+
+.si-protondrive::before {
+    content: '\f31d';
+}
+
+.si-protonmail::before {
+    content: '\f31e';
+}
+
+.si-protonvpn::before {
+    content: '\f31f';
+}
+
+.si-protondb::before {
+    content: '\f320';
+}
+
+.si-protractor::before {
+    content: '\f321';
+}
+
+.si-proxmox::before {
+    content: '\f322';
+}
+
+.si-pterodactyl::before {
+    content: '\f323';
+}
+
+.si-pubg::before {
+    content: '\f324';
+}
+
+.si-publons::before {
+    content: '\f325';
+}
+
+.si-pubmed::before {
+    content: '\f326';
+}
+
+.si-pug::before {
+    content: '\f327';
+}
+
+.si-pulumi::before {
+    content: '\f328';
+}
+
+.si-puma::before {
+    content: '\f329';
+}
+
+.si-puppet::before {
+    content: '\f32a';
+}
+
+.si-puppeteer::before {
+    content: '\f32b';
+}
+
+.si-purescript::before {
+    content: '\f32c';
+}
+
+.si-purgecss::before {
+    content: '\f32d';
+}
+
+.si-purism::before {
+    content: '\f32e';
+}
+
+.si-pushbullet::before {
+    content: '\f32f';
+}
+
+.si-pusher::before {
+    content: '\f330';
+}
+
+.si-pwa::before {
+    content: '\f331';
+}
+
+.si-pycharm::before {
+    content: '\f332';
+}
+
+.si-pycqa::before {
+    content: '\f333';
+}
+
+.si-pydantic::before {
+    content: '\f334';
+}
+
+.si-pyg::before {
+    content: '\f335';
+}
+
+.si-pypi::before {
+    content: '\f336';
+}
+
+.si-pypy::before {
+    content: '\f337';
+}
+
+.si-pyscaffold::before {
+    content: '\f338';
+}
+
+.si-pysyft::before {
+    content: '\f339';
+}
+
+.si-pytest::before {
+    content: '\f33a';
+}
+
+.si-python::before {
+    content: '\f33b';
+}
+
+.si-pythonanywhere::before {
+    content: '\f33c';
+}
+
+.si-pytorch::before {
+    content: '\f33d';
+}
+
+.si-pyup::before {
+    content: '\f33e';
+}
+
+.si-qantas::before {
+    content: '\f33f';
+}
+
+.si-qase::before {
+    content: '\f340';
+}
+
+.si-qatarairways::before {
+    content: '\f341';
+}
+
+.si-qbittorrent::before {
+    content: '\f342';
+}
+
+.si-qemu::before {
+    content: '\f343';
+}
+
+.si-qgis::before {
+    content: '\f344';
+}
+
+.si-qi::before {
+    content: '\f345';
+}
+
+.si-qiita::before {
+    content: '\f346';
+}
+
+.si-qiskit::before {
+    content: '\f347';
+}
+
+.si-qiwi::before {
+    content: '\f348';
+}
+
+.si-qlik::before {
+    content: '\f349';
+}
+
+.si-qlty::before {
+    content: '\f34a';
+}
+
+.si-qmk::before {
+    content: '\f34b';
+}
+
+.si-qnap::before {
+    content: '\f34c';
+}
+
+.si-qodo::before {
+    content: '\f34d';
+}
+
+.si-qq::before {
+    content: '\f34e';
+}
+
+.si-qt::before {
+    content: '\f34f';
+}
+
+.si-quad9::before {
+    content: '\f350';
+}
+
+.si-qualcomm::before {
+    content: '\f351';
+}
+
+.si-qualtrics::before {
+    content: '\f352';
+}
+
+.si-qualys::before {
+    content: '\f353';
+}
+
+.si-quantcast::before {
+    content: '\f354';
+}
+
+.si-quantconnect::before {
+    content: '\f355';
+}
+
+.si-quarkus::before {
+    content: '\f356';
+}
+
+.si-quarto::before {
+    content: '\f357';
+}
+
+.si-quasar::before {
+    content: '\f358';
+}
+
+.si-qubesos::before {
+    content: '\f359';
+}
+
+.si-quest::before {
+    content: '\f35a';
+}
+
+.si-quickbooks::before {
+    content: '\f35b';
+}
+
+.si-quicklook::before {
+    content: '\f35c';
+}
+
+.si-quicktime::before {
+    content: '\f35d';
+}
+
+.si-quicktype::before {
+    content: '\f35e';
+}
+
+.si-quizlet::before {
+    content: '\f35f';
+}
+
+.si-quora::before {
+    content: '\f360';
+}
+
+.si-qwant::before {
+    content: '\f361';
+}
+
+.si-qwik::before {
+    content: '\f362';
+}
+
+.si-qwiklabs::before {
+    content: '\f363';
+}
+
+.si-qzone::before {
+    content: '\f364';
+}
+
+.si-r::before {
+    content: '\f365';
+}
+
+.si-r3::before {
+    content: '\f366';
+}
+
+.si-rabbitmq::before {
+    content: '\f367';
+}
+
+.si-racket::before {
+    content: '\f368';
+}
+
+.si-radstudio::before {
+    content: '\f369';
+}
+
+.si-radar::before {
+    content: '\f36a';
+}
+
+.si-radarr::before {
+    content: '\f36b';
+}
+
+.si-radiofrance::before {
+    content: '\f36c';
+}
+
+.si-radixui::before {
+    content: '\f36d';
+}
+
+.si-railway::before {
+    content: '\f36e';
+}
+
+.si-rainmeter::before {
+    content: '\f36f';
+}
+
+.si-rainyun::before {
+    content: '\f370';
+}
+
+.si-rakuten::before {
+    content: '\f371';
+}
+
+.si-rakutenkobo::before {
+    content: '\f372';
+}
+
+.si-ram::before {
+    content: '\f373';
+}
+
+.si-rancher::before {
+    content: '\f374';
+}
+
+.si-rapid::before {
+    content: '\f375';
+}
+
+.si-rarible::before {
+    content: '\f376';
+}
+
+.si-rasa::before {
+    content: '\f377';
+}
+
+.si-raspberrypi::before {
+    content: '\f378';
+}
+
+.si-ratatui::before {
+    content: '\f379';
+}
+
+.si-ravelry::before {
+    content: '\f37a';
+}
+
+.si-ray::before {
+    content: '\f37b';
+}
+
+.si-raycast::before {
+    content: '\f37c';
+}
+
+.si-raylib::before {
+    content: '\f37d';
+}
+
+.si-razer::before {
+    content: '\f37e';
+}
+
+.si-razorpay::before {
+    content: '\f37f';
+}
+
+.si-rclone::before {
+    content: '\f380';
+}
+
+.si-react::before {
+    content: '\f381';
+}
+
+.si-reactbootstrap::before {
+    content: '\f382';
+}
+
+.si-reacthookform::before {
+    content: '\f383';
+}
+
+.si-reactquery::before {
+    content: '\f384';
+}
+
+.si-reactrouter::before {
+    content: '\f385';
+}
+
+.si-reacttable::before {
+    content: '\f386';
+}
+
+.si-reactiveresume::before {
+    content: '\f387';
+}
+
+.si-reactivex::before {
+    content: '\f388';
+}
+
+.si-reactos::before {
+    content: '\f389';
+}
+
+.si-readthedocs::before {
+    content: '\f38a';
+}
+
+.si-readdotcv::before {
+    content: '\f38b';
+}
+
+.si-readme::before {
+    content: '\f38c';
+}
+
+.si-reason::before {
+    content: '\f38d';
+}
+
+.si-reasonstudios::before {
+    content: '\f38e';
+}
+
+.si-recoil::before {
+    content: '\f38f';
+}
+
+.si-red::before {
+    content: '\f390';
+}
+
+.si-redbull::before {
+    content: '\f391';
+}
+
+.si-redcandlegames::before {
+    content: '\f392';
+}
+
+.si-redhat::before {
+    content: '\f393';
+}
+
+.si-redhatopenshift::before {
+    content: '\f394';
+}
+
+.si-redash::before {
+    content: '\f395';
+}
+
+.si-redbubble::before {
+    content: '\f396';
+}
+
+.si-reddit::before {
+    content: '\f397';
+}
+
+.si-redis::before {
+    content: '\f398';
+}
+
+.si-redmine::before {
+    content: '\f399';
+}
+
+.si-redox::before {
+    content: '\f39a';
+}
+
+.si-redragon::before {
+    content: '\f39b';
+}
+
+.si-redsys::before {
+    content: '\f39c';
+}
+
+.si-redux::before {
+    content: '\f39d';
+}
+
+.si-reduxsaga::before {
+    content: '\f39e';
+}
+
+.si-redwoodjs::before {
+    content: '\f39f';
+}
+
+.si-reebok::before {
+    content: '\f3a0';
+}
+
+.si-refine::before {
+    content: '\f3a1';
+}
+
+.si-refinedgithub::before {
+    content: '\f3a2';
+}
+
+.si-reflex::before {
+    content: '\f3a3';
+}
+
+.si-rekaui::before {
+    content: '\f3a4';
+}
+
+.si-relay::before {
+    content: '\f3a5';
+}
+
+.si-relianceindustrieslimited::before {
+    content: '\f3a6';
+}
+
+.si-remark::before {
+    content: '\f3a7';
+}
+
+.si-remedyentertainment::before {
+    content: '\f3a8';
+}
+
+.si-remix::before {
+    content: '\f3a9';
+}
+
+.si-removedotbg::before {
+    content: '\f3aa';
+}
+
+.si-renpy::before {
+    content: '\f3ab';
+}
+
+.si-renault::before {
+    content: '\f3ac';
+}
+
+.si-render::before {
+    content: '\f3ad';
+}
+
+.si-renovate::before {
+    content: '\f3ae';
+}
+
+.si-renren::before {
+    content: '\f3af';
+}
+
+.si-replicate::before {
+    content: '\f3b0';
+}
+
+.si-replit::before {
+    content: '\f3b1';
+}
+
+.si-republicofgamers::before {
+    content: '\f3b2';
+}
+
+.si-rescript::before {
+    content: '\f3b3';
+}
+
+.si-rescuetime::before {
+    content: '\f3b4';
+}
+
+.si-researchgate::before {
+    content: '\f3b5';
+}
+
+.si-resend::before {
+    content: '\f3b6';
+}
+
+.si-resharper::before {
+    content: '\f3b7';
+}
+
+.si-resurrectionremixos::before {
+    content: '\f3b8';
+}
+
+.si-retool::before {
+    content: '\f3b9';
+}
+
+.si-retroachievements::before {
+    content: '\f3ba';
+}
+
+.si-retroarch::before {
+    content: '\f3bb';
+}
+
+.si-retropie::before {
+    content: '\f3bc';
+}
+
+.si-revanced::before {
+    content: '\f3bd';
+}
+
+.si-revealdotjs::before {
+    content: '\f3be';
+}
+
+.si-revenuecat::before {
+    content: '\f3bf';
+}
+
+.si-reverbnation::before {
+    content: '\f3c0';
+}
+
+.si-revoltdotchat::before {
+    content: '\f3c1';
+}
+
+.si-revolut::before {
+    content: '\f3c2';
+}
+
+.si-rewe::before {
+    content: '\f3c3';
+}
+
+.si-rezgo::before {
+    content: '\f3c4';
+}
+
+.si-rhinoceros::before {
+    content: '\f3c5';
+}
+
+.si-rich::before {
+    content: '\f3c6';
+}
+
+.si-rider::before {
+    content: '\f3c7';
+}
+
+.si-rimacautomobili::before {
+    content: '\f3c8';
+}
+
+.si-rime::before {
+    content: '\f3c9';
+}
+
+.si-ring::before {
+    content: '\f3ca';
+}
+
+.si-riotgames::before {
+    content: '\f3cb';
+}
+
+.si-ripple::before {
+    content: '\f3cc';
+}
+
+.si-riscv::before {
+    content: '\f3cd';
+}
+
+.si-riseup::before {
+    content: '\f3ce';
+}
+
+.si-ritzcarlton::before {
+    content: '\f3cf';
+}
+
+.si-rive::before {
+    content: '\f3d0';
+}
+
+.si-roadmapdotsh::before {
+    content: '\f3d1';
+}
+
+.si-roamresearch::before {
+    content: '\f3d2';
+}
+
+.si-robinhood::before {
+    content: '\f3d3';
+}
+
+.si-roblox::before {
+    content: '\f3d4';
+}
+
+.si-robloxstudio::before {
+    content: '\f3d5';
+}
+
+.si-roboflow::before {
+    content: '\f3d6';
+}
+
+.si-robotframework::before {
+    content: '\f3d7';
+}
+
+.si-rocket::before {
+    content: '\f3d8';
+}
+
+.si-rocketdotchat::before {
+    content: '\f3d9';
+}
+
+.si-rocksdb::before {
+    content: '\f3da';
+}
+
+.si-rockstargames::before {
+    content: '\f3db';
+}
+
+.si-rockwellautomation::before {
+    content: '\f3dc';
+}
+
+.si-rockylinux::before {
+    content: '\f3dd';
+}
+
+.si-roku::before {
+    content: '\f3de';
+}
+
+.si-roll20::before {
+    content: '\f3df';
+}
+
+.si-rollbar::before {
+    content: '\f3e0';
+}
+
+.si-rolldown::before {
+    content: '\f3e1';
+}
+
+.si-rollsroyce::before {
+    content: '\f3e2';
+}
+
+.si-rollupdotjs::before {
+    content: '\f3e3';
+}
+
+.si-rook::before {
+    content: '\f3e4';
+}
+
+.si-roon::before {
+    content: '\f3e5';
+}
+
+.si-root::before {
+    content: '\f3e6';
+}
+
+.si-rootme::before {
+    content: '\f3e7';
+}
+
+.si-roots::before {
+    content: '\f3e8';
+}
+
+.si-rootsbedrock::before {
+    content: '\f3e9';
+}
+
+.si-rootssage::before {
+    content: '\f3ea';
+}
+
+.si-ros::before {
+    content: '\f3eb';
+}
+
+.si-rossmann::before {
+    content: '\f3ec';
+}
+
+.si-rotaryinternational::before {
+    content: '\f3ed';
+}
+
+.si-rottentomatoes::before {
+    content: '\f3ee';
+}
+
+.si-roundcube::before {
+    content: '\f3ef';
+}
+
+.si-rsocket::before {
+    content: '\f3f0';
+}
+
+.si-rss::before {
+    content: '\f3f1';
+}
+
+.si-rstudioide::before {
+    content: '\f3f2';
+}
+
+.si-rte::before {
+    content: '\f3f3';
+}
+
+.si-rtl::before {
+    content: '\f3f4';
+}
+
+.si-rtlzwei::before {
+    content: '\f3f5';
+}
+
+.si-rtm::before {
+    content: '\f3f6';
+}
+
+.si-rubocop::before {
+    content: '\f3f7';
+}
+
+.si-ruby::before {
+    content: '\f3f8';
+}
+
+.si-rubyonrails::before {
+    content: '\f3f9';
+}
+
+.si-rubysinatra::before {
+    content: '\f3fa';
+}
+
+.si-rubygems::before {
+    content: '\f3fb';
+}
+
+.si-rubymine::before {
+    content: '\f3fc';
+}
+
+.si-ruff::before {
+    content: '\f3fd';
+}
+
+.si-rumahweb::before {
+    content: '\f3fe';
+}
+
+.si-rumble::before {
+    content: '\f3ff';
+}
+
+.si-rundeck::before {
+    content: '\f400';
+}
+
+.si-runkeeper::before {
+    content: '\f401';
+}
+
+.si-runkit::before {
+    content: '\f402';
+}
+
+.si-runrundotit::before {
+    content: '\f403';
+}
+
+.si-rust::before {
+    content: '\f404';
+}
+
+.si-rustdesk::before {
+    content: '\f405';
+}
+
+.si-rxdb::before {
+    content: '\f406';
+}
+
+.si-ryanair::before {
+    content: '\f407';
+}
+
+.si-rye::before {
+    content: '\f408';
+}
+
+.si-s7airlines::before {
+    content: '\f409';
+}
+
+.si-sabanci::before {
+    content: '\f40a';
+}
+
+.si-safari::before {
+    content: '\f40b';
+}
+
+.si-sage::before {
+    content: '\f40c';
+}
+
+.si-sagemath::before {
+    content: '\f40d';
+}
+
+.si-sahibinden::before {
+    content: '\f40e';
+}
+
+.si-sailfishos::before {
+    content: '\f40f';
+}
+
+.si-sailsdotjs::before {
+    content: '\f410';
+}
+
+.si-salla::before {
+    content: '\f411';
+}
+
+.si-saltproject::before {
+    content: '\f412';
+}
+
+.si-samsclub::before {
+    content: '\f413';
+}
+
+.si-samsung::before {
+    content: '\f414';
+}
+
+.si-samsungpay::before {
+    content: '\f415';
+}
+
+.si-sanfranciscomunicipalrailway::before {
+    content: '\f416';
+}
+
+.si-sanic::before {
+    content: '\f417';
+}
+
+.si-sanity::before {
+    content: '\f418';
+}
+
+.si-saopaulometro::before {
+    content: '\f419';
+}
+
+.si-sap::before {
+    content: '\f41a';
+}
+
+.si-sartorius::before {
+    content: '\f41b';
+}
+
+.si-sass::before {
+    content: '\f41c';
+}
+
+.si-sat1::before {
+    content: '\f41d';
+}
+
+.si-satellite::before {
+    content: '\f41e';
+}
+
+.si-saturn::before {
+    content: '\f41f';
+}
+
+.si-saucelabs::before {
+    content: '\f420';
+}
+
+.si-saudia::before {
+    content: '\f421';
+}
+
+.si-scala::before {
+    content: '\f422';
+}
+
+.si-scalar::before {
+    content: '\f423';
+}
+
+.si-scaleway::before {
+    content: '\f424';
+}
+
+.si-scan::before {
+    content: '\f425';
+}
+
+.si-scania::before {
+    content: '\f426';
+}
+
+.si-schneiderelectric::before {
+    content: '\f427';
+}
+
+.si-scikitlearn::before {
+    content: '\f428';
+}
+
+.si-scilab::before {
+    content: '\f429';
+}
+
+.si-scipy::before {
+    content: '\f42a';
+}
+
+.si-scopus::before {
+    content: '\f42b';
+}
+
+.si-scpfoundation::before {
+    content: '\f42c';
+}
+
+.si-scrapbox::before {
+    content: '\f42d';
+}
+
+.si-scrapy::before {
+    content: '\f42e';
+}
+
+.si-scratch::before {
+    content: '\f42f';
+}
+
+.si-screencastify::before {
+    content: '\f430';
+}
+
+.si-scrimba::before {
+    content: '\f431';
+}
+
+.si-scrollreveal::before {
+    content: '\f432';
+}
+
+.si-scrumalliance::before {
+    content: '\f433';
+}
+
+.si-scrutinizerci::before {
+    content: '\f434';
+}
+
+.si-scylladb::before {
+    content: '\f435';
+}
+
+.si-seafile::before {
+    content: '\f436';
+}
+
+.si-seagate::before {
+    content: '\f437';
+}
+
+.si-searxng::before {
+    content: '\f438';
+}
+
+.si-seat::before {
+    content: '\f439';
+}
+
+.si-seatgeek::before {
+    content: '\f43a';
+}
+
+.si-securityscorecard::before {
+    content: '\f43b';
+}
+
+.si-sefaria::before {
+    content: '\f43c';
+}
+
+.si-sega::before {
+    content: '\f43d';
+}
+
+.si-selenium::before {
+    content: '\f43e';
+}
+
+.si-sellfy::before {
+    content: '\f43f';
+}
+
+.si-semanticscholar::before {
+    content: '\f440';
+}
+
+.si-semanticui::before {
+    content: '\f441';
+}
+
+.si-semanticuireact::before {
+    content: '\f442';
+}
+
+.si-semanticweb::before {
+    content: '\f443';
+}
+
+.si-semanticrelease::before {
+    content: '\f444';
+}
+
+.si-semaphoreci::before {
+    content: '\f445';
+}
+
+.si-semrush::before {
+    content: '\f446';
+}
+
+.si-semver::before {
+    content: '\f447';
+}
+
+.si-sencha::before {
+    content: '\f448';
+}
+
+.si-sennheiser::before {
+    content: '\f449';
+}
+
+.si-sensu::before {
+    content: '\f44a';
+}
+
+.si-sentry::before {
+    content: '\f44b';
+}
+
+.si-sepa::before {
+    content: '\f44c';
+}
+
+.si-sequelize::before {
+    content: '\f44d';
+}
+
+.si-servbay::before {
+    content: '\f44e';
+}
+
+.si-serverfault::before {
+    content: '\f44f';
+}
+
+.si-serverless::before {
+    content: '\f450';
+}
+
+.si-session::before {
+    content: '\f451';
+}
+
+.si-sessionize::before {
+    content: '\f452';
+}
+
+.si-setapp::before {
+    content: '\f453';
+}
+
+.si-setuptools::before {
+    content: '\f454';
+}
+
+.si-sfml::before {
+    content: '\f455';
+}
+
+.si-shadcnui::before {
+    content: '\f456';
+}
+
+.si-shadow::before {
+    content: '\f457';
+}
+
+.si-shanghaimetro::before {
+    content: '\f458';
+}
+
+.si-sharex::before {
+    content: '\f459';
+}
+
+.si-sharp::before {
+    content: '\f45a';
+}
+
+.si-shazam::before {
+    content: '\f45b';
+}
+
+.si-shell::before {
+    content: '\f45c';
+}
+
+.si-shelly::before {
+    content: '\f45d';
+}
+
+.si-shenzhenmetro::before {
+    content: '\f45e';
+}
+
+.si-shieldsdotio::before {
+    content: '\f45f';
+}
+
+.si-shikimori::before {
+    content: '\f460';
+}
+
+.si-shopee::before {
+    content: '\f461';
+}
+
+.si-shopify::before {
+    content: '\f462';
+}
+
+.si-shopware::before {
+    content: '\f463';
+}
+
+.si-shortcut::before {
+    content: '\f464';
+}
+
+.si-showpad::before {
+    content: '\f465';
+}
+
+.si-showtime::before {
+    content: '\f466';
+}
+
+.si-showwcase::before {
+    content: '\f467';
+}
+
+.si-sidekiq::before {
+    content: '\f468';
+}
+
+.si-sidequest::before {
+    content: '\f469';
+}
+
+.si-siemens::before {
+    content: '\f46a';
+}
+
+.si-sifive::before {
+    content: '\f46b';
+}
+
+.si-signal::before {
+    content: '\f46c';
+}
+
+.si-silverairways::before {
+    content: '\f46d';
+}
+
+.si-similarweb::before {
+    content: '\f46e';
+}
+
+.si-simkl::before {
+    content: '\f46f';
+}
+
+.si-simpleanalytics::before {
+    content: '\f470';
+}
+
+.si-simpleicons::before {
+    content: '\f471';
+}
+
+.si-simplelocalize::before {
+    content: '\f472';
+}
+
+.si-simplelogin::before {
+    content: '\f473';
+}
+
+.si-simplenote::before {
+    content: '\f474';
+}
+
+.si-simplex::before {
+    content: '\f475';
+}
+
+.si-sinaweibo::before {
+    content: '\f476';
+}
+
+.si-singaporeairlines::before {
+    content: '\f477';
+}
+
+.si-singlestore::before {
+    content: '\f478';
+}
+
+.si-sitecore::before {
+    content: '\f479';
+}
+
+.si-sitepoint::before {
+    content: '\f47a';
+}
+
+.si-siyuan::before {
+    content: '\f47b';
+}
+
+.si-skaffold::before {
+    content: '\f47c';
+}
+
+.si-skeleton::before {
+    content: '\f47d';
+}
+
+.si-sketch::before {
+    content: '\f47e';
+}
+
+.si-sketchfab::before {
+    content: '\f47f';
+}
+
+.si-sketchup::before {
+    content: '\f480';
+}
+
+.si-skillshare::before {
+    content: '\f481';
+}
+
+.si-skoda::before {
+    content: '\f482';
+}
+
+.si-sky::before {
+    content: '\f483';
+}
+
+.si-skypack::before {
+    content: '\f484';
+}
+
+.si-slackware::before {
+    content: '\f485';
+}
+
+.si-slashdot::before {
+    content: '\f486';
+}
+
+.si-slickpic::before {
+    content: '\f487';
+}
+
+.si-slides::before {
+    content: '\f488';
+}
+
+.si-slideshare::before {
+    content: '\f489';
+}
+
+.si-slint::before {
+    content: '\f48a';
+}
+
+.si-smart::before {
+    content: '\f48b';
+}
+
+.si-smartthings::before {
+    content: '\f48c';
+}
+
+.si-smashingmagazine::before {
+    content: '\f48d';
+}
+
+.si-smoothcomp::before {
+    content: '\f48e';
+}
+
+.si-smrt::before {
+    content: '\f48f';
+}
+
+.si-smugmug::before {
+    content: '\f490';
+}
+
+.si-snapchat::before {
+    content: '\f491';
+}
+
+.si-snapcraft::before {
+    content: '\f492';
+}
+
+.si-snapdragon::before {
+    content: '\f493';
+}
+
+.si-sncf::before {
+    content: '\f494';
+}
+
+.si-snort::before {
+    content: '\f495';
+}
+
+.si-snowflake::before {
+    content: '\f496';
+}
+
+.si-snowpack::before {
+    content: '\f497';
+}
+
+.si-snyk::before {
+    content: '\f498';
+}
+
+.si-socialblade::before {
+    content: '\f499';
+}
+
+.si-society6::before {
+    content: '\f49a';
+}
+
+.si-socket::before {
+    content: '\f49b';
+}
+
+.si-socketdotio::before {
+    content: '\f49c';
+}
+
+.si-softcatala::before {
+    content: '\f49d';
+}
+
+.si-softpedia::before {
+    content: '\f49e';
+}
+
+.si-sogou::before {
+    content: '\f49f';
+}
+
+.si-solana::before {
+    content: '\f4a0';
+}
+
+.si-solid::before {
+    content: '\f4a1';
+}
+
+.si-solidity::before {
+    content: '\f4a2';
+}
+
+.si-sololearn::before {
+    content: '\f4a3';
+}
+
+.si-solus::before {
+    content: '\f4a4';
+}
+
+.si-sonar::before {
+    content: '\f4a5';
+}
+
+.si-sonarqubecloud::before {
+    content: '\f4a6';
+}
+
+.si-sonarqubeforide::before {
+    content: '\f4a7';
+}
+
+.si-sonarqubeserver::before {
+    content: '\f4a8';
+}
+
+.si-sonarr::before {
+    content: '\f4a9';
+}
+
+.si-sonatype::before {
+    content: '\f4aa';
+}
+
+.si-songkick::before {
+    content: '\f4ab';
+}
+
+.si-songoda::before {
+    content: '\f4ac';
+}
+
+.si-sonicwall::before {
+    content: '\f4ad';
+}
+
+.si-sonos::before {
+    content: '\f4ae';
+}
+
+.si-sony::before {
+    content: '\f4af';
+}
+
+.si-soriana::before {
+    content: '\f4b0';
+}
+
+.si-soundcharts::before {
+    content: '\f4b1';
+}
+
+.si-soundcloud::before {
+    content: '\f4b2';
+}
+
+.si-sourceengine::before {
+    content: '\f4b3';
+}
+
+.si-sourceforge::before {
+    content: '\f4b4';
+}
+
+.si-sourcehut::before {
+    content: '\f4b5';
+}
+
+.si-sourcetree::before {
+    content: '\f4b6';
+}
+
+.si-southwestairlines::before {
+    content: '\f4b7';
+}
+
+.si-spacemacs::before {
+    content: '\f4b8';
+}
+
+.si-spaceship::before {
+    content: '\f4b9';
+}
+
+.si-spacex::before {
+    content: '\f4ba';
+}
+
+.si-spacy::before {
+    content: '\f4bb';
+}
+
+.si-sparkar::before {
+    content: '\f4bc';
+}
+
+.si-sparkasse::before {
+    content: '\f4bd';
+}
+
+.si-sparkfun::before {
+    content: '\f4be';
+}
+
+.si-sparkpost::before {
+    content: '\f4bf';
+}
+
+.si-spdx::before {
+    content: '\f4c0';
+}
+
+.si-speakerdeck::before {
+    content: '\f4c1';
+}
+
+.si-spectrum::before {
+    content: '\f4c2';
+}
+
+.si-speedtest::before {
+    content: '\f4c3';
+}
+
+.si-speedypage::before {
+    content: '\f4c4';
+}
+
+.si-spoj::before {
+    content: '\f4c5';
+}
+
+.si-sphinx::before {
+    content: '\f4c6';
+}
+
+.si-spigotmc::before {
+    content: '\f4c7';
+}
+
+.si-spine::before {
+    content: '\f4c8';
+}
+
+.si-spinnaker::before {
+    content: '\f4c9';
+}
+
+.si-splunk::before {
+    content: '\f4ca';
+}
+
+.si-spond::before {
+    content: '\f4cb';
+}
+
+.si-spotify::before {
+    content: '\f4cc';
+}
+
+.si-spotlight::before {
+    content: '\f4cd';
+}
+
+.si-spreadshirt::before {
+    content: '\f4ce';
+}
+
+.si-spreaker::before {
+    content: '\f4cf';
+}
+
+.si-spring::before {
+    content: '\f4d0';
+}
+
+.si-spring_creators::before {
+    content: '\f4d1';
+}
+
+.si-springboot::before {
+    content: '\f4d2';
+}
+
+.si-springsecurity::before {
+    content: '\f4d3';
+}
+
+.si-spyderide::before {
+    content: '\f4d4';
+}
+
+.si-sqlalchemy::before {
+    content: '\f4d5';
+}
+
+.si-sqlite::before {
+    content: '\f4d6';
+}
+
+.si-square::before {
+    content: '\f4d7';
+}
+
+.si-squareenix::before {
+    content: '\f4d8';
+}
+
+.si-squarespace::before {
+    content: '\f4d9';
+}
+
+.si-srgssr::before {
+    content: '\f4da';
+}
+
+.si-ssrn::before {
+    content: '\f4db';
+}
+
+.si-sst::before {
+    content: '\f4dc';
+}
+
+.si-stackexchange::before {
+    content: '\f4dd';
+}
+
+.si-stackoverflow::before {
+    content: '\f4de';
+}
+
+.si-stackbit::before {
+    content: '\f4df';
+}
+
+.si-stackblitz::before {
+    content: '\f4e0';
+}
+
+.si-stackedit::before {
+    content: '\f4e1';
+}
+
+.si-stackhawk::before {
+    content: '\f4e2';
+}
+
+.si-stackshare::before {
+    content: '\f4e3';
+}
+
+.si-stadia::before {
+    content: '\f4e4';
+}
+
+.si-staffbase::before {
+    content: '\f4e5';
+}
+
+.si-stagetimer::before {
+    content: '\f4e6';
+}
+
+.si-standardresume::before {
+    content: '\f4e7';
+}
+
+.si-standardjs::before {
+    content: '\f4e8';
+}
+
+.si-startrek::before {
+    content: '\f4e9';
+}
+
+.si-starbucks::before {
+    content: '\f4ea';
+}
+
+.si-stardock::before {
+    content: '\f4eb';
+}
+
+.si-starlingbank::before {
+    content: '\f4ec';
+}
+
+.si-starship::before {
+    content: '\f4ed';
+}
+
+.si-startdotgg::before {
+    content: '\f4ee';
+}
+
+.si-startpage::before {
+    content: '\f4ef';
+}
+
+.si-starz::before {
+    content: '\f4f0';
+}
+
+.si-statamic::before {
+    content: '\f4f1';
+}
+
+.si-statista::before {
+    content: '\f4f2';
+}
+
+.si-statuspage::before {
+    content: '\f4f3';
+}
+
+.si-statuspal::before {
+    content: '\f4f4';
+}
+
+.si-steam::before {
+    content: '\f4f5';
+}
+
+.si-steamdeck::before {
+    content: '\f4f6';
+}
+
+.si-steamdb::before {
+    content: '\f4f7';
+}
+
+.si-steamworks::before {
+    content: '\f4f8';
+}
+
+.si-steelseries::before {
+    content: '\f4f9';
+}
+
+.si-steem::before {
+    content: '\f4fa';
+}
+
+.si-steemit::before {
+    content: '\f4fb';
+}
+
+.si-steinberg::before {
+    content: '\f4fc';
+}
+
+.si-stellar::before {
+    content: '\f4fd';
+}
+
+.si-stencil::before {
+    content: '\f4fe';
+}
+
+.si-stencyl::before {
+    content: '\f4ff';
+}
+
+.si-stimulus::before {
+    content: '\f500';
+}
+
+.si-stmicroelectronics::before {
+    content: '\f501';
+}
+
+.si-stockx::before {
+    content: '\f502';
+}
+
+.si-stopstalk::before {
+    content: '\f503';
+}
+
+.si-storyblok::before {
+    content: '\f504';
+}
+
+.si-storybook::before {
+    content: '\f505';
+}
+
+.si-strapi::before {
+    content: '\f506';
+}
+
+.si-strava::before {
+    content: '\f507';
+}
+
+.si-streamlabs::before {
+    content: '\f508';
+}
+
+.si-streamlit::before {
+    content: '\f509';
+}
+
+.si-streamrunners::before {
+    content: '\f50a';
+}
+
+.si-stremio::before {
+    content: '\f50b';
+}
+
+.si-stripe::before {
+    content: '\f50c';
+}
+
+.si-strongswan::before {
+    content: '\f50d';
+}
+
+.si-stryker::before {
+    content: '\f50e';
+}
+
+.si-stubhub::before {
+    content: '\f50f';
+}
+
+.si-studio3t::before {
+    content: '\f510';
+}
+
+.si-styledcomponents::before {
+    content: '\f511';
+}
+
+.si-stylelint::before {
+    content: '\f512';
+}
+
+.si-styleshare::before {
+    content: '\f513';
+}
+
+.si-stylus::before {
+    content: '\f514';
+}
+
+.si-subaru::before {
+    content: '\f515';
+}
+
+.si-sublimetext::before {
+    content: '\f516';
+}
+
+.si-substack::before {
+    content: '\f517';
+}
+
+.si-subtitleedit::before {
+    content: '\f518';
+}
+
+.si-subversion::before {
+    content: '\f519';
+}
+
+.si-suckless::before {
+    content: '\f51a';
+}
+
+.si-sui::before {
+    content: '\f51b';
+}
+
+.si-suitest::before {
+    content: '\f51c';
+}
+
+.si-sumologic::before {
+    content: '\f51d';
+}
+
+.si-suno::before {
+    content: '\f51e';
+}
+
+.si-sunrise::before {
+    content: '\f51f';
+}
+
+.si-supabase::before {
+    content: '\f520';
+}
+
+.si-superuser::before {
+    content: '\f521';
+}
+
+.si-supercell::before {
+    content: '\f522';
+}
+
+.si-supercrease::before {
+    content: '\f523';
+}
+
+.si-supermicro::before {
+    content: '\f524';
+}
+
+.si-surfshark::before {
+    content: '\f525';
+}
+
+.si-surrealdb::before {
+    content: '\f526';
+}
+
+.si-surveymonkey::before {
+    content: '\f527';
+}
+
+.si-suse::before {
+    content: '\f528';
+}
+
+.si-suzuki::before {
+    content: '\f529';
+}
+
+.si-svelte::before {
+    content: '\f52a';
+}
+
+.si-svg::before {
+    content: '\f52b';
+}
+
+.si-svgdotjs::before {
+    content: '\f52c';
+}
+
+.si-svgo::before {
+    content: '\f52d';
+}
+
+.si-svgtrace::before {
+    content: '\f52e';
+}
+
+.si-swagger::before {
+    content: '\f52f';
+}
+
+.si-swarm::before {
+    content: '\f530';
+}
+
+.si-sway::before {
+    content: '\f531';
+}
+
+.si-swc::before {
+    content: '\f532';
+}
+
+.si-swift::before {
+    content: '\f533';
+}
+
+.si-swiggy::before {
+    content: '\f534';
+}
+
+.si-swiper::before {
+    content: '\f535';
+}
+
+.si-swisscows::before {
+    content: '\f536';
+}
+
+.si-swr::before {
+    content: '\f537';
+}
+
+.si-symantec::before {
+    content: '\f538';
+}
+
+.si-symbolab::before {
+    content: '\f539';
+}
+
+.si-symfony::before {
+    content: '\f53a';
+}
+
+.si-symphony::before {
+    content: '\f53b';
+}
+
+.si-sympy::before {
+    content: '\f53c';
+}
+
+.si-syncthing::before {
+    content: '\f53d';
+}
+
+.si-synology::before {
+    content: '\f53e';
+}
+
+.si-system76::before {
+    content: '\f53f';
+}
+
+.si-tabelog::before {
+    content: '\f540';
+}
+
+.si-tablecheck::before {
+    content: '\f541';
+}
+
+.si-tacobell::before {
+    content: '\f542';
+}
+
+.si-tado::before {
+    content: '\f543';
+}
+
+.si-taichigraphics::before {
+    content: '\f544';
+}
+
+.si-taichilang::before {
+    content: '\f545';
+}
+
+.si-tails::before {
+    content: '\f546';
+}
+
+.si-tailscale::before {
+    content: '\f547';
+}
+
+.si-tailwindcss::before {
+    content: '\f548';
+}
+
+.si-taipy::before {
+    content: '\f549';
+}
+
+.si-taketwointeractivesoftware::before {
+    content: '\f54a';
+}
+
+.si-talend::before {
+    content: '\f54b';
+}
+
+.si-talenthouse::before {
+    content: '\f54c';
+}
+
+.si-talos::before {
+    content: '\f54d';
+}
+
+.si-tamiya::before {
+    content: '\f54e';
+}
+
+.si-tampermonkey::before {
+    content: '\f54f';
+}
+
+.si-tanstack::before {
+    content: '\f550';
+}
+
+.si-taobao::before {
+    content: '\f551';
+}
+
+.si-tapas::before {
+    content: '\f552';
+}
+
+.si-target::before {
+    content: '\f553';
+}
+
+.si-tarom::before {
+    content: '\f554';
+}
+
+.si-tarteaucitron::before {
+    content: '\f555';
+}
+
+.si-task::before {
+    content: '\f556';
+}
+
+.si-tasmota::before {
+    content: '\f557';
+}
+
+.si-tata::before {
+    content: '\f558';
+}
+
+.si-tcs::before {
+    content: '\f559';
+}
+
+.si-tauri::before {
+    content: '\f55a';
+}
+
+.si-taxbuzz::before {
+    content: '\f55b';
+}
+
+.si-teal::before {
+    content: '\f55c';
+}
+
+.si-teamcity::before {
+    content: '\f55d';
+}
+
+.si-teamspeak::before {
+    content: '\f55e';
+}
+
+.si-teamviewer::before {
+    content: '\f55f';
+}
+
+.si-techcrunch::before {
+    content: '\f560';
+}
+
+.si-ted::before {
+    content: '\f561';
+}
+
+.si-teepublic::before {
+    content: '\f562';
+}
+
+.si-teespring::before {
+    content: '\f563';
+}
+
+.si-tekton::before {
+    content: '\f564';
+}
+
+.si-tele5::before {
+    content: '\f565';
+}
+
+.si-telequebec::before {
+    content: '\f566';
+}
+
+.si-telefonica::before {
+    content: '\f567';
+}
+
+.si-telegram::before {
+    content: '\f568';
+}
+
+.si-telegraph::before {
+    content: '\f569';
+}
+
+.si-telenor::before {
+    content: '\f56a';
+}
+
+.si-temporal::before {
+    content: '\f56b';
+}
+
+.si-tensorflow::before {
+    content: '\f56c';
+}
+
+.si-teradata::before {
+    content: '\f56d';
+}
+
+.si-teratail::before {
+    content: '\f56e';
+}
+
+.si-termius::before {
+    content: '\f56f';
+}
+
+.si-terraform::before {
+    content: '\f570';
+}
+
+.si-tesco::before {
+    content: '\f571';
+}
+
+.si-tesla::before {
+    content: '\f572';
+}
+
+.si-testcafe::before {
+    content: '\f573';
+}
+
+.si-testin::before {
+    content: '\f574';
+}
+
+.si-testinglibrary::before {
+    content: '\f575';
+}
+
+.si-testrail::before {
+    content: '\f576';
+}
+
+.si-tether::before {
+    content: '\f577';
+}
+
+.si-textpattern::before {
+    content: '\f578';
+}
+
+.si-textual::before {
+    content: '\f579';
+}
+
+.si-tga::before {
+    content: '\f57a';
+}
+
+.si-thangs::before {
+    content: '\f57b';
+}
+
+.si-thanos::before {
+    content: '\f57c';
+}
+
+.si-thealgorithms::before {
+    content: '\f57d';
+}
+
+.si-theboringcompany::before {
+    content: '\f57e';
+}
+
+.si-theconversation::before {
+    content: '\f57f';
+}
+
+.si-thefinals::before {
+    content: '\f580';
+}
+
+.si-theguardian::before {
+    content: '\f581';
+}
+
+.si-theirishtimes::before {
+    content: '\f582';
+}
+
+.si-themighty::before {
+    content: '\f583';
+}
+
+.si-themodelsresource::before {
+    content: '\f584';
+}
+
+.si-themoviedatabase::before {
+    content: '\f585';
+}
+
+.si-thenorthface::before {
+    content: '\f586';
+}
+
+.si-theodinproject::before {
+    content: '\f587';
+}
+
+.si-theplanetarysociety::before {
+    content: '\f588';
+}
+
+.si-theregister::before {
+    content: '\f589';
+}
+
+.si-thesoundsresource::before {
+    content: '\f58a';
+}
+
+.si-thespritersresource::before {
+    content: '\f58b';
+}
+
+.si-thestorygraph::before {
+    content: '\f58c';
+}
+
+.si-thewashingtonpost::before {
+    content: '\f58d';
+}
+
+.si-theweatherchannel::before {
+    content: '\f58e';
+}
+
+.si-thingiverse::before {
+    content: '\f58f';
+}
+
+.si-things::before {
+    content: '\f590';
+}
+
+.si-thinkpad::before {
+    content: '\f591';
+}
+
+.si-thirdweb::before {
+    content: '\f592';
+}
+
+.si-threadless::before {
+    content: '\f593';
+}
+
+.si-threads::before {
+    content: '\f594';
+}
+
+.si-threedotjs::before {
+    content: '\f595';
+}
+
+.si-threema::before {
+    content: '\f596';
+}
+
+.si-thumbtack::before {
+    content: '\f597';
+}
+
+.si-thunderbird::before {
+    content: '\f598';
+}
+
+.si-thunderstore::before {
+    content: '\f599';
+}
+
+.si-thurgauerkantonalbank::before {
+    content: '\f59a';
+}
+
+.si-thymeleaf::before {
+    content: '\f59b';
+}
+
+.si-ticketmaster::before {
+    content: '\f59c';
+}
+
+.si-ticktick::before {
+    content: '\f59d';
+}
+
+.si-tidal::before {
+    content: '\f59e';
+}
+
+.si-tiddlywiki::before {
+    content: '\f59f';
+}
+
+.si-tide::before {
+    content: '\f5a0';
+}
+
+.si-tidyverse::before {
+    content: '\f5a1';
+}
+
+.si-tietoevry::before {
+    content: '\f5a2';
+}
+
+.si-tiktok::before {
+    content: '\f5a3';
+}
+
+.si-tildapublishing::before {
+    content: '\f5a4';
+}
+
+.si-tile::before {
+    content: '\f5a5';
+}
+
+.si-timescale::before {
+    content: '\f5a6';
+}
+
+.si-tina::before {
+    content: '\f5a7';
+}
+
+.si-tinder::before {
+    content: '\f5a8';
+}
+
+.si-tindie::before {
+    content: '\f5a9';
+}
+
+.si-tinkercad::before {
+    content: '\f5aa';
+}
+
+.si-tinygrad::before {
+    content: '\f5ab';
+}
+
+.si-tinyletter::before {
+    content: '\f5ac';
+}
+
+.si-tistory::before {
+    content: '\f5ad';
+}
+
+.si-tldraw::before {
+    content: '\f5ae';
+}
+
+.si-tmux::before {
+    content: '\f5af';
+}
+
+.si-todoist::before {
+    content: '\f5b0';
+}
+
+.si-toggl::before {
+    content: '\f5b1';
+}
+
+.si-toggltrack::before {
+    content: '\f5b2';
+}
+
+.si-tokio::before {
+    content: '\f5b3';
+}
+
+.si-tokyometro::before {
+    content: '\f5b4';
+}
+
+.si-toll::before {
+    content: '\f5b5';
+}
+
+.si-toml::before {
+    content: '\f5b6';
+}
+
+.si-tomorrowland::before {
+    content: '\f5b7';
+}
+
+.si-tomtom::before {
+    content: '\f5b8';
+}
+
+.si-ton::before {
+    content: '\f5b9';
+}
+
+.si-topdotgg::before {
+    content: '\f5ba';
+}
+
+.si-topcoder::before {
+    content: '\f5bb';
+}
+
+.si-toptal::before {
+    content: '\f5bc';
+}
+
+.si-torbrowser::before {
+    content: '\f5bd';
+}
+
+.si-torproject::before {
+    content: '\f5be';
+}
+
+.si-torizon::before {
+    content: '\f5bf';
+}
+
+.si-toshiba::before {
+    content: '\f5c0';
+}
+
+.si-totvs::before {
+    content: '\f5c1';
+}
+
+.si-tourbox::before {
+    content: '\f5c2';
+}
+
+.si-tower::before {
+    content: '\f5c3';
+}
+
+.si-toyota::before {
+    content: '\f5c4';
+}
+
+.si-tplink::before {
+    content: '\f5c5';
+}
+
+.si-tqdm::before {
+    content: '\f5c6';
+}
+
+.si-traccar::before {
+    content: '\f5c7';
+}
+
+.si-tradingview::before {
+    content: '\f5c8';
+}
+
+.si-traefikmesh::before {
+    content: '\f5c9';
+}
+
+.si-traefikproxy::before {
+    content: '\f5ca';
+}
+
+.si-trailforks::before {
+    content: '\f5cb';
+}
+
+.si-trainerroad::before {
+    content: '\f5cc';
+}
+
+.si-trakt::before {
+    content: '\f5cd';
+}
+
+.si-transifex::before {
+    content: '\f5ce';
+}
+
+.si-transmission::before {
+    content: '\f5cf';
+}
+
+.si-transportforireland::before {
+    content: '\f5d0';
+}
+
+.si-transportforlondon::before {
+    content: '\f5d1';
+}
+
+.si-travisci::before {
+    content: '\f5d2';
+}
+
+.si-treehouse::before {
+    content: '\f5d3';
+}
+
+.si-trello::before {
+    content: '\f5d4';
+}
+
+.si-trendmicro::before {
+    content: '\f5d5';
+}
+
+.si-tresorit::before {
+    content: '\f5d6';
+}
+
+.si-treyarch::before {
+    content: '\f5d7';
+}
+
+.si-tricentis::before {
+    content: '\f5d8';
+}
+
+.si-trilium::before {
+    content: '\f5d9';
+}
+
+.si-triller::before {
+    content: '\f5da';
+}
+
+.si-trillertv::before {
+    content: '\f5db';
+}
+
+.si-trimble::before {
+    content: '\f5dc';
+}
+
+.si-trino::before {
+    content: '\f5dd';
+}
+
+.si-tripdotcom::before {
+    content: '\f5de';
+}
+
+.si-tripadvisor::before {
+    content: '\f5df';
+}
+
+.si-trivago::before {
+    content: '\f5e0';
+}
+
+.si-trivy::before {
+    content: '\f5e1';
+}
+
+.si-trove::before {
+    content: '\f5e2';
+}
+
+.si-trpc::before {
+    content: '\f5e3';
+}
+
+.si-truenas::before {
+    content: '\f5e4';
+}
+
+.si-trueup::before {
+    content: '\f5e5';
+}
+
+.si-trulia::before {
+    content: '\f5e6';
+}
+
+.si-trustedshops::before {
+    content: '\f5e7';
+}
+
+.si-trustpilot::before {
+    content: '\f5e8';
+}
+
+.si-tryitonline::before {
+    content: '\f5e9';
+}
+
+.si-tryhackme::before {
+    content: '\f5ea';
+}
+
+.si-tsnode::before {
+    content: '\f5eb';
+}
+
+.si-tubi::before {
+    content: '\f5ec';
+}
+
+.si-tui::before {
+    content: '\f5ed';
+}
+
+.si-tumblr::before {
+    content: '\f5ee';
+}
+
+.si-turbo::before {
+    content: '\f5ef';
+}
+
+.si-turborepo::before {
+    content: '\f5f0';
+}
+
+.si-turbosquid::before {
+    content: '\f5f1';
+}
+
+.si-turkishairlines::before {
+    content: '\f5f2';
+}
+
+.si-turso::before {
+    content: '\f5f3';
+}
+
+.si-tuta::before {
+    content: '\f5f4';
+}
+
+.si-tuxedocomputers::before {
+    content: '\f5f5';
+}
+
+.si-tvtime::before {
+    content: '\f5f6';
+}
+
+.si-tv4play::before {
+    content: '\f5f7';
+}
+
+.si-twenty::before {
+    content: '\f5f8';
+}
+
+.si-twinkly::before {
+    content: '\f5f9';
+}
+
+.si-twinmotion::before {
+    content: '\f5fa';
+}
+
+.si-twitch::before {
+    content: '\f5fb';
+}
+
+.si-typeform::before {
+    content: '\f5fc';
+}
+
+.si-typeorm::before {
+    content: '\f5fd';
+}
+
+.si-typer::before {
+    content: '\f5fe';
+}
+
+.si-typescript::before {
+    content: '\f5ff';
+}
+
+.si-typo3::before {
+    content: '\f600';
+}
+
+.si-typst::before {
+    content: '\f601';
+}
+
+.si-udotsdotnews::before {
+    content: '\f602';
+}
+
+.si-uber::before {
+    content: '\f603';
+}
+
+.si-ubereats::before {
+    content: '\f604';
+}
+
+.si-ubiquiti::before {
+    content: '\f605';
+}
+
+.si-ubisoft::before {
+    content: '\f606';
+}
+
+.si-ublockorigin::before {
+    content: '\f607';
+}
+
+.si-ubuntu::before {
+    content: '\f608';
+}
+
+.si-ubuntumate::before {
+    content: '\f609';
+}
+
+.si-udacity::before {
+    content: '\f60a';
+}
+
+.si-udemy::before {
+    content: '\f60b';
+}
+
+.si-ufc::before {
+    content: '\f60c';
+}
+
+.si-uikit::before {
+    content: '\f60d';
+}
+
+.si-uipath::before {
+    content: '\f60e';
+}
+
+.si-ukca::before {
+    content: '\f60f';
+}
+
+.si-ultralytics::before {
+    content: '\f610';
+}
+
+.si-ulule::before {
+    content: '\f611';
+}
+
+.si-umami::before {
+    content: '\f612';
+}
+
+.si-umbraco::before {
+    content: '\f613';
+}
+
+.si-umbrel::before {
+    content: '\f614';
+}
+
+.si-uml::before {
+    content: '\f615';
+}
+
+.si-unacademy::before {
+    content: '\f616';
+}
+
+.si-underarmour::before {
+    content: '\f617';
+}
+
+.si-underscoredotjs::before {
+    content: '\f618';
+}
+
+.si-undertale::before {
+    content: '\f619';
+}
+
+.si-unicode::before {
+    content: '\f61a';
+}
+
+.si-unilever::before {
+    content: '\f61b';
+}
+
+.si-uniqlo::before {
+    content: '\f61c';
+}
+
+.si-uniqlo_ja::before {
+    content: '\f61d';
+}
+
+.si-unitedairlines::before {
+    content: '\f61e';
+}
+
+.si-unitednations::before {
+    content: '\f61f';
+}
+
+.si-unity::before {
+    content: '\f620';
+}
+
+.si-unjs::before {
+    content: '\f621';
+}
+
+.si-unlicense::before {
+    content: '\f622';
+}
+
+.si-unocss::before {
+    content: '\f623';
+}
+
+.si-unpkg::before {
+    content: '\f624';
+}
+
+.si-unraid::before {
+    content: '\f625';
+}
+
+.si-unrealengine::before {
+    content: '\f626';
+}
+
+.si-unsplash::before {
+    content: '\f627';
+}
+
+.si-unstop::before {
+    content: '\f628';
+}
+
+.si-untappd::before {
+    content: '\f629';
+}
+
+.si-upcloud::before {
+    content: '\f62a';
+}
+
+.si-uphold::before {
+    content: '\f62b';
+}
+
+.si-uplabs::before {
+    content: '\f62c';
+}
+
+.si-upptime::before {
+    content: '\f62d';
+}
+
+.si-ups::before {
+    content: '\f62e';
+}
+
+.si-upstash::before {
+    content: '\f62f';
+}
+
+.si-uptimekuma::before {
+    content: '\f630';
+}
+
+.si-upwork::before {
+    content: '\f631';
+}
+
+.si-uservoice::before {
+    content: '\f632';
+}
+
+.si-usps::before {
+    content: '\f633';
+}
+
+.si-utorrent::before {
+    content: '\f634';
+}
+
+.si-uv::before {
+    content: '\f635';
+}
+
+.si-v::before {
+    content: '\f636';
+}
+
+.si-v0::before {
+    content: '\f637';
+}
+
+.si-v2ex::before {
+    content: '\f638';
+}
+
+.si-v8::before {
+    content: '\f639';
+}
+
+.si-vaadin::before {
+    content: '\f63a';
+}
+
+.si-vagrant::before {
+    content: '\f63b';
+}
+
+.si-vala::before {
+    content: '\f63c';
+}
+
+.si-valorant::before {
+    content: '\f63d';
+}
+
+.si-valve::before {
+    content: '\f63e';
+}
+
+.si-vanillaextract::before {
+    content: '\f63f';
+}
+
+.si-vapor::before {
+    content: '\f640';
+}
+
+.si-vault::before {
+    content: '\f641';
+}
+
+.si-vaultwarden::before {
+    content: '\f642';
+}
+
+.si-vauxhall::before {
+    content: '\f643';
+}
+
+.si-vbulletin::before {
+    content: '\f644';
+}
+
+.si-vectary::before {
+    content: '\f645';
+}
+
+.si-vectorlogozone::before {
+    content: '\f646';
+}
+
+.si-vectorworks::before {
+    content: '\f647';
+}
+
+.si-veeam::before {
+    content: '\f648';
+}
+
+.si-veed::before {
+    content: '\f649';
+}
+
+.si-veepee::before {
+    content: '\f64a';
+}
+
+.si-vega::before {
+    content: '\f64b';
+}
+
+.si-vegas::before {
+    content: '\f64c';
+}
+
+.si-velocity::before {
+    content: '\f64d';
+}
+
+.si-velog::before {
+    content: '\f64e';
+}
+
+.si-vencord::before {
+    content: '\f64f';
+}
+
+.si-venmo::before {
+    content: '\f650';
+}
+
+.si-vercel::before {
+    content: '\f651';
+}
+
+.si-verdaccio::before {
+    content: '\f652';
+}
+
+.si-veritas::before {
+    content: '\f653';
+}
+
+.si-verizon::before {
+    content: '\f654';
+}
+
+.si-vespa::before {
+    content: '\f655';
+}
+
+.si-vestel::before {
+    content: '\f656';
+}
+
+.si-vexxhost::before {
+    content: '\f657';
+}
+
+.si-vfairs::before {
+    content: '\f658';
+}
+
+.si-viadeo::before {
+    content: '\f659';
+}
+
+.si-viaplay::before {
+    content: '\f65a';
+}
+
+.si-viber::before {
+    content: '\f65b';
+}
+
+.si-viblo::before {
+    content: '\f65c';
+}
+
+.si-victoriametrics::before {
+    content: '\f65d';
+}
+
+.si-victronenergy::before {
+    content: '\f65e';
+}
+
+.si-vikunja::before {
+    content: '\f65f';
+}
+
+.si-vim::before {
+    content: '\f660';
+}
+
+.si-vimeo::before {
+    content: '\f661';
+}
+
+.si-vimeolivestream::before {
+    content: '\f662';
+}
+
+.si-vinted::before {
+    content: '\f663';
+}
+
+.si-virgin::before {
+    content: '\f664';
+}
+
+.si-virginatlantic::before {
+    content: '\f665';
+}
+
+.si-virginmedia::before {
+    content: '\f666';
+}
+
+.si-virtualbox::before {
+    content: '\f667';
+}
+
+.si-virustotal::before {
+    content: '\f668';
+}
+
+.si-visa::before {
+    content: '\f669';
+}
+
+.si-visualparadigm::before {
+    content: '\f66a';
+}
+
+.si-visx::before {
+    content: '\f66b';
+}
+
+.si-vite::before {
+    content: '\f66c';
+}
+
+.si-vitepress::before {
+    content: '\f66d';
+}
+
+.si-vitess::before {
+    content: '\f66e';
+}
+
+.si-vitest::before {
+    content: '\f66f';
+}
+
+.si-vivawallet::before {
+    content: '\f670';
+}
+
+.si-vivaldi::before {
+    content: '\f671';
+}
+
+.si-vivino::before {
+    content: '\f672';
+}
+
+.si-vivint::before {
+    content: '\f673';
+}
+
+.si-vivo::before {
+    content: '\f674';
+}
+
+.si-vk::before {
+    content: '\f675';
+}
+
+.si-vlcmediaplayer::before {
+    content: '\f676';
+}
+
+.si-vmware::before {
+    content: '\f677';
+}
+
+.si-vodafone::before {
+    content: '\f678';
+}
+
+.si-voelkner::before {
+    content: '\f679';
+}
+
+.si-voidlinux::before {
+    content: '\f67a';
+}
+
+.si-voipdotms::before {
+    content: '\f67b';
+}
+
+.si-volkswagen::before {
+    content: '\f67c';
+}
+
+.si-volvo::before {
+    content: '\f67d';
+}
+
+.si-vonage::before {
+    content: '\f67e';
+}
+
+.si-vorondesign::before {
+    content: '\f67f';
+}
+
+.si-vowpalwabbit::before {
+    content: '\f680';
+}
+
+.si-vox::before {
+    content: '\f681';
+}
+
+.si-vrchat::before {
+    content: '\f682';
+}
+
+.si-vsco::before {
+    content: '\f683';
+}
+
+.si-vscodium::before {
+    content: '\f684';
+}
+
+.si-vtex::before {
+    content: '\f685';
+}
+
+.si-vuedotjs::before {
+    content: '\f686';
+}
+
+.si-vuetify::before {
+    content: '\f687';
+}
+
+.si-vueuse::before {
+    content: '\f688';
+}
+
+.si-vulkan::before {
+    content: '\f689';
+}
+
+.si-vultr::before {
+    content: '\f68a';
+}
+
+.si-vyond::before {
+    content: '\f68b';
+}
+
+.si-w3schools::before {
+    content: '\f68c';
+}
+
+.si-wacom::before {
+    content: '\f68d';
+}
+
+.si-wagmi::before {
+    content: '\f68e';
+}
+
+.si-wagtail::before {
+    content: '\f68f';
+}
+
+.si-wails::before {
+    content: '\f690';
+}
+
+.si-wakatime::before {
+    content: '\f691';
+}
+
+.si-walkman::before {
+    content: '\f692';
+}
+
+.si-wallabag::before {
+    content: '\f693';
+}
+
+.si-walletconnect::before {
+    content: '\f694';
+}
+
+.si-wantedly::before {
+    content: '\f695';
+}
+
+.si-wappalyzer::before {
+    content: '\f696';
+}
+
+.si-warp::before {
+    content: '\f697';
+}
+
+.si-wasabi::before {
+    content: '\f698';
+}
+
+.si-wasmcloud::before {
+    content: '\f699';
+}
+
+.si-wasmer::before {
+    content: '\f69a';
+}
+
+.si-watchtower::before {
+    content: '\f69b';
+}
+
+.si-wattpad::before {
+    content: '\f69c';
+}
+
+.si-wayland::before {
+    content: '\f69d';
+}
+
+.si-waze::before {
+    content: '\f69e';
+}
+
+.si-wazirx::before {
+    content: '\f69f';
+}
+
+.si-wearos::before {
+    content: '\f6a0';
+}
+
+.si-weasyl::before {
+    content: '\f6a1';
+}
+
+.si-webawesome::before {
+    content: '\f6a2';
+}
+
+.si-webdotde::before {
+    content: '\f6a3';
+}
+
+.si-web3dotjs::before {
+    content: '\f6a4';
+}
+
+.si-webassembly::before {
+    content: '\f6a5';
+}
+
+.si-webauthn::before {
+    content: '\f6a6';
+}
+
+.si-webcomponentsdotorg::before {
+    content: '\f6a7';
+}
+
+.si-webdriverio::before {
+    content: '\f6a8';
+}
+
+.si-webex::before {
+    content: '\f6a9';
+}
+
+.si-webflow::before {
+    content: '\f6aa';
+}
+
+.si-webgl::before {
+    content: '\f6ab';
+}
+
+.si-webgpu::before {
+    content: '\f6ac';
+}
+
+.si-weblate::before {
+    content: '\f6ad';
+}
+
+.si-webmin::before {
+    content: '\f6ae';
+}
+
+.si-webmoney::before {
+    content: '\f6af';
+}
+
+.si-webpack::before {
+    content: '\f6b0';
+}
+
+.si-webrtc::before {
+    content: '\f6b1';
+}
+
+.si-webstorm::before {
+    content: '\f6b2';
+}
+
+.si-webtoon::before {
+    content: '\f6b3';
+}
+
+.si-webtrees::before {
+    content: '\f6b4';
+}
+
+.si-wechat::before {
+    content: '\f6b5';
+}
+
+.si-wegame::before {
+    content: '\f6b6';
+}
+
+.si-weightsandbiases::before {
+    content: '\f6b7';
+}
+
+.si-welcometothejungle::before {
+    content: '\f6b8';
+}
+
+.si-wellfound::before {
+    content: '\f6b9';
+}
+
+.si-wellsfargo::before {
+    content: '\f6ba';
+}
+
+.si-wemo::before {
+    content: '\f6bb';
+}
+
+.si-weread::before {
+    content: '\f6bc';
+}
+
+.si-westernunion::before {
+    content: '\f6bd';
+}
+
+.si-wetransfer::before {
+    content: '\f6be';
+}
+
+.si-wezterm::before {
+    content: '\f6bf';
+}
+
+.si-wgpu::before {
+    content: '\f6c0';
+}
+
+.si-what3words::before {
+    content: '\f6c1';
+}
+
+.si-whatsapp::before {
+    content: '\f6c2';
+}
+
+.si-wheniwork::before {
+    content: '\f6c3';
+}
+
+.si-wikidotgg::before {
+    content: '\f6c4';
+}
+
+.si-wikidotjs::before {
+    content: '\f6c5';
+}
+
+.si-wikibooks::before {
+    content: '\f6c6';
+}
+
+.si-wikidata::before {
+    content: '\f6c7';
+}
+
+.si-wikimediacommons::before {
+    content: '\f6c8';
+}
+
+.si-wikimediafoundation::before {
+    content: '\f6c9';
+}
+
+.si-wikipedia::before {
+    content: '\f6ca';
+}
+
+.si-wikiquote::before {
+    content: '\f6cb';
+}
+
+.si-wikisource::before {
+    content: '\f6cc';
+}
+
+.si-wikiversity::before {
+    content: '\f6cd';
+}
+
+.si-wikivoyage::before {
+    content: '\f6ce';
+}
+
+.si-winamp::before {
+    content: '\f6cf';
+}
+
+.si-windsurf::before {
+    content: '\f6d0';
+}
+
+.si-wine::before {
+    content: '\f6d1';
+}
+
+.si-wipro::before {
+    content: '\f6d2';
+}
+
+.si-wire::before {
+    content: '\f6d3';
+}
+
+.si-wireguard::before {
+    content: '\f6d4';
+}
+
+.si-wireshark::before {
+    content: '\f6d5';
+}
+
+.si-wise::before {
+    content: '\f6d6';
+}
+
+.si-wish::before {
+    content: '\f6d7';
+}
+
+.si-wistia::before {
+    content: '\f6d8';
+}
+
+.si-wix::before {
+    content: '\f6d9';
+}
+
+.si-wizzair::before {
+    content: '\f6da';
+}
+
+.si-wolfram::before {
+    content: '\f6db';
+}
+
+.si-wolframlanguage::before {
+    content: '\f6dc';
+}
+
+.si-wolframmathematica::before {
+    content: '\f6dd';
+}
+
+.si-wondershare::before {
+    content: '\f6de';
+}
+
+.si-wondersharefilmora::before {
+    content: '\f6df';
+}
+
+.si-woo::before {
+    content: '\f6e0';
+}
+
+.si-woocommerce::before {
+    content: '\f6e1';
+}
+
+.si-wordpress::before {
+    content: '\f6e2';
+}
+
+.si-workplace::before {
+    content: '\f6e3';
+}
+
+.si-worldhealthorganization::before {
+    content: '\f6e4';
+}
+
+.si-wpengine::before {
+    content: '\f6e5';
+}
+
+.si-wprocket::before {
+    content: '\f6e6';
+}
+
+.si-wpexplorer::before {
+    content: '\f6e7';
+}
+
+.si-writedotas::before {
+    content: '\f6e8';
+}
+
+.si-wwe::before {
+    content: '\f6e9';
+}
+
+.si-wwise::before {
+    content: '\f6ea';
+}
+
+.si-wxt::before {
+    content: '\f6eb';
+}
+
+.si-wykop::before {
+    content: '\f6ec';
+}
+
+.si-wyze::before {
+    content: '\f6ed';
+}
+
+.si-x::before {
+    content: '\f6ee';
+}
+
+.si-xdotorg::before {
+    content: '\f6ef';
+}
+
+.si-xampp::before {
+    content: '\f6f0';
+}
+
+.si-xcode::before {
+    content: '\f6f1';
+}
+
+.si-xdadevelopers::before {
+    content: '\f6f2';
+}
+
+.si-xendit::before {
+    content: '\f6f3';
+}
+
+.si-xero::before {
+    content: '\f6f4';
+}
+
+.si-xfce::before {
+    content: '\f6f5';
+}
+
+.si-xiaohongshu::before {
+    content: '\f6f6';
+}
+
+.si-xiaomi::before {
+    content: '\f6f7';
+}
+
+.si-xing::before {
+    content: '\f6f8';
+}
+
+.si-xml::before {
+    content: '\f6f9';
+}
+
+.si-xmpp::before {
+    content: '\f6fa';
+}
+
+.si-xo::before {
+    content: '\f6fb';
+}
+
+.si-xrp::before {
+    content: '\f6fc';
+}
+
+.si-xsplit::before {
+    content: '\f6fd';
+}
+
+.si-xstate::before {
+    content: '\f6fe';
+}
+
+.si-xubuntu::before {
+    content: '\f6ff';
+}
+
+.si-xyflow::before {
+    content: '\f700';
+}
+
+.si-ycombinator::before {
+    content: '\f701';
+}
+
+.si-yaak::before {
+    content: '\f702';
+}
+
+.si-yabai::before {
+    content: '\f703';
+}
+
+.si-yale::before {
+    content: '\f704';
+}
+
+.si-yamahacorporation::before {
+    content: '\f705';
+}
+
+.si-yamahamotorcorporation::before {
+    content: '\f706';
+}
+
+.si-yaml::before {
+    content: '\f707';
+}
+
+.si-yandexcloud::before {
+    content: '\f708';
+}
+
+.si-yarn::before {
+    content: '\f709';
+}
+
+.si-yelp::before {
+    content: '\f70a';
+}
+
+.si-yeti::before {
+    content: '\f70b';
+}
+
+.si-yii::before {
+    content: '\f70c';
+}
+
+.si-yoast::before {
+    content: '\f70d';
+}
+
+.si-yolo::before {
+    content: '\f70e';
+}
+
+.si-youhodler::before {
+    content: '\f70f';
+}
+
+.si-youtube::before {
+    content: '\f710';
+}
+
+.si-youtubegaming::before {
+    content: '\f711';
+}
+
+.si-youtubekids::before {
+    content: '\f712';
+}
+
+.si-youtubemusic::before {
+    content: '\f713';
+}
+
+.si-youtubeshorts::before {
+    content: '\f714';
+}
+
+.si-youtubestudio::before {
+    content: '\f715';
+}
+
+.si-youtubetv::before {
+    content: '\f716';
+}
+
+.si-yr::before {
+    content: '\f717';
+}
+
+.si-yubico::before {
+    content: '\f718';
+}
+
+.si-yunohost::before {
+    content: '\f719';
+}
+
+.si-zabka::before {
+    content: '\f71a';
+}
+
+.si-zaim::before {
+    content: '\f71b';
+}
+
+.si-zalando::before {
+    content: '\f71c';
+}
+
+.si-zalo::before {
+    content: '\f71d';
+}
+
+.si-zap::before {
+    content: '\f71e';
+}
+
+.si-zapier::before {
+    content: '\f71f';
+}
+
+.si-zara::before {
+    content: '\f720';
+}
+
+.si-zazzle::before {
+    content: '\f721';
+}
+
+.si-zcash::before {
+    content: '\f722';
+}
+
+.si-zcool::before {
+    content: '\f723';
+}
+
+.si-zdf::before {
+    content: '\f724';
+}
+
+.si-zebpay::before {
+    content: '\f725';
+}
+
+.si-zebratechnologies::before {
+    content: '\f726';
+}
+
+.si-zedindustries::before {
+    content: '\f727';
+}
+
+.si-zelle::before {
+    content: '\f728';
+}
+
+.si-zenbrowser::before {
+    content: '\f729';
+}
+
+.si-zend::before {
+    content: '\f72a';
+}
+
+.si-zendesk::before {
+    content: '\f72b';
+}
+
+.si-zenn::before {
+    content: '\f72c';
+}
+
+.si-zenodo::before {
+    content: '\f72d';
+}
+
+.si-zensar::before {
+    content: '\f72e';
+}
+
+.si-zerodha::before {
+    content: '\f72f';
+}
+
+.si-zerotier::before {
+    content: '\f730';
+}
+
+.si-zettlr::before {
+    content: '\f731';
+}
+
+.si-zhihu::before {
+    content: '\f732';
+}
+
+.si-zig::before {
+    content: '\f733';
+}
+
+.si-zigbee::before {
+    content: '\f734';
+}
+
+.si-zigbee2mqtt::before {
+    content: '\f735';
+}
+
+.si-ziggo::before {
+    content: '\f736';
+}
+
+.si-zilch::before {
+    content: '\f737';
+}
+
+.si-zillow::before {
+    content: '\f738';
+}
+
+.si-zincsearch::before {
+    content: '\f739';
+}
+
+.si-zingat::before {
+    content: '\f73a';
+}
+
+.si-zod::before {
+    content: '\f73b';
+}
+
+.si-zoho::before {
+    content: '\f73c';
+}
+
+.si-zoiper::before {
+    content: '\f73d';
+}
+
+.si-zola::before {
+    content: '\f73e';
+}
+
+.si-zomato::before {
+    content: '\f73f';
+}
+
+.si-zoom::before {
+    content: '\f740';
+}
+
+.si-zorin::before {
+    content: '\f741';
+}
+
+.si-zotero::before {
+    content: '\f742';
+}
+
+.si-zsh::before {
+    content: '\f743';
+}
+
+.si-zulip::before {
+    content: '\f744';
+}
+
+.si-zyte::before {
+    content: '\f745';
+}

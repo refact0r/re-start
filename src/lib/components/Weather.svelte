@@ -199,10 +199,14 @@
                     {#each forecast as forecast}
                         {#if settings.forecastMode === 'daily'}
                             <div class="forecast-temp">
-                                {forecast.temperatureMax}° <span class="separator">/</span> {forecast.temperatureMin}°
+                                {forecast.temperatureMax}°
+                                <span class="separator">/</span>
+                                {forecast.temperatureMin}°
                             </div>
                         {:else}
-                            <div class="forecast-temp">{forecast.temperature}°</div>
+                            <div class="forecast-temp">
+                                {forecast.temperature}°
+                            </div>
                         {/if}
                     {/each}
                 </div>

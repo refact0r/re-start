@@ -1,305 +1,319 @@
 <script>
-	import { onDestroy } from 'svelte'
-	import { fade, fly } from 'svelte/transition'
-	import {
-		saveSettings,
-		settings,
-		resetSettings,
-	} from '../stores/settings-store.svelte.js'
-	import {
-		themeNames,
-		themes,
-		defaultCustomColors,
-	} from '../config/themes.js'
-	import RadioButton from './ui/RadioButton.svelte'
-	import Checkbox from './ui/Checkbox.svelte'
-	import { createTaskBackend } from '../backends/index.js'
-	import { isChrome } from '../utils/browser-detect.js'
+    import { onDestroy, tick } from 'svelte'
+    import { fade, fly } from 'svelte/transition'
+    import {
+        saveSettings,
+        settings,
+        resetSettings,
+    } from '../stores/settings-store.svelte.js'
+    import {
+        themeNames,
+        themes,
+        defaultCustomColors,
+    } from '../config/themes.js'
+    import RadioButton from './ui/RadioButton.svelte'
+    import Checkbox from './ui/Checkbox.svelte'
+    import { createTaskBackend } from '../backends/index.js'
+    import { isChrome } from '../utils/browser-detect.js'
+    import { guessIconSlug, isValidSlug } from '../utils/link-icons.js'
+    import IconPicker from './IconPicker.svelte'
 
-	let { showSettings = false, closeSettings } = $props()
+    let { showSettings = false, closeSettings } = $props()
 
-	// Check if Google Tasks is available (Chrome only)
-	const googleTasksAvailable = isChrome()
+    // Check if Google Tasks is available (Chrome only)
+    const googleTasksAvailable = isChrome()
 
-	// @ts-ignore
-	const version = __APP_VERSION__
+    // @ts-ignore
+    const version = __APP_VERSION__
 
-	let googleTasksApi = $state(null)
-	let signingIn = $state(false)
-	let signInError = $state('')
+    let googleTasksApi = $state(null)
+    let signingIn = $state(false)
+    let signInError = $state('')
 
-	async function handleGoogleSignIn() {
-		try {
-			signingIn = true
-			signInError = ''
+    async function handleGoogleSignIn() {
+        try {
+            signingIn = true
+            signInError = ''
 
-			if (!googleTasksApi) {
-				googleTasksApi = createTaskBackend('google-tasks')
-			}
+            if (!googleTasksApi) {
+                googleTasksApi = createTaskBackend('google-tasks')
+            }
 
-			await googleTasksApi.signIn()
-			settings.googleTasksSignedIn = true
-			saveSettings(settings)
-		} catch (err) {
-			console.error('google sign in failed:', err)
-			signInError = 'sign in failed'
-			settings.googleTasksSignedIn = false
-		} finally {
-			signingIn = false
-		}
-	}
+            await googleTasksApi.signIn()
+            settings.googleTasksSignedIn = true
+            saveSettings(settings)
+        } catch (err) {
+            console.error('google sign in failed:', err)
+            signInError = 'sign in failed'
+            settings.googleTasksSignedIn = false
+        } finally {
+            signingIn = false
+        }
+    }
 
-	async function handleGoogleSignOut() {
-		try {
-			if (!googleTasksApi) {
-				googleTasksApi = createTaskBackend('google-tasks')
-			}
+    async function handleGoogleSignOut() {
+        try {
+            if (!googleTasksApi) {
+                googleTasksApi = createTaskBackend('google-tasks')
+            }
 
-			await googleTasksApi.signOut()
-			settings.googleTasksSignedIn = false
-			saveSettings(settings)
-			signInError = ''
-		} catch (err) {
-			console.error('google sign out failed:', err)
-		}
-	}
+            await googleTasksApi.signOut()
+            settings.googleTasksSignedIn = false
+            saveSettings(settings)
+            signInError = ''
+        } catch (err) {
+            console.error('google sign out failed:', err)
+        }
+    }
 
-	function addLink() {
-		settings.links = [...settings.links, { title: '', url: '' }]
-	}
+    let iconPickerOpen = $state(null)
+    let iconPickerRef = $state(null)
 
-	function removeLink(index) {
-		settings.links = settings.links.filter((_, i) => i !== index)
-	}
+    function toggleIconPicker(index) {
+        if (iconPickerOpen === index) {
+            iconPickerOpen = null
+        } else {
+            iconPickerOpen = index
+            tick().then(() => iconPickerRef?.focusInput())
+        }
+    }
 
-	function handleClose() {
-		saveSettings(settings)
-		closeSettings()
-	}
+    function addLink() {
+        settings.links = [...settings.links, { title: '', url: '', icon: '' }]
+    }
 
-	function handleKeydown(event) {
-		if (event.key === 'Escape') {
-			handleClose()
-		}
-	}
+    function removeLink(index) {
+        settings.links = settings.links.filter((_, i) => i !== index)
+    }
 
-	function handleReset() {
-		if (
-			confirm('are you sure you want to reset all settings to default?')
-		) {
-			resetSettings()
-			saveSettings(settings)
-		}
-	}
+    function handleClose() {
+        saveSettings(settings)
+        closeSettings()
+    }
 
-	function handleExport() {
-		const dataStr = JSON.stringify(settings, null, 2)
-		const blob = new Blob([dataStr], { type: 'application/json' })
-		const url = URL.createObjectURL(blob)
-		const a = document.createElement('a')
-		a.href = url
-		a.download = 're-start-settings.json'
-		a.click()
-		URL.revokeObjectURL(url)
-	}
+    function handleKeydown(event) {
+        if (event.key === 'Escape') {
+            handleClose()
+        }
+    }
 
-	let fileInput = $state(null)
+    function handleReset() {
+        if (
+            confirm('are you sure you want to reset all settings to default?')
+        ) {
+            resetSettings()
+            saveSettings(settings)
+        }
+    }
 
-	function handleImport() {
-		fileInput?.click()
-	}
+    function handleExport() {
+        const dataStr = JSON.stringify(settings, null, 2)
+        const blob = new Blob([dataStr], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 're-start-settings.json'
+        a.click()
+        URL.revokeObjectURL(url)
+    }
 
-	function handleFileSelect(event) {
-		const file = event.target.files?.[0]
-		if (!file) return
+    let fileInput = $state(null)
 
-		const reader = new FileReader()
-		reader.onload = (e) => {
-			try {
-				const imported = JSON.parse(e.target.result)
-				Object.assign(settings, imported)
-				saveSettings(settings)
-			} catch (err) {
-				alert('failed to import settings: invalid json file')
-			}
-		}
-		reader.readAsText(file)
-		event.target.value = ''
-	}
+    function handleImport() {
+        fileInput?.click()
+    }
 
-	const customColorLabels = [
-		{ key: 'bg1', label: 'bg 1' },
-		{ key: 'bg2', label: 'bg 2' },
-		{ key: 'bg3', label: 'bg 3' },
-		{ key: 'txt4', label: 'label' },
-		{ key: 'txt3', label: 'txt 3' },
-		{ key: 'txt2', label: 'txt 2' },
-		{ key: 'txt1', label: 'txt 1' },
-		{ key: 'txtErr', label: 'error' },
-	]
+    function handleFileSelect(event) {
+        const file = event.target.files?.[0]
+        if (!file) return
 
-	// Drag and drop state
-	let draggedIndex = $state(null)
-	let dropSlotIndex = $state(null) // Which slot (between items) to drop into
+        const reader = new FileReader()
+        reader.onload = (e) => {
+            try {
+                const imported = JSON.parse(e.target.result)
+                Object.assign(settings, imported)
+                saveSettings(settings)
+            } catch (err) {
+                alert('failed to import settings: invalid json file')
+            }
+        }
+        reader.readAsText(file)
+        event.target.value = ''
+    }
 
-	function handleDragStart(event, index) {
-		draggedIndex = index
-		event.dataTransfer.effectAllowed = 'move'
-		event.dataTransfer.setData('text/html', event.currentTarget)
-	}
+    const customColorLabels = [
+        { key: 'bg1', label: 'bg 1' },
+        { key: 'bg2', label: 'bg 2' },
+        { key: 'bg3', label: 'bg 3' },
+        { key: 'txt4', label: 'label' },
+        { key: 'txt3', label: 'txt 3' },
+        { key: 'txt2', label: 'txt 2' },
+        { key: 'txt1', label: 'txt 1' },
+        { key: 'txtErr', label: 'error' },
+    ]
 
-	function handleDropZoneDragOver(event, slotIndex) {
-		event.preventDefault()
-		event.dataTransfer.dropEffect = 'move'
-		dropSlotIndex = slotIndex
-	}
+    // Drag and drop state
+    let draggedIndex = $state(null)
+    let dropSlotIndex = $state(null) // Which slot (between items) to drop into
 
-	function handleDropZoneDragLeave() {
-		dropSlotIndex = null
-	}
+    function handleDragStart(event, index) {
+        draggedIndex = index
+        event.dataTransfer.effectAllowed = 'move'
+        event.dataTransfer.setData('text/html', event.currentTarget)
+    }
 
-	function handleDropZoneDrop(event, slotIndex) {
-		event.preventDefault()
+    function handleDropZoneDragOver(event, slotIndex) {
+        event.preventDefault()
+        event.dataTransfer.dropEffect = 'move'
+        dropSlotIndex = slotIndex
+    }
 
-		if (draggedIndex === null) {
-			dropSlotIndex = null
-			return
-		}
+    function handleDropZoneDragLeave() {
+        dropSlotIndex = null
+    }
 
-		// Don't do anything if dropping in the same position
-		if (slotIndex === draggedIndex || slotIndex === draggedIndex + 1) {
-			draggedIndex = null
-			dropSlotIndex = null
-			return
-		}
+    function handleDropZoneDrop(event, slotIndex) {
+        event.preventDefault()
 
-		const newLinks = [...settings.links]
-		const draggedItem = newLinks[draggedIndex]
+        if (draggedIndex === null) {
+            dropSlotIndex = null
+            return
+        }
 
-		// Remove the dragged item
-		newLinks.splice(draggedIndex, 1)
+        // Don't do anything if dropping in the same position
+        if (slotIndex === draggedIndex || slotIndex === draggedIndex + 1) {
+            draggedIndex = null
+            dropSlotIndex = null
+            return
+        }
 
-		// Adjust slot index if we removed an item before it
-		const adjustedSlotIndex =
-			draggedIndex < slotIndex ? slotIndex - 1 : slotIndex
+        const newLinks = [...settings.links]
+        const draggedItem = newLinks[draggedIndex]
 
-		// Insert at the slot position
-		newLinks.splice(adjustedSlotIndex, 0, draggedItem)
+        // Remove the dragged item
+        newLinks.splice(draggedIndex, 1)
 
-		settings.links = newLinks
-		draggedIndex = null
-		dropSlotIndex = null
-	}
+        // Adjust slot index if we removed an item before it
+        const adjustedSlotIndex =
+            draggedIndex < slotIndex ? slotIndex - 1 : slotIndex
 
-	function handleDragEnd() {
-		draggedIndex = null
-		dropSlotIndex = null
-	}
+        // Insert at the slot position
+        newLinks.splice(adjustedSlotIndex, 0, draggedItem)
 
-	let locationLoading = $state(false)
-	let locationError = $state(null)
-	let locationErrorTimeout = null
+        settings.links = newLinks
+        draggedIndex = null
+        dropSlotIndex = null
+    }
 
-	async function useCurrentLocation() {
-		if (!navigator.geolocation) {
-			locationError = 'geolocation not supported by browser'
-			if (locationErrorTimeout) clearTimeout(locationErrorTimeout)
-			locationErrorTimeout = setTimeout(
-				() => (locationError = null),
-				3000
-			)
-			return
-		}
+    function handleDragEnd() {
+        draggedIndex = null
+        dropSlotIndex = null
+    }
 
-		locationLoading = true
-		locationError = null
+    let locationLoading = $state(false)
+    let locationError = $state(null)
+    let locationErrorTimeout = null
 
-		navigator.geolocation.getCurrentPosition(
-			(position) => {
-				settings.latitude =
-					Math.round(position.coords.latitude * 100) / 100
-				settings.longitude =
-					Math.round(position.coords.longitude * 100) / 100
-				locationLoading = false
-			},
-			(error) => {
-				locationLoading = false
-				switch (error.code) {
-					case error.PERMISSION_DENIED:
-						locationError = 'location permission denied'
-						break
-					case error.POSITION_UNAVAILABLE:
-						locationError = 'location unavailable'
-						break
-					case error.TIMEOUT:
-						locationError = 'location request timed out'
-						break
-					default:
-						locationError = 'failed to get location'
-				}
-				if (locationErrorTimeout) clearTimeout(locationErrorTimeout)
-				locationErrorTimeout = setTimeout(
-					() => (locationError = null),
-					3000
-				)
-			},
-			{
-				enableHighAccuracy: false,
-				timeout: 10000,
-				maximumAge: 300000,
-			}
-		)
-	}
+    async function useCurrentLocation() {
+        if (!navigator.geolocation) {
+            locationError = 'geolocation not supported by browser'
+            if (locationErrorTimeout) clearTimeout(locationErrorTimeout)
+            locationErrorTimeout = setTimeout(
+                () => (locationError = null),
+                3000
+            )
+            return
+        }
 
-	onDestroy(() => {
-		if (locationErrorTimeout) {
-			clearTimeout(locationErrorTimeout)
-		}
-	})
+        locationLoading = true
+        locationError = null
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                settings.latitude =
+                    Math.round(position.coords.latitude * 100) / 100
+                settings.longitude =
+                    Math.round(position.coords.longitude * 100) / 100
+                locationLoading = false
+            },
+            (error) => {
+                locationLoading = false
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        locationError = 'location permission denied'
+                        break
+                    case error.POSITION_UNAVAILABLE:
+                        locationError = 'location unavailable'
+                        break
+                    case error.TIMEOUT:
+                        locationError = 'location request timed out'
+                        break
+                    default:
+                        locationError = 'failed to get location'
+                }
+                if (locationErrorTimeout) clearTimeout(locationErrorTimeout)
+                locationErrorTimeout = setTimeout(
+                    () => (locationError = null),
+                    3000
+                )
+            },
+            {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 300000,
+            }
+        )
+    }
+
+    onDestroy(() => {
+        if (locationErrorTimeout) {
+            clearTimeout(locationErrorTimeout)
+        }
+    })
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
 
 {#if showSettings}
-	<div
-		class="backdrop"
-		onclick={handleClose}
-		onkeydown={(e) => e.key === 'Enter' && handleClose()}
-		role="button"
-		tabindex="0"
-		transition:fade={{ duration: 200 }}
-	></div>
+    <div
+        class="backdrop"
+        onclick={handleClose}
+        onkeydown={(e) => e.key === 'Enter' && handleClose()}
+        role="button"
+        tabindex="0"
+        transition:fade={{ duration: 200 }}
+    ></div>
 
-	<div class="settings" transition:fly={{ x: 640, duration: 200 }}>
-		<div class="header">
-			<h2>settings</h2>
-			<button class="close-btn" onclick={handleClose}>x</button>
-		</div>
+    <div class="settings" transition:fly={{ x: 640, duration: 200 }}>
+        <div class="header">
+            <h2>settings</h2>
+            <button class="close-btn" onclick={handleClose}>x</button>
+        </div>
 
-		<div class="content">
-			<div class="group">
-				<div class="setting-label">widgets</div>
-				<div class="checkbox-group">
-					<Checkbox bind:checked={settings.showClock}>clock</Checkbox>
-					<Checkbox bind:checked={settings.showStats}>stats</Checkbox>
-					<Checkbox bind:checked={settings.showWeather}>
-						weather
-					</Checkbox>
-					<Checkbox bind:checked={settings.showTasks}>tasks</Checkbox>
-					<Checkbox bind:checked={settings.showLinks}>links</Checkbox>
-				</div>
-			</div>
-			<div class="group">
-				<div class="setting-label">theme</div>
-				<div class="theme-grid">
-					{#each themeNames as themeName}
-						<div class="theme-option">
-							<RadioButton
-								bind:group={settings.currentTheme}
-								value={themeName}
-							>
-								{#if themeName === 'custom'}
-									<!-- <div class="theme-preview">
+        <div class="content">
+            <div class="group">
+                <div class="setting-label">widgets</div>
+                <div class="checkbox-group">
+                    <Checkbox bind:checked={settings.showClock}>clock</Checkbox>
+                    <Checkbox bind:checked={settings.showStats}>stats</Checkbox>
+                    <Checkbox bind:checked={settings.showWeather}>
+                        weather
+                    </Checkbox>
+                    <Checkbox bind:checked={settings.showTasks}>tasks</Checkbox>
+                    <Checkbox bind:checked={settings.showLinks}>links</Checkbox>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">theme</div>
+                <div class="theme-grid">
+                    {#each themeNames as themeName}
+                        <div class="theme-option">
+                            <RadioButton
+                                bind:group={settings.currentTheme}
+                                value={themeName}
+                            >
+                                {#if themeName === 'custom'}
+                                    <!-- <div class="theme-preview">
 										<div
 											style="background-color: {settings
 												.customThemeColors?.bg1 ??
@@ -316,654 +330,710 @@
 												defaultCustomColors.txt2}"
 										></div>
 									</div> -->
-								{:else}
-									<div class="theme-preview">
-										<div
-											style="background-color: {themes[
-												themeName
-											].preview.bg}"
-										></div>
-										<div
-											style="background-color: {themes[
-												themeName
-											].preview.accent}"
-										></div>
-										<div
-											style="background-color: {themes[
-												themeName
-											].preview.text}"
-										></div>
-									</div>
-								{/if}
-								<span class="theme-name"
-									>{themes[themeName].displayName}</span
-								>
-							</RadioButton>
-						</div>
-					{/each}
-				</div>
-				{#if settings.currentTheme === 'custom'}
-					<div class="custom-colors-grid">
-						{#each customColorLabels as { key, label }}
-							<div class="color-input-row">
-								<input
-									type="color"
-									id="color-{key}"
-									value={settings.customThemeColors[key]}
-									oninput={(e) => {
-										settings.customThemeColors = {
-											...settings.customThemeColors,
-											[key]: e.target.value,
-										}
-									}}
-								/>
-								<label for="color-{key}">{label}</label>
-								<input
-									type="text"
-									value={settings.customThemeColors[key]}
-									oninput={(e) => {
-										settings.customThemeColors = {
-											...settings.customThemeColors,
-											[key]: e.target.value,
-										}
-									}}
-									class="color-text"
-								/>
-							</div>
-						{/each}
-					</div>
-					<button
-						class="button bottom"
-						onclick={() => {
-							settings.customThemeColors = {
-								...defaultCustomColors,
-							}
-						}}
-					>
-						<span class="bracket">[</span><span class="action-text"
-							>reset custom theme</span
-						><span class="bracket">]</span>
-					</button>
-				{/if}
-			</div>
-			<div class="group">
-				<label for="font">font</label>
-				<input
-					id="font"
-					type="text"
-					bind:value={settings.font}
-					placeholder="Geist Mono Variable"
-				/>
-			</div>
+                                {:else}
+                                    <div class="theme-preview">
+                                        <div
+                                            style="background-color: {themes[
+                                                themeName
+                                            ].preview.bg}"
+                                        ></div>
+                                        <div
+                                            style="background-color: {themes[
+                                                themeName
+                                            ].preview.accent}"
+                                        ></div>
+                                        <div
+                                            style="background-color: {themes[
+                                                themeName
+                                            ].preview.text}"
+                                        ></div>
+                                    </div>
+                                {/if}
+                                <span class="theme-name"
+                                    >{themes[themeName].displayName}</span
+                                >
+                            </RadioButton>
+                        </div>
+                    {/each}
+                </div>
+                {#if settings.currentTheme === 'custom'}
+                    <div class="custom-colors-grid">
+                        {#each customColorLabels as { key, label }}
+                            <div class="color-input-row">
+                                <input
+                                    type="color"
+                                    id="color-{key}"
+                                    value={settings.customThemeColors[key]}
+                                    oninput={(e) => {
+                                        settings.customThemeColors = {
+                                            ...settings.customThemeColors,
+                                            [key]: e.target.value,
+                                        }
+                                    }}
+                                />
+                                <label for="color-{key}">{label}</label>
+                                <input
+                                    type="text"
+                                    value={settings.customThemeColors[key]}
+                                    oninput={(e) => {
+                                        settings.customThemeColors = {
+                                            ...settings.customThemeColors,
+                                            [key]: e.target.value,
+                                        }
+                                    }}
+                                    class="color-text"
+                                />
+                            </div>
+                        {/each}
+                    </div>
+                    <button
+                        class="button bottom"
+                        onclick={() => {
+                            settings.customThemeColors = {
+                                ...defaultCustomColors,
+                            }
+                        }}
+                    >
+                        <span class="bracket">[</span><span class="action-text"
+                            >reset custom theme</span
+                        ><span class="bracket">]</span>
+                    </button>
+                {/if}
+            </div>
+            <div class="group">
+                <label for="font">font</label>
+                <input
+                    id="font"
+                    type="text"
+                    bind:value={settings.font}
+                    placeholder="Geist Mono Variable"
+                />
+            </div>
 
-			<div class="group">
-				<label for="tab-title">tab title</label>
-				<input
-					id="tab-title"
-					type="text"
-					bind:value={settings.tabTitle}
-					placeholder="~"
-				/>
-			</div>
+            <div class="group">
+                <label for="tab-title">tab title</label>
+                <input
+                    id="tab-title"
+                    type="text"
+                    bind:value={settings.tabTitle}
+                    placeholder="~"
+                />
+            </div>
 
-			<div class="group">
-				<div class="setting-label">task backend</div>
-				<div class="radio-group">
-					<RadioButton
-						bind:group={settings.taskBackend}
-						value="local"
-					>
-						local
-					</RadioButton>
-					<RadioButton
-						bind:group={settings.taskBackend}
-						value="todoist"
-					>
-						todoist
-					</RadioButton>
-					{#if googleTasksAvailable}
-						<RadioButton
-							bind:group={settings.taskBackend}
-							value="google-tasks"
-						>
-							google tasks
-						</RadioButton>
-					{/if}
-				</div>
-			</div>
+            <div class="group">
+                <div class="setting-label">task backend</div>
+                <div class="radio-group">
+                    <RadioButton
+                        bind:group={settings.taskBackend}
+                        value="local"
+                    >
+                        local
+                    </RadioButton>
+                    <RadioButton
+                        bind:group={settings.taskBackend}
+                        value="todoist"
+                    >
+                        todoist
+                    </RadioButton>
+                    {#if googleTasksAvailable}
+                        <RadioButton
+                            bind:group={settings.taskBackend}
+                            value="google-tasks"
+                        >
+                            google tasks
+                        </RadioButton>
+                    {/if}
+                </div>
+            </div>
 
-			{#if settings.taskBackend === 'todoist'}
-				<div class="group">
-					<label for="todoist-token">todoist api token</label>
-					<input
-						id="todoist-token"
-						type="password"
-						bind:value={settings.todoistApiToken}
-					/>
-				</div>
-			{/if}
+            {#if settings.taskBackend === 'todoist'}
+                <div class="group">
+                    <label for="todoist-token">todoist api token</label>
+                    <input
+                        id="todoist-token"
+                        type="password"
+                        bind:value={settings.todoistApiToken}
+                    />
+                </div>
+            {/if}
 
-			{#if settings.taskBackend === 'google-tasks'}
-				<div class="group">
-					<div class="setting-label">google tasks authentication</div>
-					<button
-						class="button"
-						onclick={settings.googleTasksSignedIn
-							? handleGoogleSignOut
-							: handleGoogleSignIn}
-						disabled={signingIn}
-					>
-						[{settings.googleTasksSignedIn
-							? 'sign out'
-							: signInError
-								? signInError
-								: signingIn
-									? 'signing in...'
-									: 'sign in with google'}]
-					</button>
-				</div>
-			{/if}
+            {#if settings.taskBackend === 'google-tasks'}
+                <div class="group">
+                    <div class="setting-label">google tasks authentication</div>
+                    <button
+                        class="button"
+                        onclick={settings.googleTasksSignedIn
+                            ? handleGoogleSignOut
+                            : handleGoogleSignIn}
+                        disabled={signingIn}
+                    >
+                        [{settings.googleTasksSignedIn
+                            ? 'sign out'
+                            : signInError
+                              ? signInError
+                              : signingIn
+                                ? 'signing in...'
+                                : 'sign in with google'}]
+                    </button>
+                </div>
+            {/if}
 
-			<div class="group">
-				<div class="setting-label">weather forecast</div>
-				<div class="radio-group">
-					<RadioButton
-						bind:group={settings.forecastMode}
-						value="hourly"
-					>
-						hourly
-					</RadioButton>
-					<RadioButton
-						bind:group={settings.forecastMode}
-						value="daily"
-					>
-						daily
-					</RadioButton>
-				</div>
-			</div>
-			<div class="group">
-				<div class="setting-label">weather location</div>
-				<div class="radio-group">
-					<RadioButton
-						bind:group={settings.locationMode}
-						value="manual"
-					>
-						manual
-					</RadioButton>
-					<RadioButton
-						bind:group={settings.locationMode}
-						value="auto"
-					>
-						auto
-					</RadioButton>
-				</div>
-			</div>
+            <div class="group">
+                <div class="setting-label">weather forecast</div>
+                <div class="radio-group">
+                    <RadioButton
+                        bind:group={settings.forecastMode}
+                        value="hourly"
+                    >
+                        hourly
+                    </RadioButton>
+                    <RadioButton
+                        bind:group={settings.forecastMode}
+                        value="daily"
+                    >
+                        daily
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">weather location</div>
+                <div class="radio-group">
+                    <RadioButton
+                        bind:group={settings.locationMode}
+                        value="manual"
+                    >
+                        manual
+                    </RadioButton>
+                    <RadioButton
+                        bind:group={settings.locationMode}
+                        value="auto"
+                    >
+                        auto
+                    </RadioButton>
+                </div>
+            </div>
 
-			{#if settings.locationMode === 'manual'}
-				<div class="group">
-					<div class="split">
-						<div class="col">
-							<label for="latitude">weather latitude</label>
-							<input
-								id="latitude"
-								type="number"
-								bind:value={settings.latitude}
-								step="0.01"
-							/>
-						</div>
-						<div class="col">
-							<label for="longitude">weather longitude</label>
-							<input
-								id="longitude"
-								type="number"
-								bind:value={settings.longitude}
-								step="0.01"
-							/>
-						</div>
-					</div>
-					<button
-						class="button bottom"
-						onclick={useCurrentLocation}
-						disabled={locationLoading}
-					>
-						<span class="bracket">[</span><span class="action-text"
-							>{locationError
-								? locationError
-								: locationLoading
-									? 'getting location...'
-									: 'use current location'}</span
-						><span class="bracket">]</span>
-					</button>
-				</div>
-			{/if}
+            {#if settings.locationMode === 'manual'}
+                <div class="group">
+                    <div class="split">
+                        <div class="col">
+                            <label for="latitude">weather latitude</label>
+                            <input
+                                id="latitude"
+                                type="number"
+                                bind:value={settings.latitude}
+                                step="0.01"
+                            />
+                        </div>
+                        <div class="col">
+                            <label for="longitude">weather longitude</label>
+                            <input
+                                id="longitude"
+                                type="number"
+                                bind:value={settings.longitude}
+                                step="0.01"
+                            />
+                        </div>
+                    </div>
+                    <button
+                        class="button bottom"
+                        onclick={useCurrentLocation}
+                        disabled={locationLoading}
+                    >
+                        <span class="bracket">[</span><span class="action-text"
+                            >{locationError
+                                ? locationError
+                                : locationLoading
+                                  ? 'getting location...'
+                                  : 'use current location'}</span
+                        ><span class="bracket">]</span>
+                    </button>
+                </div>
+            {/if}
 
-			<div class="group">
-				<div class="setting-label">time format</div>
-				<div class="radio-group">
-					<RadioButton bind:group={settings.timeFormat} value="12hr">
-						12 hour
-					</RadioButton>
-					<RadioButton bind:group={settings.timeFormat} value="24hr">
-						24 hour
-					</RadioButton>
-				</div>
-			</div>
-			<div class="group">
-				<div class="setting-label">date format</div>
-				<div class="radio-group">
-					<RadioButton bind:group={settings.dateFormat} value="mdy">
-						month-day-year
-					</RadioButton>
-					<RadioButton bind:group={settings.dateFormat} value="dmy">
-						day-month-year
-					</RadioButton>
-				</div>
-			</div>
-			<div class="group">
-				<div class="setting-label">temperature format</div>
-				<div class="radio-group">
-					<RadioButton
-						bind:group={settings.tempUnit}
-						value="fahrenheit"
-					>
-						fahrenheit
-					</RadioButton>
-					<RadioButton bind:group={settings.tempUnit} value="celsius">
-						celsius
-					</RadioButton>
-				</div>
-			</div>
-			<div class="group">
-				<div class="setting-label">speed format</div>
-				<div class="radio-group">
-					<RadioButton bind:group={settings.speedUnit} value="mph">
-						mph
-					</RadioButton>
-					<RadioButton bind:group={settings.speedUnit} value="kmh">
-						kmh
-					</RadioButton>
-				</div>
-			</div>
-			<div class="group">
-				<div class="setting-label">link behavior</div>
-				<div class="radio-group">
-					<RadioButton bind:group={settings.linkTarget} value="_self">
-						same tab
-					</RadioButton>
-					<RadioButton
-						bind:group={settings.linkTarget}
-						value="_blank"
-					>
-						new tab
-					</RadioButton>
-				</div>
-			</div>
-			<div class="group">
-				<label for="linksPerColumn">links per column</label>
-				<input
-					id="linksPerColumn"
-					type="number"
-					bind:value={settings.linksPerColumn}
-					step="1"
-				/>
-			</div>
-			<div class="group">
-				<div class="links-header">
-					<div class="setting-label">links</div>
-					<button class="add-btn" onclick={addLink}>add link</button>
-				</div>
-				<div class="links-list">
-					{#each settings.links as link, index}
-						<!-- Drop zone before this item -->
-						<div
-							class="drop-zone"
-							class:active={dropSlotIndex === index}
-							ondragover={(e) => handleDropZoneDragOver(e, index)}
-							ondragleave={handleDropZoneDragLeave}
-							ondrop={(e) => handleDropZoneDrop(e, index)}
-							role="none"
-						></div>
+            <div class="group">
+                <div class="setting-label">time format</div>
+                <div class="radio-group">
+                    <RadioButton bind:group={settings.timeFormat} value="12hr">
+                        12 hour
+                    </RadioButton>
+                    <RadioButton bind:group={settings.timeFormat} value="24hr">
+                        24 hour
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">date format</div>
+                <div class="radio-group">
+                    <RadioButton bind:group={settings.dateFormat} value="mdy">
+                        month-day-year
+                    </RadioButton>
+                    <RadioButton bind:group={settings.dateFormat} value="dmy">
+                        day-month-year
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">temperature format</div>
+                <div class="radio-group">
+                    <RadioButton
+                        bind:group={settings.tempUnit}
+                        value="fahrenheit"
+                    >
+                        fahrenheit
+                    </RadioButton>
+                    <RadioButton bind:group={settings.tempUnit} value="celsius">
+                        celsius
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">speed format</div>
+                <div class="radio-group">
+                    <RadioButton bind:group={settings.speedUnit} value="mph">
+                        mph
+                    </RadioButton>
+                    <RadioButton bind:group={settings.speedUnit} value="kmh">
+                        kmh
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">link behavior</div>
+                <div class="radio-group">
+                    <RadioButton bind:group={settings.linkTarget} value="_self">
+                        same tab
+                    </RadioButton>
+                    <RadioButton
+                        bind:group={settings.linkTarget}
+                        value="_blank"
+                    >
+                        new tab
+                    </RadioButton>
+                </div>
+            </div>
+            <div class="group">
+                <div class="setting-label">link icons</div>
+                <div class="checkbox-group">
+                    <Checkbox bind:checked={settings.showLinkIcons}>
+                        show icons
+                    </Checkbox>
+                </div>
+            </div>
+            <div class="group">
+                <label for="linksPerColumn">links per column</label>
+                <input
+                    id="linksPerColumn"
+                    type="number"
+                    bind:value={settings.linksPerColumn}
+                    step="1"
+                />
+            </div>
+            <div class="group">
+                <div class="links-header">
+                    <div class="setting-label">links</div>
+                    <button class="add-btn" onclick={addLink}>add link</button>
+                </div>
+                <div class="links-list">
+                    {#each settings.links as link, index}
+                        <!-- Drop zone before this item -->
+                        <div
+                            class="drop-zone"
+                            class:active={dropSlotIndex === index}
+                            ondragover={(e) => handleDropZoneDragOver(e, index)}
+                            ondragleave={handleDropZoneDragLeave}
+                            ondrop={(e) => handleDropZoneDrop(e, index)}
+                            role="none"
+                        ></div>
 
-						<div
-							class="link"
-							class:dragging={draggedIndex === index}
-							role="listitem"
-						>
-							<span
-								class="drag-handle"
-								title="Drag to reorder"
-								draggable="true"
-								ondragstart={(e) => handleDragStart(e, index)}
-								ondragend={handleDragEnd}
-								role="button"
-								tabindex="0">=</span
-							>
-							<input
-								type="text"
-								bind:value={link.title}
-								placeholder="title"
-								class="link-input name"
-								draggable="false"
-							/>
-							<input
-								type="url"
-								bind:value={link.url}
-								placeholder="https://example.com"
-								class="link-input"
-								draggable="false"
-							/>
-							<button
-								class="remove-btn"
-								onclick={() => removeLink(index)}
-							>
-								x
-							</button>
-						</div>
-					{/each}
+                        <div
+                            class="link"
+                            class:dragging={draggedIndex === index}
+                            role="listitem"
+                        >
+                            <span
+                                class="drag-handle"
+                                title="Drag to reorder"
+                                draggable="true"
+                                ondragstart={(e) => handleDragStart(e, index)}
+                                ondragend={handleDragEnd}
+                                role="button"
+                                tabindex="0">=</span
+                            >
+                            <button
+                                class="icon-btn"
+                                title={link.icon ||
+                                    guessIconSlug(link.url) ||
+                                    'pick icon'}
+                                onclick={() => toggleIconPicker(index)}
+                                draggable="false"
+                            >
+                                {#if isValidSlug(link.icon) || guessIconSlug(link.url)}
+                                    <span
+                                        class="si si-{link.icon ||
+                                            guessIconSlug(link.url)}"
+                                    ></span>
+                                {:else}
+                                    <span class="icon-placeholder">?</span>
+                                {/if}
+                            </button>
+                            <input
+                                type="text"
+                                bind:value={link.title}
+                                placeholder="title"
+                                class="link-input name"
+                                draggable="false"
+                            />
+                            <input
+                                type="url"
+                                bind:value={link.url}
+                                placeholder="https://example.com"
+                                class="link-input"
+                                draggable="false"
+                            />
+                            <button
+                                class="remove-btn"
+                                onclick={() => removeLink(index)}
+                            >
+                                x
+                            </button>
+                        </div>
+                        {#if iconPickerOpen === index}
+                            <IconPicker
+                                bind:this={iconPickerRef}
+                                icon={link.icon}
+                                url={link.url}
+                                onselect={(slug) => {
+                                    link.icon = slug
+                                    iconPickerOpen = null
+                                }}
+                            />
+                        {/if}
+                    {/each}
 
-					<!-- Drop zone after the last item -->
-					<div
-						class="drop-zone"
-						class:active={dropSlotIndex === settings.links.length}
-						ondragover={(e) =>
-							handleDropZoneDragOver(e, settings.links.length)}
-						ondragleave={handleDropZoneDragLeave}
-						ondrop={(e) =>
-							handleDropZoneDrop(e, settings.links.length)}
-						role="none"
-					></div>
-				</div>
-			</div>
-			<div class="group">
-				<label for="custom-css">custom css</label>
-				<textarea
-					id="custom-css"
-					bind:value={settings.customCSS}
-					placeholder="/* add your custom styles here */"
-					rows="6"
-				></textarea>
-			</div>
-			<div class="group">
-				<div class="setting-label">manage settings</div>
-				<div class="settings-actions">
-					<button onclick={handleImport}
-						><span class="bracket">[</span><span class="action-text"
-							>import json</span
-						><span class="bracket">]</span></button
-					>
-					<button onclick={handleExport}
-						><span class="bracket">[</span><span class="action-text"
-							>export json</span
-						><span class="bracket">]</span></button
-					>
-					<button onclick={handleReset}
-						><span class="bracket">[</span><span class="action-text"
-							>reset settings</span
-						><span class="bracket">]</span></button
-					>
-				</div>
-			</div>
-			<input
-				type="file"
-				accept=".json"
-				bind:this={fileInput}
-				onchange={handleFileSelect}
-				style="display: none;"
-			/>
-			<div class="version">
-				re-start{#if version}&nbsp;v{version}{/if} •
-				<a href="https://github.com/refact0r/re-start" target="_blank"
-					><span class="bracket">[</span><span class="action-text"
-						>github</span
-					><span class="bracket">]</span></a
-				>
-				• made with ❤️ by
-				<a href="https://refact0r.dev" target="_blank"
-					><span class="bracket">[</span><span class="action-text"
-						>refact0r</span
-					><span class="bracket">]</span></a
-				>
-			</div>
-		</div>
-	</div>
+                    <!-- Drop zone after the last item -->
+                    <div
+                        class="drop-zone"
+                        class:active={dropSlotIndex === settings.links.length}
+                        ondragover={(e) =>
+                            handleDropZoneDragOver(e, settings.links.length)}
+                        ondragleave={handleDropZoneDragLeave}
+                        ondrop={(e) =>
+                            handleDropZoneDrop(e, settings.links.length)}
+                        role="none"
+                    ></div>
+                </div>
+            </div>
+            <div class="group">
+                <label for="custom-css">custom css</label>
+                <textarea
+                    id="custom-css"
+                    bind:value={settings.customCSS}
+                    placeholder="/* add your custom styles here */"
+                    rows="6"
+                ></textarea>
+            </div>
+            <div class="group">
+                <div class="setting-label">manage settings</div>
+                <div class="settings-actions">
+                    <button onclick={handleImport}
+                        ><span class="bracket">[</span><span class="action-text"
+                            >import json</span
+                        ><span class="bracket">]</span></button
+                    >
+                    <button onclick={handleExport}
+                        ><span class="bracket">[</span><span class="action-text"
+                            >export json</span
+                        ><span class="bracket">]</span></button
+                    >
+                    <button onclick={handleReset}
+                        ><span class="bracket">[</span><span class="action-text"
+                            >reset settings</span
+                        ><span class="bracket">]</span></button
+                    >
+                </div>
+            </div>
+            <input
+                type="file"
+                accept=".json"
+                bind:this={fileInput}
+                onchange={handleFileSelect}
+                style="display: none;"
+            />
+            <div class="version">
+                re-start{#if version}&nbsp;v{version}{/if} •
+                <a href="https://github.com/refact0r/re-start" target="_blank"
+                    ><span class="bracket">[</span><span class="action-text"
+                        >github</span
+                    ><span class="bracket">]</span></a
+                >
+                • made with ❤️ by
+                <a href="https://refact0r.dev" target="_blank"
+                    ><span class="bracket">[</span><span class="action-text"
+                        >refact0r</span
+                    ><span class="bracket">]</span></a
+                >
+            </div>
+        </div>
+    </div>
 {/if}
 
 <style>
-	.backdrop {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 999;
-	}
-	.settings {
-		position: fixed;
-		top: 0;
-		right: 0;
-		width: 40rem;
-		height: 100%;
-		background: var(--bg-1);
-		border-left: 2px solid var(--bg-3);
-		z-index: 1000;
-		display: flex;
-		flex-direction: column;
-	}
-	.header {
-		padding: 0.75rem 1rem 0.75rem 1.5rem;
-		border-bottom: 2px solid var(--bg-3);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+    }
+    .settings {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 40rem;
+        height: 100%;
+        background: var(--bg-1);
+        border-left: 2px solid var(--bg-3);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+    }
+    .header {
+        padding: 0.75rem 1rem 0.75rem 1.5rem;
+        border-bottom: 2px solid var(--bg-3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-		h2 {
-			margin: 0;
-		}
-	}
-	.close-btn {
-		padding: 0 0.5rem;
-		font-size: 1.5rem;
-		line-height: 2.25rem;
-		font-weight: 300;
-	}
-	.content {
-		flex: 1;
-		padding: 1.5rem;
-		overflow-y: auto;
-		scrollbar-width: thin;
-		scrollbar-color: var(--bg-3) var(--bg-1);
-	}
-	.split {
-		display: flex;
-		gap: 1rem;
-	}
-	.col {
-		flex: 1;
-	}
-	.group {
-		flex: 1;
-		margin-bottom: 1.5rem;
-	}
-	.group > label,
-	.col > label,
-	.setting-label {
-		display: block;
-		margin-bottom: 0.5rem;
-	}
-	.group input[type='text'],
-	.group input[type='password'],
-	.group input[type='number'],
-	.group input[type='url'] {
-		width: 100%;
-		padding: 0.5rem;
-		background: var(--bg-2);
-		border: 2px solid var(--bg-3);
-	}
-	.group textarea {
-		width: 100%;
-		padding: 0.5rem;
-		background: var(--bg-2);
-		border: 2px solid var(--bg-3);
-		resize: vertical;
-		font-family: var(--font-family);
-		font-size: 0.875rem;
-		min-height: 6rem;
-		color: inherit;
+        h2 {
+            margin: 0;
+        }
+    }
+    .close-btn {
+        padding: 0 0.5rem;
+        font-size: 1.5rem;
+        line-height: 2.25rem;
+        font-weight: 300;
+    }
+    .content {
+        flex: 1;
+        padding: 1.5rem;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--bg-3) var(--bg-1);
+    }
+    .split {
+        display: flex;
+        gap: 1rem;
+    }
+    .col {
+        flex: 1;
+    }
+    .group {
+        flex: 1;
+        margin-bottom: 1.5rem;
+    }
+    .group > label,
+    .col > label,
+    .setting-label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    .group input[type='text'],
+    .group input[type='password'],
+    .group input[type='number'],
+    .group input[type='url'],
+    .group textarea {
+        width: 100%;
+        padding: 0.375rem;
+        background: var(--bg-2);
+        border: 2px solid var(--bg-3);
+    }
+    .group textarea {
+        resize: vertical;
+        font-family: var(--font-family);
+        font-size: 0.875rem;
+        min-height: 6rem;
+        color: inherit;
 
-		&:focus {
-			outline: none;
-		}
-		&::placeholder {
-			color: var(--txt-3);
-		}
-	}
-	.links-header {
-		display: flex;
-		justify-content: space-between;
-	}
-	.add-btn {
-		height: 1.5rem;
-	}
-	.drop-zone {
-		height: 0.25rem;
-		margin: 0;
-		position: relative;
-	}
-	.drop-zone.active::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 50%;
-		transform: translateY(-50%);
-		height: 2px;
-		background-color: var(--txt-2);
-	}
-	.link {
-		display: flex;
-		align-items: center;
-		margin-bottom: 0;
-		border: 2px solid transparent;
-	}
-	.link.dragging {
-		opacity: 0.5;
-	}
-	.drag-handle {
-		cursor: grab;
-		padding: 0 0.5rem 0 0.25rem;
-		color: var(--txt-3);
-		user-select: none;
-		font-size: 1.125rem;
-		touch-action: none;
-	}
-	.drag-handle:active {
-		cursor: grabbing;
-	}
-	.link .link-input.name {
-		width: 10rem;
-		margin-right: 0.5rem;
-	}
-	.remove-btn {
-		padding: 0 0.25rem 0 0.5rem;
-		font-size: 1.125rem;
-		font-weight: 300;
-	}
-	.settings-actions {
-		display: flex;
-		gap: 1rem;
-		margin-bottom: 1rem;
-	}
-	.bracket {
-		color: var(--txt-3);
-	}
-	.action-text {
-		color: var(--txt-2);
-	}
-	button:hover .bracket,
-	a:hover .bracket {
-		color: var(--txt-2);
-	}
-	button.bottom {
-		margin-top: 1rem;
-	}
-	.version {
-		color: var(--txt-3);
+        &:focus {
+            outline: none;
+        }
+        &::placeholder {
+            color: var(--txt-3);
+        }
+    }
+    .links-header {
+        display: flex;
+        justify-content: space-between;
 
-		a {
-			color: var(--txt-2);
-		}
-		a:hover {
-			color: var(--txt-1);
-		}
-	}
-	.theme-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 0.5rem;
-	}
-	.theme-preview {
-		display: inline-flex;
-		vertical-align: middle;
-		margin-top: -0.125rem;
-		border: 2px solid var(--bg-3);
-	}
-	.theme-preview div {
-		width: 1rem;
-		height: 1rem;
-	}
-	.theme-name {
-		flex: 1;
-	}
-	.radio-group,
-	.checkbox-group {
-		display: flex;
-		gap: 3ch;
-	}
-	.custom-colors-grid {
-		margin-top: 1rem;
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: repeat(4, auto);
-		grid-auto-flow: column;
-		gap: 0.5rem 1rem;
-	}
-	.color-input-row {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
+        .setting-label {
+            margin: 0;
+        }
+    }
+    .links-list {
+        display: flex;
+        flex-direction: column;
+    }
+    .add-btn {
+        height: 1.5rem;
+    }
+    .drop-zone {
+        height: 0.5rem;
+        margin: 0;
+        position: relative;
+    }
+    .drop-zone.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 2px;
+        background-color: var(--txt-2);
+    }
+    .link {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        /*border: 2px solid transparent;*/
+    }
+    .link.dragging {
+        opacity: 0.5;
+    }
+    .drag-handle {
+        cursor: grab;
+        padding: 0 0.5rem 0 0.25rem;
+        color: var(--txt-3);
+        user-select: none;
+        font-size: 1.125rem;
+        touch-action: none;
+    }
+    .drag-handle:active {
+        cursor: grabbing;
+    }
+    .icon-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-right: 0.5rem;
+        border: 2px solid var(--bg-3);
+        background: var(--bg-2);
+        color: var(--txt-2);
+        flex-shrink: 0;
+    }
+    .icon-btn:hover {
+        border-color: var(--txt-3);
+        color: var(--txt-1);
+    }
+    .icon-placeholder {
+        color: var(--txt-3);
+        font-size: 0.875rem;
+    }
+    .link .link-input.name {
+        width: 8rem;
+        margin-right: 0.5rem;
+    }
+    .remove-btn {
+        padding: 0 0.25rem 0 0.5rem;
+        font-size: 1.125rem;
+        font-weight: 300;
+    }
+    .settings-actions {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .bracket {
+        color: var(--txt-3);
+    }
+    .action-text {
+        color: var(--txt-2);
+    }
+    button:hover .bracket,
+    a:hover .bracket {
+        color: var(--txt-2);
+    }
+    button.bottom {
+        margin-top: 0.5rem;
+    }
+    .version {
+        color: var(--txt-3);
 
-		label {
-			color: var(--txt-2);
-			width: 3.25rem;
-			flex-shrink: 0;
-		}
-	}
-	input[type='color'] {
-		width: 1.25rem;
-		height: 1.25rem;
-		padding: 0;
-		border: 2px solid var(--bg-3);
-		background: none;
-		cursor: pointer;
-		flex-shrink: 0;
+        a {
+            color: var(--txt-2);
+        }
+        a:hover {
+            color: var(--txt-1);
+        }
+    }
+    .theme-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+    .theme-preview {
+        display: inline-flex;
+        vertical-align: middle;
+        margin-top: -0.125rem;
+        border: 2px solid var(--bg-3);
+    }
+    .theme-preview div {
+        width: 1rem;
+        height: 1rem;
+    }
+    .theme-name {
+        flex: 1;
+    }
+    .radio-group,
+    .checkbox-group {
+        display: flex;
+        gap: 3ch;
+    }
+    .custom-colors-grid {
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(4, auto);
+        grid-auto-flow: column;
+        gap: 0.5rem 1rem;
+    }
+    .color-input-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
 
-		&::-webkit-color-swatch-wrapper {
-			padding: 0;
-		}
-		&::-webkit-color-swatch {
-			border: none;
-		}
-		&::-moz-color-swatch {
-			border: none;
-		}
-	}
-	.color-text {
-		width: 100%;
-		padding: 0.375rem !important;
-		background: var(--bg-2);
-		border: 2px solid var(--bg-3);
-		font-size: 0.875rem;
-		font-family: var(--font-family);
-		color: inherit;
-	}
+        label {
+            color: var(--txt-2);
+            width: 3.25rem;
+            flex-shrink: 0;
+        }
+    }
+    input[type='color'] {
+        width: 1.25rem;
+        height: 1.25rem;
+        padding: 0;
+        border: 2px solid var(--bg-3);
+        background: none;
+        cursor: pointer;
+        flex-shrink: 0;
+
+        &::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        &::-webkit-color-swatch {
+            border: none;
+        }
+        &::-moz-color-swatch {
+            border: none;
+        }
+    }
+    input[type='text'].color-text {
+        font-size: 0.875rem;
+        color: inherit;
+    }
 </style>

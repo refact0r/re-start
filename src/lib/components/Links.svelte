@@ -1,5 +1,6 @@
 <script>
     import { settings } from '../stores/settings-store.svelte.js'
+    import { guessIconSlug, isValidSlug } from '../utils/link-icons.js'
 
     const columns = $derived.by(() => {
         const result = []
@@ -12,6 +13,12 @@
         }
         return result
     })
+
+    function getIconSlug(link) {
+        if (link.icon && isValidSlug(link.icon)) return link.icon
+        if (link.url) return guessIconSlug(link.url)
+        return null
+    }
 </script>
 
 <div class="panel-wrapper">
@@ -20,13 +27,21 @@
         {#each columns as column}
             <div class="column">
                 {#each column as link}
+                    {@const slug =
+                        settings.showLinkIcons !== false
+                            ? getIconSlug(link)
+                            : null}
                     <a
                         href={link.url}
                         target={settings.linkTarget}
                         rel="noopener noreferrer"
                         class="link"
                     >
-                        <span>></span>
+                        {#if slug}
+                            <span class="icon si si-{slug}"></span>
+                        {:else}
+                            <span class="prefix">></span>
+                        {/if}
                         {link.title}
                     </a>
                     <br />
@@ -41,11 +56,20 @@
         display: flex;
         gap: 1.5rem;
     }
-    .link:hover span {
+    .link:hover .prefix,
+    .link:hover .icon {
         color: var(--txt-2);
     }
-    span {
+    .prefix,
+    .icon {
+        display: inline-block;
+        width: 1.25rem;
         color: var(--txt-3);
+        text-align: center;
+    }
+    .icon {
+        font-size: 0.875rem;
+        vertical-align: text-bottom;
     }
     .column {
         flex-grow: 1;

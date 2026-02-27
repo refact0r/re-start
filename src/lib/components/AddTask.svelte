@@ -87,7 +87,11 @@
 <form class:show onsubmit={handleSubmit}>
     <span class="dark">+</span>
     <div class="input-shell">
-        <div class="input-overlay" bind:this={overlayElement} aria-hidden="true">
+        <div
+            class="input-overlay"
+            bind:this={overlayElement}
+            aria-hidden="true"
+        >
             {#if showPlaceholder}
                 <span class="placeholder">{placeholder}</span>
             {:else}
