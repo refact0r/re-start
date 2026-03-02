@@ -10,9 +10,26 @@
         "homepage": "index.html"
     },
     "permissions": ["identity"],
+    "host_permissions": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://chatgpt.com/*",
+                "https://chat.openai.com/*"
+            ],
+            "js": ["chatgpt-autosend.js"],
+            "run_at": "document_idle"
+        }
+    ],
     "oauth2": {
-        "client_id": "489393578728-r6p53q4oe7ngcm6r4kmtgbk17s2cgpk8.apps.googleusercontent.com",
-        "scopes": ["https://www.googleapis.com/auth/tasks"]
+        "client_id": "711643843065-v3kv0htpah386u1stn4p3tjt1t7o8g8e.apps.googleusercontent.com",
+        "scopes": [
+            "https://www.googleapis.com/auth/tasks",
+            "https://www.googleapis.com/auth/calendar.readonly"
+        ]
     },
     "browser_specific_settings": {
         "gecko": {

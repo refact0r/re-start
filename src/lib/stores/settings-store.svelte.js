@@ -1,5 +1,30 @@
 import { defaultCustomColors } from '../config/themes.js'
 
+export const MAIN_WIDGET_IDS = ['weather', 'tasks', 'calendar']
+
+export function normalizeMainWidgetOrder(order) {
+    if (!Array.isArray(order)) {
+        return [...MAIN_WIDGET_IDS]
+    }
+
+    const normalized = []
+    const seen = new Set()
+
+    for (const id of order) {
+        if (!MAIN_WIDGET_IDS.includes(id) || seen.has(id)) continue
+        seen.add(id)
+        normalized.push(id)
+    }
+
+    for (const id of MAIN_WIDGET_IDS) {
+        if (!seen.has(id)) {
+            normalized.push(id)
+        }
+    }
+
+    return normalized
+}
+
 function detectFormatPreferences() {
     try {
         const use24h = !new Intl.DateTimeFormat(undefined, {
@@ -29,6 +54,9 @@ let defaultSettings = {
     todoistApiToken: '',
     todoistVisibleProjectIds: null,
     googleTasksSignedIn: false,
+    googleCalendarSignedIn: false,
+    googleCalendarMaxEvents: 5,
+    googleCalendarVisibleCalendarIds: null,
     locationMode: 'manual',
     latitude: null,
     longitude: null,
@@ -85,6 +113,8 @@ let defaultSettings = {
     showStats: true,
     showWeather: true,
     showTasks: true,
+    showCalendar: false,
+    mainWidgetOrder: [...MAIN_WIDGET_IDS],
     showLinks: true,
 }
 
@@ -103,6 +133,22 @@ function loadSettings() {
                     parsed.showLinkIcons === false ? 'arrow' : 'icons'
                 delete merged.showLinkIcons
             }
+            // remove deprecated standalone radar widget setting
+            delete merged.showWeatherRadar
+            // remove deprecated pomodoro settings
+            delete merged.showPomodoro
+            delete merged.pomodoroFocusMinutes
+            delete merged.pomodoroShortBreakMinutes
+            delete merged.pomodoroLongBreakMinutes
+            delete merged.pomodoroLongBreakEvery
+            delete merged.pomodoroAutoStartBreaks
+            delete merged.pomodoroAutoStartFocus
+            delete merged.pomodoroSoundEnabled
+            delete merged.pomodoroSoundType
+            delete merged.pomodoroSoundVolume
+            merged.mainWidgetOrder = normalizeMainWidgetOrder(
+                merged.mainWidgetOrder
+            )
             return merged
         }
     } catch (error) {

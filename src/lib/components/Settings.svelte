@@ -5,6 +5,7 @@
         saveSettings,
         settings,
         resetSettings,
+        normalizeMainWidgetOrder,
     } from '../stores/settings-store.svelte.js'
     import {
         themeNames,
@@ -14,6 +15,7 @@
     import RadioButton from './ui/RadioButton.svelte'
     import Checkbox from './ui/Checkbox.svelte'
     import { createTaskBackend } from '../backends/index.js'
+    import GoogleCalendarAPI from '../api/google-calendar-api.js'
     import { isChrome } from '../utils/browser-detect.js'
     import { guessIconSlug, isValidSlug, extractDomain } from '../utils/link-icons.js'
     import IconPicker from './IconPicker.svelte'
@@ -23,6 +25,7 @@
 
     // Check if Google Tasks is available (Chrome only)
     const googleTasksAvailable = isChrome()
+    const googleCalendarAvailable = isChrome()
 
     // @ts-ignore
     const version = __APP_VERSION__
@@ -30,10 +33,24 @@
     let googleTasksApi = $state(null)
     let signingIn = $state(false)
     let signInError = $state('')
+    let googleCalendarApi = $state(null)
+    let calendarSigningIn = $state(false)
+    let calendarSignInError = $state('')
+    let googleCalendars = $state([])
+    let googleCalendarsLoading = $state(false)
+    let googleCalendarsError = $state('')
+    let googleCalendarsRequestId = 0
     let todoistProjects = $state([])
     let todoistProjectsLoading = $state(false)
     let todoistProjectsError = $state('')
     let todoistProjectsRequestId = 0
+    const widgetLabels = {
+        weather: 'weather',
+        tasks: 'tasks',
+        calendar: 'calendar',
+    }
+
+    let widgetReorderMode = $state(false)
 
     function googleSignInLabel() {
         if (settings.googleTasksSignedIn) return 'sign out'
@@ -76,6 +93,118 @@
         } catch (err) {
             console.error('google sign out failed:', err)
         }
+    }
+
+    function googleCalendarSignInLabel() {
+        if (settings.googleCalendarSignedIn) return 'sign out'
+        if (calendarSignInError) return calendarSignInError
+        if (calendarSigningIn) return 'signing in...'
+        return 'sign in with google'
+    }
+
+    function ensureGoogleCalendarApi() {
+        if (!googleCalendarApi) {
+            googleCalendarApi = new GoogleCalendarAPI()
+        }
+        return googleCalendarApi
+    }
+
+    async function handleGoogleCalendarSignIn() {
+        try {
+            calendarSigningIn = true
+            calendarSignInError = ''
+            await ensureGoogleCalendarApi().signIn()
+            settings.googleCalendarSignedIn = true
+            saveSettings(settings)
+        } catch (err) {
+            console.error('google calendar sign in failed:', err)
+            calendarSignInError = 'sign in failed'
+            settings.googleCalendarSignedIn = false
+        } finally {
+            calendarSigningIn = false
+        }
+    }
+
+    async function handleGoogleCalendarSignOut() {
+        try {
+            await ensureGoogleCalendarApi().signOut()
+            settings.googleCalendarSignedIn = false
+            saveSettings(settings)
+            calendarSignInError = ''
+        } catch (err) {
+            console.error('google calendar sign out failed:', err)
+        }
+    }
+
+    async function loadGoogleCalendars() {
+        const requestId = ++googleCalendarsRequestId
+
+        if (!settings.googleCalendarSignedIn) {
+            googleCalendars = []
+            googleCalendarsLoading = false
+            googleCalendarsError = ''
+            return
+        }
+
+        googleCalendarsLoading = true
+        googleCalendarsError = ''
+
+        try {
+            const calendars = await ensureGoogleCalendarApi().getCalendars()
+            if (requestId !== googleCalendarsRequestId) return
+
+            googleCalendars = calendars
+
+            if (Array.isArray(settings.googleCalendarVisibleCalendarIds)) {
+                const validCalendarIds = new Set(
+                    googleCalendars.map((calendar) => String(calendar.id))
+                )
+                settings.googleCalendarVisibleCalendarIds =
+                    settings.googleCalendarVisibleCalendarIds.filter(
+                        (calendarId) =>
+                            validCalendarIds.has(String(calendarId))
+                    )
+            }
+        } catch (err) {
+            if (requestId !== googleCalendarsRequestId) return
+            googleCalendars = []
+            googleCalendarsError = 'failed to load calendars'
+            console.error('google calendar list load failed:', err)
+        } finally {
+            if (requestId === googleCalendarsRequestId) {
+                googleCalendarsLoading = false
+            }
+        }
+    }
+
+    function isGoogleCalendarSelected(calendarId) {
+        if (settings.googleCalendarVisibleCalendarIds === null) return true
+        const id = String(calendarId)
+        return (settings.googleCalendarVisibleCalendarIds || []).some(
+            (selectedId) => String(selectedId) === id
+        )
+    }
+
+    function setGoogleCalendarVisibility(calendarId, visible) {
+        const id = String(calendarId)
+        const allCalendarIds = googleCalendars.map((calendar) =>
+            String(calendar.id)
+        )
+        const currentCalendarIds =
+            settings.googleCalendarVisibleCalendarIds === null
+                ? allCalendarIds
+                : (settings.googleCalendarVisibleCalendarIds || []).map(
+                      (selectedId) => String(selectedId)
+                  )
+
+        const nextCalendarIds = new Set(currentCalendarIds)
+        if (visible) {
+            nextCalendarIds.add(id)
+        } else {
+            nextCalendarIds.delete(id)
+        }
+
+        settings.googleCalendarVisibleCalendarIds = Array.from(nextCalendarIds)
     }
 
     async function loadTodoistProjects(token) {
@@ -191,6 +320,27 @@
         loadTodoistProjects(settings.todoistApiToken)
     })
 
+    $effect(() => {
+        const shouldLoadGoogleCalendars =
+            showSettings &&
+            googleCalendarAvailable &&
+            settings.googleCalendarSignedIn
+
+        if (!shouldLoadGoogleCalendars) {
+            googleCalendarsRequestId++
+            googleCalendars = []
+            googleCalendarsLoading = false
+            googleCalendarsError = ''
+            return
+        }
+
+        loadGoogleCalendars()
+    })
+
+    $effect(() => {
+        ensureMainWidgetOrder()
+    })
+
     let iconPickerOpen = $state(null)
     let iconPickerRef = $state(null)
 
@@ -228,6 +378,9 @@
 
     function handleClose() {
         saveSettings(settings)
+        widgetReorderMode = false
+        draggedWidgetIndex = null
+        widgetDropSlotIndex = null
         closeSettings()
     }
 
@@ -299,9 +452,103 @@
         { key: 'txtErr', label: 'error' },
     ]
 
+    function arraysEqual(a, b) {
+        if (a.length !== b.length) return false
+        return a.every((value, index) => value === b[index])
+    }
+
+    function getWidgetOrderForEditor(order) {
+        const normalized = normalizeMainWidgetOrder(order)
+        if (googleCalendarAvailable) return normalized
+        return normalized.filter((widgetId) => widgetId !== 'calendar')
+    }
+
+    function ensureMainWidgetOrder() {
+        const normalized = normalizeMainWidgetOrder(settings.mainWidgetOrder)
+        if (!arraysEqual(normalized, settings.mainWidgetOrder || [])) {
+            settings.mainWidgetOrder = normalized
+        }
+    }
+
+    function isWidgetShown(widgetId) {
+        switch (widgetId) {
+            case 'weather':
+                return settings.showWeather
+            case 'tasks':
+                return settings.showTasks
+            case 'calendar':
+                return googleCalendarAvailable && settings.showCalendar
+            default:
+                return false
+        }
+    }
+
+    function toggleWidgetReorderMode() {
+        widgetReorderMode = !widgetReorderMode
+        if (widgetReorderMode) {
+            ensureMainWidgetOrder()
+        } else {
+            draggedWidgetIndex = null
+            widgetDropSlotIndex = null
+        }
+    }
+
+    function reorderMainWidgets(slotIndex) {
+        ensureMainWidgetOrder()
+
+        const visibleOrder = getWidgetOrderForEditor(settings.mainWidgetOrder)
+        if (draggedWidgetIndex === null || draggedWidgetIndex >= visibleOrder.length) {
+            return
+        }
+
+        if (
+            slotIndex === draggedWidgetIndex ||
+            slotIndex === draggedWidgetIndex + 1
+        ) {
+            return
+        }
+
+        const nextVisibleOrder = [...visibleOrder]
+        const draggedItem = nextVisibleOrder[draggedWidgetIndex]
+        nextVisibleOrder.splice(draggedWidgetIndex, 1)
+        const adjustedSlotIndex =
+            draggedWidgetIndex < slotIndex ? slotIndex - 1 : slotIndex
+        nextVisibleOrder.splice(adjustedSlotIndex, 0, draggedItem)
+
+        if (googleCalendarAvailable) {
+            settings.mainWidgetOrder = nextVisibleOrder
+            return
+        }
+
+        const normalizedOrder = normalizeMainWidgetOrder(settings.mainWidgetOrder)
+        const calendarIndex = normalizedOrder.indexOf('calendar')
+        const orderWithoutCalendar = normalizedOrder.filter(
+            (widgetId) => widgetId !== 'calendar'
+        )
+
+        if (!arraysEqual(orderWithoutCalendar, nextVisibleOrder)) {
+            let insertAt = nextVisibleOrder.length
+            if (calendarIndex >= 0 && calendarIndex < normalizedOrder.length - 1) {
+                const nextWidgetAfterCalendar = normalizedOrder[calendarIndex + 1]
+                const nextIndex = nextVisibleOrder.indexOf(nextWidgetAfterCalendar)
+                if (nextIndex >= 0) {
+                    insertAt = nextIndex
+                }
+            }
+
+            nextVisibleOrder.splice(insertAt, 0, 'calendar')
+        }
+
+        settings.mainWidgetOrder = normalizeMainWidgetOrder(nextVisibleOrder)
+    }
+
     // Drag and drop state
     let draggedIndex = $state(null)
     let dropSlotIndex = $state(null) // Which slot (between items) to drop into
+
+    // Main widget reorder state
+    let draggedWidgetIndex = $state(null)
+    let widgetDropSlotIndex = $state(null)
 
     function handleDragStart(event, index) {
         draggedIndex = index
@@ -355,6 +602,34 @@
     function handleDragEnd() {
         draggedIndex = null
         dropSlotIndex = null
+    }
+
+    function handleWidgetDragStart(event, index) {
+        draggedWidgetIndex = index
+        event.dataTransfer.effectAllowed = 'move'
+        event.dataTransfer.setData('text/plain', String(index))
+    }
+
+    function handleWidgetDropZoneDragOver(event, slotIndex) {
+        event.preventDefault()
+        event.dataTransfer.dropEffect = 'move'
+        widgetDropSlotIndex = slotIndex
+    }
+
+    function handleWidgetDropZoneDragLeave() {
+        widgetDropSlotIndex = null
+    }
+
+    function handleWidgetDropZoneDrop(event, slotIndex) {
+        event.preventDefault()
+        reorderMainWidgets(slotIndex)
+        draggedWidgetIndex = null
+        widgetDropSlotIndex = null
+    }
+
+    function handleWidgetDragEnd() {
+        draggedWidgetIndex = null
+        widgetDropSlotIndex = null
     }
 
     let locationLoading = $state(false)
@@ -439,7 +714,12 @@
 
         <div class="content">
             <div class="group">
-                <div class="setting-label">widgets</div>
+                <div class="widgets-header">
+                    <div class="setting-label">widgets</div>
+                    <button class="add-btn" type="button" onclick={toggleWidgetReorderMode}>
+                        {widgetReorderMode ? 'done reordering' : 'reorder widgets'}
+                    </button>
+                </div>
                 <div class="checkbox-group">
                     <Checkbox bind:checked={settings.showClock}>clock</Checkbox>
                     <Checkbox bind:checked={settings.showStats}>stats</Checkbox>
@@ -447,8 +727,69 @@
                         >weather</Checkbox
                     >
                     <Checkbox bind:checked={settings.showTasks}>tasks</Checkbox>
+                    {#if googleCalendarAvailable}
+                        <Checkbox bind:checked={settings.showCalendar}
+                            >calendar</Checkbox
+                        >
+                    {/if}
                     <Checkbox bind:checked={settings.showLinks}>links</Checkbox>
                 </div>
+                {#if widgetReorderMode}
+                    {@const widgetEditorOrder = getWidgetOrderForEditor(settings.mainWidgetOrder)}
+                    <div class="helper-text top-gap">
+                        drag to reorder the main widget row
+                    </div>
+                    <div class="widget-order-list">
+                        {#each widgetEditorOrder as widgetId, index}
+                            <div
+                                class="drop-zone"
+                                class:active={widgetDropSlotIndex === index}
+                                ondragover={(e) => handleWidgetDropZoneDragOver(e, index)}
+                                ondragleave={handleWidgetDropZoneDragLeave}
+                                ondrop={(e) => handleWidgetDropZoneDrop(e, index)}
+                                role="none"
+                            ></div>
+                            <div
+                                class="widget-order-item"
+                                class:dragging={draggedWidgetIndex === index}
+                                role="listitem"
+                            >
+                                <span
+                                    class="drag-handle"
+                                    title="Drag to reorder"
+                                    draggable="true"
+                                    ondragstart={(e) => handleWidgetDragStart(e, index)}
+                                    ondragend={handleWidgetDragEnd}
+                                    role="button"
+                                    tabindex="0">=</span
+                                >
+                                <span class="widget-order-name">{widgetLabels[widgetId]}</span>
+                                <span
+                                    class="widget-order-state"
+                                    class:active={isWidgetShown(widgetId)}
+                                >
+                                    {isWidgetShown(widgetId) ? 'shown' : 'hidden'}
+                                </span>
+                            </div>
+                        {/each}
+                        <div
+                            class="drop-zone"
+                            class:active={widgetDropSlotIndex === widgetEditorOrder.length}
+                            ondragover={(e) =>
+                                handleWidgetDropZoneDragOver(
+                                    e,
+                                    widgetEditorOrder.length
+                                )}
+                            ondragleave={handleWidgetDropZoneDragLeave}
+                            ondrop={(e) =>
+                                handleWidgetDropZoneDrop(
+                                    e,
+                                    widgetEditorOrder.length
+                                )}
+                            role="none"
+                        ></div>
+                    </div>
+                {/if}
             </div>
             <div class="group">
                 <div class="setting-label">theme</div>
@@ -646,6 +987,90 @@
                         [{googleSignInLabel()}]
                     </button>
                 </div>
+            {/if}
+
+            {#if googleCalendarAvailable}
+                <div class="group">
+                    <div class="setting-label">google calendar authentication</div>
+                    <button
+                        class="button"
+                        onclick={settings.googleCalendarSignedIn
+                            ? handleGoogleCalendarSignOut
+                            : handleGoogleCalendarSignIn}
+                        disabled={calendarSigningIn}
+                    >
+                        [{googleCalendarSignInLabel()}]
+                    </button>
+                </div>
+                <div class="group">
+                    <label for="google-calendar-max-events"
+                        >max calendar events</label
+                    >
+                    <input
+                        id="google-calendar-max-events"
+                        type="number"
+                        bind:value={settings.googleCalendarMaxEvents}
+                        min="1"
+                        max="20"
+                        step="1"
+                    />
+                </div>
+
+                {#if settings.googleCalendarSignedIn}
+                    <div class="group">
+                        <div class="setting-label">google calendars</div>
+                        <div class="todoist-project-actions">
+                            <button
+                                class="button"
+                                onclick={() =>
+                                    (settings.googleCalendarVisibleCalendarIds =
+                                        null)}
+                            >
+                                [show all]
+                            </button>
+                            <button
+                                class="button"
+                                onclick={() =>
+                                    (settings.googleCalendarVisibleCalendarIds =
+                                        [])}
+                            >
+                                [show none]
+                            </button>
+                            <button
+                                class="button"
+                                onclick={loadGoogleCalendars}
+                                disabled={googleCalendarsLoading}
+                            >
+                                [refresh]
+                            </button>
+                        </div>
+                        {#if googleCalendarsLoading}
+                            <div class="helper-text">loading calendars...</div>
+                        {:else if googleCalendarsError}
+                            <div class="helper-text">{googleCalendarsError}</div>
+                        {:else if googleCalendars.length === 0}
+                            <div class="helper-text">no calendars found</div>
+                        {:else}
+                            <div class="todoist-project-list">
+                                {#each googleCalendars as calendar}
+                                    <Checkbox
+                                        checked={isGoogleCalendarSelected(
+                                            calendar.id
+                                        )}
+                                        onchange={(event) =>
+                                            setGoogleCalendarVisibility(
+                                                calendar.id,
+                                                event.target.checked
+                                            )}
+                                    >
+                                        {calendar.name}
+                                        {calendar.primary ? ' (primary)' : ''}
+                                    </Checkbox>
+                                {/each}
+                            </div>
+                        {/if}
+                    </div>
+                {/if}
             {/if}
 
             <div class="group">
@@ -1014,11 +1439,23 @@
         flex: 1;
         margin-bottom: 1.5rem;
     }
+    .top-gap {
+        margin-top: 0.5rem;
+    }
     .group > label,
     .col > label,
     .setting-label {
         display: block;
         margin-bottom: 0.5rem;
+    }
+    .widgets-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .setting-label {
+            margin: 0;
+        }
     }
     .group input[type='text'],
     .group input[type='password'],
@@ -1073,6 +1510,35 @@
         transform: translateY(-50%);
         height: 2px;
         background-color: var(--txt-2);
+    }
+    .widget-order-list {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0.5rem;
+        border: 2px solid var(--bg-3);
+        background: var(--bg-2);
+        padding: 0.25rem 0.5rem;
+    }
+    .widget-order-item {
+        display: flex;
+        align-items: center;
+        min-height: 2rem;
+        gap: 0.25rem;
+    }
+    .widget-order-item.dragging {
+        opacity: 0.5;
+    }
+    .widget-order-name {
+        color: var(--txt-2);
+        flex: 1;
+    }
+    .widget-order-state {
+        color: var(--txt-3);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+    .widget-order-state.active {
+        color: var(--txt-2);
     }
     .link {
         display: flex;

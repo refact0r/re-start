@@ -222,6 +222,7 @@ class WeatherAPI {
                 time: hourlyData.time[index],
                 temperature: hourlyData.temperature_2m[index].toFixed(0),
                 weatherCode: hourlyData.weather_code[index],
+                isDay: hourlyData.is_day[index] === 1,
                 description: this._getWeatherDescription(
                     hourlyData.weather_code[index],
                     hourlyData.is_day[index] === 1
@@ -249,6 +250,7 @@ class WeatherAPI {
                 temperatureMax: dailyData.temperature_2m_max[i].toFixed(0),
                 temperatureMin: dailyData.temperature_2m_min[i].toFixed(0),
                 weatherCode: dailyData.weather_code[i],
+                isDay: true,
                 description: this._getWeatherDescription(
                     dailyData.weather_code[i],
                     true
