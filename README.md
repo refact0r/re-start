@@ -4,7 +4,7 @@ a tui-style browser startpage, built with svelte.
 
 features:
 
-- task list with multiple backend options (local, todoist, google tasks (chrome only))
+- task list with multiple backend options (local, todoist, google tasks (chrome only), microsoft todo (chrome only))
 - smart task input with natural date and project parsing
 - weather summary (from open-meteo)
 - customizable quick links with icons
