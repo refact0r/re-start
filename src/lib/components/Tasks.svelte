@@ -127,8 +127,8 @@
     $effect(() => {
         const backend = settings.taskBackend
         const token = settings.todoistApiToken
-        settings.googleTasksSignedIn
-        settings.microsoftTodoSignedIn
+        const googleTasksSignedIn = settings.googleTasksSignedIn
+        const microsoftTodoSignedIn = settings.microsoftTodoSignedIn
         const microsoftClientId = settings.microsoftTodoClientId
         const microsoftTenant = settings.microsoftTodoTenant
 
