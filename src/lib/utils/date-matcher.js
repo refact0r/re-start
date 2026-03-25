@@ -332,6 +332,33 @@ function findTime24h(lower, considerTime) {
     }
 }
 
+const TIME_SHORTCUTS = {
+    midnight: { hour: 0, minute: 0 },
+    noon: { hour: 12, minute: 0 },
+    midday: { hour: 12, minute: 0 },
+    morning: { hour: 9, minute: 0 },
+    afternoon: { hour: 13, minute: 0 },
+    evening: { hour: 18, minute: 0 },
+    night: { hour: 21, minute: 0 },
+    tonight: { hour: 21, minute: 0 },
+}
+
+function findTimeShortcuts(lower, considerTime) {
+    for (const [word, { hour, minute }] of Object.entries(TIME_SHORTCUTS)) {
+        const regex = new RegExp(`\\b${word}\\b`, 'g')
+        let m
+        while ((m = regex.exec(lower))) {
+            considerTime({
+                start: m.index,
+                end: m.index + word.length,
+                hour,
+                minute,
+                ampm: null,
+            })
+        }
+    }
+}
+
 function findBareHours(lower, considerTime) {
     const regex = /\b([0-2]?\d)\b/g
     let m
@@ -352,6 +379,7 @@ function findBareHours(lower, considerTime) {
 function collectTimeMatches(lower) {
     const matches = []
     const push = (entry) => matches.push(entry)
+    findTimeShortcuts(lower, push)
     findTimeWithAmPm(lower, push)
     findTime24h(lower, push)
     findBareHours(lower, push)

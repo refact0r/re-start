@@ -275,6 +275,79 @@ const CASES = [
             due: { year: 2026, month: 1, day: 1 },
         },
     },
+    {
+        name: 'noon shortcut alone rolls when past',
+        input: 'task noon',
+        expected: {
+            match: 'noon',
+            hasTime: true,
+            // noon UTC is past-noon in local time, rolls to tomorrow
+            due: { year: 2025, month: 12, day: 8, hour: 12, minute: 0 },
+        },
+    },
+    {
+        name: 'midnight shortcut alone rolls to tomorrow when past',
+        input: 'task midnight',
+        expected: {
+            match: 'midnight',
+            hasTime: true,
+            due: { year: 2025, month: 12, day: 8, hour: 0, minute: 0 },
+        },
+    },
+    {
+        name: 'noon with date',
+        input: 'meeting dec 12 noon',
+        expected: {
+            match: 'dec 12 noon',
+            hasTime: true,
+            due: { year: 2025, month: 12, day: 12, hour: 12, minute: 0 },
+        },
+    },
+    {
+        name: 'midnight with date',
+        input: 'deadline dec 12 midnight',
+        expected: {
+            match: 'dec 12 midnight',
+            hasTime: true,
+            due: { year: 2025, month: 12, day: 12, hour: 0, minute: 0 },
+        },
+    },
+    {
+        name: 'midday shortcut rolls when past',
+        input: 'lunch midday',
+        expected: {
+            match: 'midday',
+            hasTime: true,
+            due: { year: 2025, month: 12, day: 8, hour: 12, minute: 0 },
+        },
+    },
+    {
+        name: 'morning shortcut with weekday',
+        input: 'standup monday morning',
+        expected: {
+            // WEEKDAY_REGEX consumes optional leading whitespace, so match may include it
+            hasTime: true,
+            due: { year: 2025, month: 12, day: 8, hour: 9, minute: 0 },
+        },
+    },
+    {
+        name: 'tonight shortcut',
+        input: 'task tonight',
+        expected: {
+            match: 'tonight',
+            hasTime: true,
+            due: { year: 2025, month: 12, day: 7, hour: 21, minute: 0 },
+        },
+    },
+    {
+        name: 'evening shortcut with date',
+        input: 'dinner dec 12 evening',
+        expected: {
+            match: 'dec 12 evening',
+            hasTime: true,
+            due: { year: 2025, month: 12, day: 12, hour: 18, minute: 0 },
+        },
+    },
 ]
 
 function makeLocalDate({ year, month, day, hour = 0, minute = 0 }) {
