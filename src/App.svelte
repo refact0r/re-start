@@ -11,6 +11,7 @@
     import Weather from './lib/components/Weather.svelte'
     import { saveSettings } from './lib/stores/settings-store.svelte.js'
     import { isChrome } from './lib/utils/browser-detect.js'
+    import iconSvg from '/public/icon.svg?raw'
 
     let showSettings = $state(false)
 
@@ -33,6 +34,15 @@
     function applyTheme(themeName) {
         document.documentElement.className =
             'theme-' + (themeName || defaultTheme)
+    }
+
+    function updateFavicon() {
+        const style = getComputedStyle(document.documentElement)
+        const bg = style.getPropertyValue('--bg-1').trim() || '#141414'
+        const fg = style.getPropertyValue('--txt-2').trim() || '#aeaeae'
+        const svg = iconSvg.replace('#141414', bg).replace('#aeaeae', fg)
+        const link = document.querySelector('link[rel="icon"]')
+        if (link) link.href = 'data:image/svg+xml,' + encodeURIComponent(svg)
     }
 
     function applyCustomThemeColors(colors) {
@@ -69,10 +79,12 @@
 
     $effect(() => {
         applyTheme(settings.currentTheme)
+        updateFavicon()
     })
 
     $effect(() => {
         applyCustomThemeColors(settings.customThemeColors)
+        updateFavicon()
     })
 
     $effect(() => {
