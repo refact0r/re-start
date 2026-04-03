@@ -731,7 +731,7 @@
                             <input
                                 type="text"
                                 bind:value={link.hotkey}
-                                placeholder="key"
+                                placeholder="⌘"
                                 class="link-input hotkey"
                                 maxlength="1"
                                 draggable="false"
