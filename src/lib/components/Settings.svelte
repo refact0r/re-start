@@ -25,27 +25,30 @@
     let { showSettings = false, closeSettings } = $props()
     const prevDomains = new WeakMap()
 
-    // Check if Google Tasks is available (Chrome only)
-    const googleTasksAvailable = isChrome()
+    // Task backends that depend on chrome.identity are Chrome-only
+    const chromeIdentityAvailable = isChrome()
 
     // @ts-ignore
     const version = __APP_VERSION__
 
     let googleTasksApi = $state(null)
-    let signingIn = $state(false)
-    let signInError = $state('')
+    let microsoftTodoApi = $state(null)
+    let googleSigningIn = $state(false)
+    let googleSignInError = $state('')
+    let microsoftSigningIn = $state(false)
+    let microsoftSignInError = $state('')
 
     function googleSignInLabel() {
         if (settings.googleTasksSignedIn) return 'sign out'
-        if (signInError) return signInError
-        if (signingIn) return 'signing in...'
+        if (googleSignInError) return googleSignInError
+        if (googleSigningIn) return 'signing in...'
         return 'sign in with google'
     }
 
     async function handleGoogleSignIn() {
         try {
-            signingIn = true
-            signInError = ''
+            googleSigningIn = true
+            googleSignInError = ''
 
             if (!googleTasksApi) {
                 googleTasksApi = createTaskBackend('google-tasks')
@@ -56,10 +59,10 @@
             saveSettings(settings)
         } catch (err) {
             console.error('google sign in failed:', err)
-            signInError = 'sign in failed'
+            googleSignInError = 'sign in failed'
             settings.googleTasksSignedIn = false
         } finally {
-            signingIn = false
+            googleSigningIn = false
         }
     }
 
@@ -72,9 +75,69 @@
             await googleTasksApi.signOut()
             settings.googleTasksSignedIn = false
             saveSettings(settings)
-            signInError = ''
+            googleSignInError = ''
         } catch (err) {
             console.error('google sign out failed:', err)
+        }
+    }
+
+    function microsoftSignInLabel() {
+        if (settings.microsoftTodoSignedIn) return 'sign out'
+        if (microsoftSignInError) return microsoftSignInError
+        if (microsoftSigningIn) return 'signing in...'
+        return 'sign in with microsoft'
+    }
+
+    function getMicrosoftConfig() {
+        return {
+            clientId: settings.microsoftTodoClientId?.trim(),
+            tenant: settings.microsoftTodoTenant?.trim() || 'common',
+        }
+    }
+
+    async function handleMicrosoftSignIn() {
+        const clientId = settings.microsoftTodoClientId?.trim()
+        if (!clientId) {
+            microsoftSignInError = 'client id required'
+            settings.microsoftTodoSignedIn = false
+            return
+        }
+
+        try {
+            microsoftSigningIn = true
+            microsoftSignInError = ''
+            microsoftTodoApi = createTaskBackend(
+                'microsoft-todo',
+                getMicrosoftConfig()
+            )
+
+            await microsoftTodoApi.signIn()
+            settings.microsoftTodoSignedIn = true
+            saveSettings(settings)
+        } catch (err) {
+            console.error('microsoft sign in failed:', err)
+            microsoftSignInError = 'sign in failed'
+            settings.microsoftTodoSignedIn = false
+        } finally {
+            microsoftSigningIn = false
+        }
+    }
+
+    async function handleMicrosoftSignOut() {
+        try {
+            if (!microsoftTodoApi) {
+                microsoftTodoApi = createTaskBackend(
+                    'microsoft-todo',
+                    getMicrosoftConfig()
+                )
+            }
+
+            await microsoftTodoApi.signOut()
+            settings.microsoftTodoSignedIn = false
+            saveSettings(settings)
+            microsoftSignInError = ''
+        } catch (err) {
+            console.error('microsoft sign out failed:', err)
         }
     }
 
@@ -459,12 +522,18 @@
                     >
                         todoist
                     </RadioButton>
-                    {#if googleTasksAvailable}
+                    {#if chromeIdentityAvailable}
                         <RadioButton
                             bind:group={settings.taskBackend}
                             value="google-tasks"
                         >
                             google tasks
+                        </RadioButton>
+                        <RadioButton
+                            bind:group={settings.taskBackend}
+                            value="microsoft-todo"
+                        >
+                            microsoft todo
                         </RadioButton>
                     {/if}
                 </div>
@@ -489,9 +558,44 @@
                         onclick={settings.googleTasksSignedIn
                             ? handleGoogleSignOut
                             : handleGoogleSignIn}
-                        disabled={signingIn}
+                        disabled={googleSigningIn}
                     >
                         [{googleSignInLabel()}]
+                    </button>
+                </div>
+            {/if}
+
+            {#if settings.taskBackend === 'microsoft-todo'}
+                <div class="group">
+                    <label for="microsoft-client-id">microsoft client id</label>
+                    <input
+                        id="microsoft-client-id"
+                        type="text"
+                        bind:value={settings.microsoftTodoClientId}
+                        placeholder="application (client) id"
+                    />
+                </div>
+                <div class="group">
+                    <label for="microsoft-tenant">microsoft tenant</label>
+                    <input
+                        id="microsoft-tenant"
+                        type="text"
+                        bind:value={settings.microsoftTodoTenant}
+                        placeholder="common"
+                    />
+                </div>
+                <div class="group">
+                    <div class="setting-label">
+                        microsoft todo authentication
+                    </div>
+                    <button
+                        class="button"
+                        onclick={settings.microsoftTodoSignedIn
+                            ? handleMicrosoftSignOut
+                            : handleMicrosoftSignIn}
+                        disabled={microsoftSigningIn}
+                    >
+                        [{microsoftSignInLabel()}]
                     </button>
                 </div>
             {/if}

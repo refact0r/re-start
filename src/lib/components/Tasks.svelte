@@ -22,6 +22,8 @@
     let initialLoad = $state(true)
     let previousToken = $state(null)
     let previousBackend = $state(null)
+    let previousMicrosoftClientId = $state('')
+    let previousMicrosoftTenant = $state('common')
     let taskCount = $derived(tasks.filter((task) => !task.checked).length)
     let taskLabel = $derived(taskCount === 1 ? 'task' : 'tasks')
     let backendUrl = $derived.by(() => {
@@ -29,6 +31,8 @@
             return 'https://app.todoist.com/app'
         if (settings.taskBackend === 'google-tasks')
             return 'https://tasks.google.com'
+        if (settings.taskBackend === 'microsoft-todo')
+            return 'https://to-do.office.com/tasks/'
         return null
     })
     let newTaskContent = $state('')
@@ -122,24 +126,43 @@
     $effect(() => {
         const backend = settings.taskBackend
         const token = settings.todoistApiToken
-        const googleSignedIn = settings.googleTasksSignedIn
+        const googleTasksSignedIn = settings.googleTasksSignedIn
+        const microsoftTodoSignedIn = settings.microsoftTodoSignedIn
+        const microsoftClientId = settings.microsoftTodoClientId
+        const microsoftTenant = settings.microsoftTodoTenant
 
         if (untrack(() => initialLoad)) {
             initialLoad = false
             previousToken = token
             previousBackend = backend
+            previousMicrosoftClientId = microsoftClientId
+            previousMicrosoftTenant = microsoftTenant
             return
         }
 
         // Clear local data if:
         // 1. Todoist token changed
-        // 2. Backend changed (switching between local/todoist/google-tasks)
+        // 2. Backend changed (switching between local/todoist/google-tasks/microsoft-todo)
+        // 3. Microsoft client config changed
         const tokenChanged = backend === 'todoist' && previousToken !== token
         const backendChanged = previousBackend !== backend
-        const clearLocalData = tokenChanged || backendChanged
+        const microsoftConfigChanged =
+            backend === 'microsoft-todo' &&
+            (previousMicrosoftClientId !== microsoftClientId ||
+                previousMicrosoftTenant !== microsoftTenant)
+
+        if (microsoftConfigChanged && settings.microsoftTodoSignedIn) {
+            // Microsoft client configuration changed, so require re-auth.
+            // Reset the signed-in flag to avoid misleading "authentication expired" errors.
+            settings.microsoftTodoSignedIn = false
+        }
+        const clearLocalData =
+            tokenChanged || backendChanged || microsoftConfigChanged
 
         previousToken = token
         previousBackend = backend
+        previousMicrosoftClientId = microsoftClientId
+        previousMicrosoftTenant = microsoftTenant
         initializeAPI(backend, token, clearLocalData)
     })
 
@@ -168,8 +191,36 @@
             return
         }
 
+        if (backend === 'microsoft-todo' && !isChrome()) {
+            resetState('microsoft todo only works in chrome')
+            return
+        }
+
+        if (
+            backend === 'microsoft-todo' &&
+            !settings.microsoftTodoClientId?.trim()
+        ) {
+            resetState('no microsoft client id')
+            return
+        }
+
+        if (backend === 'microsoft-todo' && !settings.microsoftTodoSignedIn) {
+            resetState('not signed in to microsoft')
+            return
+        }
+
         try {
-            const config = backend === 'google-tasks' ? undefined : { token }
+            const config =
+                backend === 'google-tasks'
+                    ? undefined
+                    : backend === 'microsoft-todo'
+                      ? {
+                            clientId: settings.microsoftTodoClientId.trim(),
+                            tenant:
+                                settings.microsoftTodoTenant?.trim() ||
+                                'common',
+                        }
+                      : { token }
             api = createTaskBackend(backend, config)
 
             if (clearLocalData) {
@@ -213,6 +264,11 @@
                     id: tl.id,
                     name: tl.title,
                 }))
+            } else if (settings.taskBackend === 'microsoft-todo') {
+                availableProjects = (api.data?.lists || []).map((list) => ({
+                    id: list.id,
+                    name: list.displayName,
+                }))
             }
         } catch (err) {
             // Check if this is an auth error for Google Tasks
@@ -222,6 +278,12 @@
             ) {
                 settings.googleTasksSignedIn = false
                 error = 'google sign in expired'
+            } else if (
+                settings.taskBackend === 'microsoft-todo' &&
+                err.message?.includes('Authentication expired')
+            ) {
+                settings.microsoftTodoSignedIn = false
+                error = 'microsoft sign in expired'
             } else {
                 error = `failed to sync tasks`
             }

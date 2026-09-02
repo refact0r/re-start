@@ -40,6 +40,17 @@ export function buildManifest() {
                         (p) => p !== 'identity'
                     )
                 }
+                if (manifest.host_permissions) {
+                    manifest.host_permissions = manifest.host_permissions.filter(
+                        (host) =>
+                            host !== 'https://graph.microsoft.com/*' &&
+                            host !==
+                                'https://login.microsoftonline.com/*'
+                    )
+                    if (manifest.host_permissions.length === 0) {
+                        delete manifest.host_permissions
+                    }
+                }
             }
 
             if (!fs.existsSync(outDir)) {
