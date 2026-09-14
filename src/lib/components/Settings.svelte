@@ -338,6 +338,7 @@
                         >weather</Checkbox
                     >
                     <Checkbox bind:checked={settings.showTasks}>tasks</Checkbox>
+                    <Checkbox bind:checked={settings.showSearch}>search</Checkbox>
                     <Checkbox bind:checked={settings.showLinks}>links</Checkbox>
                 </div>
             </div>

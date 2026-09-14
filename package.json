@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "@fontsource-variable/geist-mono": "^5.2.7",
+        "i": "^0.3.7",
         "simple-icons-font": "^16.15.0"
     }
 }

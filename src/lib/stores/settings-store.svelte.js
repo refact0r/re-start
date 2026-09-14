@@ -140,6 +140,40 @@ let defaultSettings = {
     showWeather: true,
     showTasks: true,
     showLinks: true,
+    showSearch: true,
+    searchEngine: 'google',
+    searchEngines: [
+        {
+            name: 'google',
+            label: 'google',
+            url: 'https://www.google.com/search?q=',
+        },
+        {
+            name: 'duckduckgo',
+            label: 'ddg',
+            url: 'https://duckduckgo.com/?q=',
+        },
+        {
+            name: 'bing',
+            label: 'bing',
+            url: 'https://www.bing.com/search?q=',
+        },
+        {
+            name: 'youtube',
+            label: 'youtube',
+            url: 'https://www.youtube.com/results?search_query=',
+        },
+        {
+            name: 'github',
+            label: 'github',
+            url: 'https://github.com/search?q=',
+        },
+        {
+            name: 'perplexity',
+            label: 'perplexity',
+            url: 'https://www.perplexity.ai/search?q=',
+        },
+    ],
 }
 
 function loadSettings() {
