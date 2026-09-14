@@ -5,6 +5,7 @@
     import { defaultTheme, defaultCustomColors } from './lib/config/themes.js'
     import Clock from './lib/components/Clock.svelte'
     import Links from './lib/components/Links.svelte'
+    import Search from './lib/components/Search.svelte'
     import Settings from './lib/components/Settings.svelte'
     import Stats from './lib/components/Stats.svelte'
     import Tasks from './lib/components/Tasks.svelte'
@@ -158,6 +159,9 @@
                     <Tasks />
                 {/if}
             </div>
+        {/if}
+        {#if settings.showSearch}
+            <Search />
         {/if}
         {#if settings.showLinks}
             <Links />
